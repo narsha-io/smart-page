@@ -1,0 +1,21 @@
+package io.narsha.smartpage.spring.core.web;
+
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+@TestConfiguration
+public class WebConfig {
+
+  @ControllerAdvice
+  public class PaginatedFilterControllerAdvice {
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected ResponseEntity<String> handleHttpRequestMethodNotSupportedException(
+        IllegalArgumentException e) {
+      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+  }
+}

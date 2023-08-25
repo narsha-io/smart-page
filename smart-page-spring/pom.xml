@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.narsha-io</groupId>
+        <artifactId>smart-page</artifactId>
+        <version>1.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>smart-page-spring</artifactId>
+    <packaging>pom</packaging>
+
+    <properties>
+        <spring.boot.dependencies.version>3.1.3</spring.boot.dependencies.version>
+    </properties>
+
+    <modules>
+        <module>smart-page-spring-core</module>
+        <module>smart-page-spring-test</module>
+        <module>smart-page-spring-sql</module>
+        <module>smart-page-spring-sql-example</module>
+        <module>smart-page-spring-mongo</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.dependencies.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>
