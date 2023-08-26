@@ -4,16 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
+    <groupId>io.narsha</groupId>
     <artifactId>smart-page</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
         <module>smart-page-core</module>
         <module>smart-page-spring</module>
-        <module>smart-page-spring/smart-page-spring-jdbc-template</module>
         <module>smart-page-coverage</module>
-        <module>smart-page-spring/smart-page-spring-jpa</module>
     </modules>
 
     <properties>
