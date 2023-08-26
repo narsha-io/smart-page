@@ -11,8 +11,9 @@
     <modules>
         <module>smart-page-core</module>
         <module>smart-page-spring</module>
-        <module>smart-page-spring/smart-page-spring-jdbc</module>
+        <module>smart-page-spring/smart-page-spring-jdbc-template</module>
         <module>smart-page-coverage</module>
+        <module>smart-page-spring/smart-page-spring-jpa</module>
     </modules>
 
     <properties>
@@ -22,6 +23,15 @@
         <sonar.organization>narsha-io</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.2.220</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <profiles>
         <profile>
