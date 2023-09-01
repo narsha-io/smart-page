@@ -4,7 +4,7 @@ public class Person {
 
   private Long id;
   private String firstName;
-  private String lastName;
+  private String role;
 
   public Long getId() {
     return id;
@@ -22,11 +22,11 @@ public class Person {
     this.firstName = firstName;
   }
 
-  public String getLastName() {
-    return lastName;
+  public String getRole() {
+    return role;
   }
 
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
+  public void setRole(String role) {
+    this.role = role;
   }
 }

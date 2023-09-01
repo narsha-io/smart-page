@@ -18,8 +18,7 @@
 
     <modules>
         <module>smart-page-spring-core</module>
-        <module>smart-page-spring-jpa</module>
-        <module>smart-page-spring-jdbc-template</module>
+        <module>smart-page-spring-data</module>
     </modules>
 
     <dependencies>

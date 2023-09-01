@@ -23,7 +23,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @SpringBootTest(
     classes = {SmartPageSpringTestApplication.class, WebConfig.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ResolverTest {
+class ResolverTest {
 
   @Value(value = "${local.server.port}")
   private int port;
