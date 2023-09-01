@@ -22,7 +22,7 @@ public class JpaQueryExecutorTest {
 
     @Test
     public void test() {
-        final Pair<List<Country>, Long> res = new JpaQueryExecutor(entityManager).execute(new PaginatedFilteredQuery<>(Country.class), new RowMapper(objectMapper));
+        final Pair<List<Country>, Long> res = new JpaQueryExecutor(entityManager).execute(new PaginatedFilteredQuery<>(Country.class, 0, 10), new RowMapper(objectMapper));
         res.getKey().forEach(System.out::println);
     }
 

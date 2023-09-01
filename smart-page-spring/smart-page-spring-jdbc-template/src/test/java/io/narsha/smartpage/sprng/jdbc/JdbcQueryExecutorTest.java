@@ -23,8 +23,8 @@ public class JdbcQueryExecutorTest {
 
     @Test
     public void test() {
-        final Pair<List<Country>, Long> res = new JdbcQueryExecutor(jdbcTemplate).execute(new PaginatedFilteredQuery<>(Country.class), new RowMapper(objectMapper));
-        res.getKey().forEach(System.out::println);
+        final Pair<List<Country>, Long> res = new JdbcQueryExecutor(jdbcTemplate).execute(new PaginatedFilteredQuery<>(Country.class, 0, 10), new RowMapper(objectMapper));
+//        res.getKey().forEach(System.out::println);
     }
 
     @SpringBootApplication

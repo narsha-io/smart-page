@@ -24,7 +24,7 @@ public class JdbcQueryExecutor implements QueryExecutor {
 
     @Override
     public <T> Pair<List<T>, Long> execute(PaginatedFilteredQuery<T> paginatedFilteredQuery, RowMapper rowMapper) {
-
+/*
         List<T> data = this.jdbcTemplate.query(paginatedFilteredQuery.getQuery(), rs -> {
             return extractResultSet(paginatedFilteredQuery, rowMapper, rs);
         });
@@ -32,6 +32,9 @@ public class JdbcQueryExecutor implements QueryExecutor {
         Long count = 1L;
 
         return Pair.of(data, count);
+
+ */
+        return null;
     }
 
     private <T> List<T> extractResultSet(PaginatedFilteredQuery<T> paginatedFilteredQuery, RowMapper rowMapper, ResultSet rs) throws SQLException {

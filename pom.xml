@@ -12,6 +12,7 @@
         <module>smart-page-core</module>
         <module>smart-page-spring</module>
         <module>smart-page-coverage</module>
+        <module>smart-page-spring/smart-page-spring-test</module>
     </modules>
 
     <properties>

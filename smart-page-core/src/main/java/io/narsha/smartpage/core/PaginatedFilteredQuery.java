@@ -1,15 +1,22 @@
 package io.narsha.smartpage.core;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import io.narsha.smartpage.core.filters.FilterParser;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PaginatedFilteredQuery<T> {
 
     private final Class<T> targetClass;
-    private final String query = "select id, name from countries";
+    private final Map<String, FilterParser> filters = new HashMap<>();
+    private final Map<String, String> orders = new HashMap<>();
+    private final Integer page;
+    private final Integer size;
 
-    public PaginatedFilteredQuery(Class<T> targetClass) {
+    public PaginatedFilteredQuery(Class<T> targetClass, Integer page, Integer size) {
         this.targetClass = targetClass;
+        this.page = page;
+        this.size = size;
     }
 
 
@@ -17,7 +24,19 @@ public class PaginatedFilteredQuery<T> {
         return this.targetClass;
     }
 
-    public String getQuery() {
-        return query;
+    public Map<String, FilterParser> getFilters() {
+        return filters;
+    }
+
+    public Map<String, String> getOrders() {
+        return orders;
+    }
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public Integer getSize() {
+        return size;
     }
 }

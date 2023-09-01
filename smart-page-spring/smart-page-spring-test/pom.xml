@@ -10,22 +10,18 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>smart-page-spring-jdbc-template</artifactId>
+    <artifactId>smart-page-spring-test</artifactId>
+
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.narsha</groupId>
             <artifactId>smart-page-core</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>smart-page-spring-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jdbc</artifactId>
-            <version>${spring.boot.version}</version>
         </dependency>
     </dependencies>
 

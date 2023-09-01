@@ -17,6 +17,7 @@
     </properties>
 
     <modules>
+        <module>smart-page-spring-core</module>
         <module>smart-page-spring-jpa</module>
         <module>smart-page-spring-jdbc-template</module>
     </modules>
