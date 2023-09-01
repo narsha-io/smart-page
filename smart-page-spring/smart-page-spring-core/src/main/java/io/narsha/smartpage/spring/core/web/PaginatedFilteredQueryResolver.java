@@ -13,6 +13,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,19 +27,13 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.mvc.method.annotation.PathVariableMapMethodArgumentResolver;
 
 @Component
+@RequiredArgsConstructor
 public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentResolver {
 
   private final ObjectMapper objectMapper;
   private final PageableHandlerMethodArgumentResolver pageableHandlerMethodArgumentResolver;
-  private final PathVariableMapMethodArgumentResolver pathVariableMapMethodArgumentResolver;
-
-  public PaginatedFilteredQueryResolver(
-      ObjectMapper objectMapper,
-      PageableHandlerMethodArgumentResolver pageableHandlerMethodArgumentResolver) {
-    this.objectMapper = objectMapper;
-    this.pageableHandlerMethodArgumentResolver = pageableHandlerMethodArgumentResolver;
-    this.pathVariableMapMethodArgumentResolver = new PathVariableMapMethodArgumentResolver();
-  }
+  private PathVariableMapMethodArgumentResolver pathVariableMapMethodArgumentResolver =
+      new PathVariableMapMethodArgumentResolver();
 
   @Override
   public boolean supportsParameter(MethodParameter parameter) {
