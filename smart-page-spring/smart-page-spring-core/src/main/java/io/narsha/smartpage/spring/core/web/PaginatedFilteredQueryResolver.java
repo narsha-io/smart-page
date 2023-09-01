@@ -79,7 +79,6 @@ public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentReso
   private Map<String, FilterParser> getFilters(
       Map<String, String[]> parameters, String[] httpFilters, Class<?> targetClass)
       throws UnknownFilterException {
-    // TODO make safe
     var filters =
         Stream.of(httpFilters)
             .map(e -> e.split(","))
@@ -127,7 +126,7 @@ public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentReso
     final var pathVariableMap =
         pathVariableMapMethodArgumentResolver.resolveArgument(
             parameter, mavContainer, webRequest, binderFactory);
-    if (pathVariableMap instanceof Map map) {
+    if (pathVariableMap instanceof Map<?, ?> map) {
       map.forEach(
           (key, value) ->
               parameters.put(String.valueOf(key), new String[] {String.valueOf(value)}));

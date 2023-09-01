@@ -5,13 +5,13 @@ import java.util.function.Supplier;
 public enum Filter {
   EQUALS(EqualsFilter::new);
 
-  final Supplier<? extends FilterParser> parser;
+  final Supplier<FilterParser> parser;
 
-  Filter(Supplier<? extends FilterParser> parser) {
+  Filter(Supplier<FilterParser> parser) {
     this.parser = parser;
   }
 
-  public Supplier<? extends FilterParser> getParser() {
+  public Supplier<FilterParser> getParser() {
     return this.parser;
   }
 }

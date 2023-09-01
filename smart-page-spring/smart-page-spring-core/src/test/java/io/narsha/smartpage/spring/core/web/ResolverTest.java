@@ -33,7 +33,7 @@ public class ResolverTest {
   @Autowired private AtomicReference<PaginatedFilteredQuery<Person>> reference;
 
   @Test
-  public void noFilterNoPage() {
+  void noFilterNoPage() {
     assertThat(call(null).getStatusCode()).isEqualTo(HttpStatus.OK);
 
     final var query = reference.get();
@@ -43,7 +43,7 @@ public class ResolverTest {
   }
 
   @Test
-  public void noFilterWithPageAndSort() {
+  void noFilterWithPageAndSort() {
     assertThat(call("?page=10&size=300&sort=id,asc&sort=firstName,desc").getStatusCode())
         .isEqualTo(HttpStatus.OK);
     final var query = reference.get();
@@ -54,7 +54,7 @@ public class ResolverTest {
   }
 
   @Test
-  public void noFilterWithPageAndUnknownSort() {
+  void noFilterWithPageAndUnknownSort() {
     assertThat(call("?page=10&size=300&sort=id,asc&sort=test,desc").getStatusCode())
         .isEqualTo(HttpStatus.OK);
     final var query = reference.get();
@@ -66,7 +66,7 @@ public class ResolverTest {
   }
 
   @Test
-  public void validFilters() {
+  void validFilters() {
     assertThat(
             call("?id=1&firstName=toto&filter=id,equals&filter=firstName,equals").getStatusCode())
         .isEqualTo(HttpStatus.OK);
@@ -88,7 +88,7 @@ public class ResolverTest {
   }
 
   @Test
-  public void withDefaultFilterAndUnknownFilter() {
+  void withDefaultFilterAndUnknownFilter() {
     assertThat(call("?id=1&firstName=toto&filter=id,equals&filter=truc,equals").getStatusCode())
         .isEqualTo(HttpStatus.OK);
     final var query = reference.get();
@@ -109,7 +109,7 @@ public class ResolverTest {
   }
 
   @Test
-  public void withInvalidFilterType() {
+  void withInvalidFilterType() {
     var response = call("?id=1&firstName=toto&filter=id,equals&filter=firstName,truc");
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getBody()).isEqualTo("Unrecognized filter type : truc");
