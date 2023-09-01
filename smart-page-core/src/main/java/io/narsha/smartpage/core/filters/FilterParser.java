@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class FilterParser {
 
-    public abstract void parse(ObjectMapper objectMapper, Class<?> targetClass, String[] value);
+  public abstract void parse(ObjectMapper objectMapper, Class<?> targetClass, String[] value);
 
-    public abstract String getSQLFragment(String property);
+  public abstract String getSQLFragment(String property);
 
-    public abstract Object getValue();
+  public abstract Object getValue();
 }
