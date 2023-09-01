@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -17,10 +18,12 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.mvc.method.annotation.PathVariableMapMethodArgumentResolver;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -78,9 +81,13 @@ public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentReso
                 throw new UnknownFilterException(filter);
             }
 
-            var parser = Filter.valueOf(filter.toUpperCase()).getParser().get();
-            parser.parse(objectMapper, getPropertyClass(entry.getKey(), targetClass), entry.getValue());
-            result.put(entry.getKey(), parser);
+            // do not care about unknown property (can be used for something else in the http query)
+            getPropertyClass(entry.getKey(), targetClass)
+                    .ifPresent(propertyClass -> {
+                        var parser = Filter.valueOf(filter.toUpperCase()).getParser().get();
+                        parser.parse(objectMapper, propertyClass, entry.getValue());
+                        result.put(entry.getKey(), parser);
+                    });
         }
 
         return result;
@@ -90,14 +97,16 @@ public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentReso
         return Stream.of(Filter.values()).anyMatch(v -> Objects.equals(v.name().toLowerCase(), name.toLowerCase()));
     }
 
-    private Class<?> getPropertyClass(String property, Class<?> targetClass) {
-        var field = ReflectionUtils.findField(targetClass, property);
-        return field.getType();
+    private Optional<Class<?>> getPropertyClass(String property, Class<?> targetClass) {
+        return Optional.ofNullable(ReflectionUtils.findField(targetClass, property))
+                .map(Field::getType);
     }
 
     private void addPathVariableIntoFilterMap(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory, HashMap<String, String[]> parameters) throws Exception {
-        final var pathVariableMap = (Map<String, String>) pathVariableMapMethodArgumentResolver.resolveArgument(parameter, mavContainer, webRequest, binderFactory);
-        pathVariableMap.forEach((key, value) -> parameters.put(key, new String[]{value}));
+        final var pathVariableMap = pathVariableMapMethodArgumentResolver.resolveArgument(parameter, mavContainer, webRequest, binderFactory);
+        if (pathVariableMap instanceof Map map) {
+            map.forEach((key, value) -> parameters.put(String.valueOf(key), new String[]{String.valueOf(value)}));
+        }
     }
 
     private Map<String, String> extractSort(Class<?> targetClass, Pageable pageable) {
