@@ -8,7 +8,7 @@ import java.util.Map;
 import lombok.Setter;
 import org.junit.jupiter.api.Test;
 
-public class RowMapperTest {
+class RowMapperTest {
 
   private static final RowMapper rowMapper = new RowMapper(new ObjectMapper());
 

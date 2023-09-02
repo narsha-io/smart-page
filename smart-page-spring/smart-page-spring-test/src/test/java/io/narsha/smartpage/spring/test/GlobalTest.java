@@ -19,7 +19,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @SpringBootTest(
     classes = SmartPageSpringTestApplication.class,
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class GlobalTest {
+class GlobalTest {
 
   @Autowired AtomicReference<PaginatedFilteredQuery<Person>> ref;
 

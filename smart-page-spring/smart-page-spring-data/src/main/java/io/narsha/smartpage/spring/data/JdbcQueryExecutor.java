@@ -33,7 +33,6 @@ public class JdbcQueryExecutor implements QueryExecutor {
         paginatedFilteredQuery.filters().entrySet().stream()
             .collect(Collectors.toMap(Map.Entry::getKey, f -> f.getValue().getValue()));
 
-    System.out.println("query = " + jdbcQueryParser.getQuery());
     List<T> data =
         this.jdbcTemplate.query(
             jdbcQueryParser.getQuery(),

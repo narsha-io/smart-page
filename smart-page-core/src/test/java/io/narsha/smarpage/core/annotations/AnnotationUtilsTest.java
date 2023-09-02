@@ -10,7 +10,7 @@ import io.narsha.smartpage.core.annotations.DataTableProperty;
 import io.narsha.smartpage.core.exceptions.InternalException;
 import org.junit.jupiter.api.Test;
 
-public class AnnotationUtilsTest {
+class AnnotationUtilsTest {
 
   @Test
   void getClassAnnotationValue() {
