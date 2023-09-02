@@ -33,12 +33,6 @@
             <artifactId>spring-data-commons</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.narsha</groupId>
-            <artifactId>smart-page-spring-test</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>smart-page-spring-test</artifactId>
             <version>${project.version}</version>

@@ -30,13 +30,7 @@
             <groupId>io.narsha</groupId>
             <artifactId>smart-page-spring-test</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>smart-page-spring-test</artifactId>
-            <version>${project.version}</version>
-            <type>test-jar</type>
+            <scope>test-jar</scope>
         </dependency>
     </dependencies>
 

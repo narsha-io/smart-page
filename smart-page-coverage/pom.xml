@@ -22,11 +22,6 @@
             <artifactId>smart-page-spring-data</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>smart-page-spring-test</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 
     <build>

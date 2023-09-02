@@ -17,8 +17,8 @@
     </properties>
 
     <modules>
-        <module>smart-page-spring-test</module>
         <module>smart-page-spring-core</module>
+        <module>smart-page-spring-test</module>
         <module>smart-page-spring-data</module>
     </modules>
 
