@@ -38,8 +38,8 @@ class ResolverTest {
 
     final var query = reference.get();
     assertPageAndTarget(query);
-    assertThat(query.getOrders()).isEmpty();
-    assertThat(query.getFilters()).isEmpty();
+    assertThat(query.orders()).isEmpty();
+    assertThat(query.filters()).isEmpty();
   }
 
   @Test
@@ -49,8 +49,8 @@ class ResolverTest {
     final var query = reference.get();
     assertPageAndTarget(query, 10, 300);
     final var sort = Map.of("id", "asc", "firstName", "desc");
-    assertThat(query.getOrders()).isEqualTo(sort);
-    assertThat(query.getFilters()).isEmpty();
+    assertThat(query.orders()).isEqualTo(sort);
+    assertThat(query.filters()).isEmpty();
   }
 
   @Test
@@ -61,8 +61,8 @@ class ResolverTest {
     assertPageAndTarget(query, 10, 300);
 
     final var sort = Map.of("id", "asc");
-    assertThat(query.getOrders()).isEqualTo(sort);
-    assertThat(query.getFilters()).isEmpty();
+    assertThat(query.orders()).isEqualTo(sort);
+    assertThat(query.filters()).isEmpty();
   }
 
   @Test
@@ -73,16 +73,16 @@ class ResolverTest {
     final var query = reference.get();
     assertPageAndTarget(query);
 
-    assertThat(query.getOrders()).isEmpty();
+    assertThat(query.orders()).isEmpty();
 
-    assertThat(query.getFilters()).hasSize(2);
-    assertThat(query.getFilters()).containsKey("id");
-    var filter = query.getFilters().get("id");
+    assertThat(query.filters()).hasSize(2);
+    assertThat(query.filters()).containsKey("id");
+    var filter = query.filters().get("id");
     assertThat(filter).isInstanceOf(EqualsFilter.class);
     assertThat(filter.getValue()).isEqualTo(1L);
 
-    assertThat(query.getFilters()).containsKey("firstName");
-    filter = query.getFilters().get("firstName");
+    assertThat(query.filters()).containsKey("firstName");
+    filter = query.filters().get("firstName");
     assertThat(filter).isInstanceOf(EqualsFilter.class);
     assertThat(filter.getValue()).isEqualTo("toto");
   }
@@ -94,16 +94,16 @@ class ResolverTest {
     final var query = reference.get();
     assertPageAndTarget(query);
 
-    assertThat(query.getOrders()).isEmpty();
+    assertThat(query.orders()).isEmpty();
 
-    assertThat(query.getFilters()).hasSize(2);
-    assertThat(query.getFilters()).containsKey("id");
-    var filter = query.getFilters().get("id");
+    assertThat(query.filters()).hasSize(2);
+    assertThat(query.filters()).containsKey("id");
+    var filter = query.filters().get("id");
     assertThat(filter).isInstanceOf(EqualsFilter.class);
     assertThat(filter.getValue()).isEqualTo(1L);
 
-    assertThat(query.getFilters()).containsKey("firstName");
-    filter = query.getFilters().get("firstName");
+    assertThat(query.filters()).containsKey("firstName");
+    filter = query.filters().get("firstName");
     assertThat(filter).isInstanceOf(EqualsFilter.class);
     assertThat(filter.getValue()).isEqualTo("toto");
   }
@@ -126,8 +126,8 @@ class ResolverTest {
 
   private void assertPageAndTarget(
       PaginatedFilteredQuery<Person> query, Integer page, Integer size) {
-    assertThat(query.getPage()).isEqualTo(page);
-    assertThat(query.getSize()).isEqualTo(size);
-    assertThat(query.getTargetClass()).isEqualTo(Person.class);
+    assertThat(query.page()).isEqualTo(page);
+    assertThat(query.size()).isEqualTo(size);
+    assertThat(query.targetClass()).isEqualTo(Person.class);
   }
 }

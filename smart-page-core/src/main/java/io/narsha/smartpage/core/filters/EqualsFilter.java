@@ -8,10 +8,7 @@ public class EqualsFilter extends FilterParser {
 
   @Override
   public void parse(ObjectMapper objectMapper, Class<?> targetClass, String[] value) {
-    if (value.length > 1) {
-      throw new IllegalArgumentException();
-    }
-    this.value = objectMapper.convertValue(value[0], targetClass);
+    this.value = objectMapper.convertValue(String.join(",", value), targetClass);
   }
 
   @Override

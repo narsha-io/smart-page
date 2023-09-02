@@ -29,14 +29,14 @@ public class JdbcQueryParser<T> {
   private StringBuilder offsetQuery = new StringBuilder();
 
   private void buildOffsetQuery() {
-    if (this.queryFilter.getPage() != null
-        && this.queryFilter.getPage() >= 0
-        && this.queryFilter.getSize() != null
-        && this.queryFilter.getSize() > 0) {
-      var offsetStart = this.queryFilter.getPage() * this.queryFilter.getSize();
+    if (this.queryFilter.page() != null
+        && this.queryFilter.page() >= 0
+        && this.queryFilter.size() != null
+        && this.queryFilter.size() > 0) {
+      var offsetStart = this.queryFilter.page() * this.queryFilter.size();
       this.offsetQuery
           .append(" LIMIT ")
-          .append(this.queryFilter.getSize())
+          .append(this.queryFilter.size())
           .append(" OFFSET ")
           .append(offsetStart);
     }
@@ -70,7 +70,7 @@ public class JdbcQueryParser<T> {
     }
 
     this.queryFilter
-        .getFilters()
+        .filters()
         .forEach(
             (prop, parser) -> {
               final var sqlField = getFilterParamValue(prop);
@@ -89,8 +89,8 @@ public class JdbcQueryParser<T> {
 
   private String getBaseQuery() {
     final var reference =
-        AnnotationUtils.getAnnotationProperty(
-            this.queryFilter.getTargetClass(), DataTable.class, DataTable::value);
+        AnnotationUtils.getClassAnnotationValue(
+            this.queryFilter.targetClass(), DataTable.class, DataTable::value);
     return getSQLFileContent(reference);
   }
 
@@ -108,8 +108,8 @@ public class JdbcQueryParser<T> {
 
   private String getFilterParamValue(String prop) {
     try {
-      return AnnotationUtils.getAnnotationProperty(
-          this.queryFilter.getTargetClass(),
+      return AnnotationUtils.getFieldAnnotationValue(
+          this.queryFilter.targetClass(),
           prop,
           DataTableProperty.class,
           DataTableProperty::columnName);
@@ -120,7 +120,7 @@ public class JdbcQueryParser<T> {
 
   private String getOrderFragment() {
     var order =
-        StreamSupport.stream(this.queryFilter.getOrders().entrySet().spliterator(), false)
+        StreamSupport.stream(this.queryFilter.orders().entrySet().spliterator(), false)
             .map(
                 o -> {
                   var prop = getFilterParamValue(o.getKey());

@@ -64,9 +64,14 @@ public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentReso
     final var filters = getFilters(parameters, httpFilters, targetClass);
 
     final var paginatedFilteredQuery =
-        new PaginatedFilteredQuery<>(targetClass, pageable.getPageNumber(), pageable.getPageSize());
-    paginatedFilteredQuery.getOrders().putAll(extractSort(targetClass, pageable));
-    paginatedFilteredQuery.getFilters().putAll(filters);
+        new PaginatedFilteredQuery<>(
+            targetClass,
+            new HashMap<>(),
+            new HashMap<>(),
+            pageable.getPageNumber(),
+            pageable.getPageSize());
+    paginatedFilteredQuery.orders().putAll(extractSort(targetClass, pageable));
+    paginatedFilteredQuery.filters().putAll(filters);
 
     return paginatedFilteredQuery;
   }
