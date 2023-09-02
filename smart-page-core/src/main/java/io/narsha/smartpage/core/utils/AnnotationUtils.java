@@ -1,5 +1,6 @@
-package io.narsha.smartpage.core.annotations;
+package io.narsha.smartpage.core.utils;
 
+import io.narsha.smartpage.core.annotations.DataTableProperty;
 import io.narsha.smartpage.core.exceptions.InternalException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

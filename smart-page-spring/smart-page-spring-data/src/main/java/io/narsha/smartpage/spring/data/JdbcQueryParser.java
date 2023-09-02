@@ -2,14 +2,13 @@ package io.narsha.smartpage.spring.data;
 
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.QueryExecutor;
-import io.narsha.smartpage.core.annotations.AnnotationUtils;
 import io.narsha.smartpage.core.annotations.DataTable;
-import io.narsha.smartpage.core.annotations.DataTableProperty;
+import io.narsha.smartpage.core.utils.AnnotationUtils;
+import io.narsha.smartpage.spring.data.filters.JdbcFilterRegistrationService;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
@@ -19,6 +18,7 @@ public class JdbcQueryParser<T> {
   private StringBuilder query = new StringBuilder();
   private StringBuilder countQuery = new StringBuilder();
   private final PaginatedFilteredQuery<T> queryFilter;
+  private final JdbcFilterRegistrationService jdbcFilterRegistrationService;
 
   public void init() {
     buildQuery();
@@ -52,7 +52,7 @@ public class JdbcQueryParser<T> {
 
   private void buildQuery() {
     this.query.append(getBaseQuery());
-    this.query.append(getFilterFragment(this.query.toString()));
+    this.query.append(getFilterFragment());
     this.query.append(getOrderFragment());
   }
 
@@ -62,29 +62,24 @@ public class JdbcQueryParser<T> {
     this.countQuery.append(") C");
   }
 
-  private String getFilterFragment(String currentQuery) {
+  private String getFilterFragment() {
     final var filterBuilder = new StringBuilder();
-
-    if (!isWhereClauseExists(currentQuery)) {
-      filterBuilder.append(" where 1 = 1 ");
-    }
 
     this.queryFilter
         .filters()
         .forEach(
-            (prop, parser) -> {
-              final var sqlField = getFilterParamValue(prop);
-              filterBuilder.append(" and ").append(sqlField).append(parser.getSQLFragment(prop));
-            });
+            (prop, parser) ->
+                this.jdbcFilterRegistrationService
+                    .get(parser.getClass())
+                    .ifPresentOrElse(
+                        sql -> {
+                          filterBuilder.append(" AND ").append(sql.getSQLFragment(prop));
+                        },
+                        () -> {
+                          throw new IllegalArgumentException();
+                        }));
 
     return filterBuilder.toString();
-  }
-
-  private boolean isWhereClauseExists(String query) {
-    final var whereIndex = query.lastIndexOf("where");
-    final var index = query.lastIndexOf(")");
-
-    return index < whereIndex;
   }
 
   private String getBaseQuery() {
@@ -103,33 +98,17 @@ public class JdbcQueryParser<T> {
     } catch (Exception e) {
       res = reference;
     }
-    return "select * from ( " + res + " ) SMART_PAGE_QUERY";
-  }
-
-  private String getFilterParamValue(String prop) {
-    try {
-      return AnnotationUtils.getFieldAnnotationValue(
-          this.queryFilter.targetClass(),
-          prop,
-          DataTableProperty.class,
-          DataTableProperty::columnName);
-    } catch (Exception e) {
-      return prop;
-    }
+    return "SELECT * FROM ( " + res + " ) SMART_PAGE_QUERY WHERE 1 = 1 ";
   }
 
   private String getOrderFragment() {
     var order =
-        StreamSupport.stream(this.queryFilter.orders().entrySet().spliterator(), false)
-            .map(
-                o -> {
-                  var prop = getFilterParamValue(o.getKey());
-                  return prop + " " + o.getValue();
-                })
+        this.queryFilter.orders().entrySet().stream()
+            .map(o -> o.getKey() + " " + o.getValue())
             .collect(Collectors.joining(", "));
 
     if (StringUtils.isNotEmpty(order)) {
-      order = " order by " + order;
+      order = " ORDER BY " + order;
     }
     return order;
   }

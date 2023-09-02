@@ -17,8 +17,8 @@
     </properties>
 
     <modules>
-        <module>smart-page-spring-test</module>
         <module>smart-page-spring-core</module>
+        <module>smart-page-spring-test</module>
         <module>smart-page-spring-data</module>
     </modules>
 
@@ -28,6 +28,12 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
                 <version>${spring.boot.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -47,6 +53,5 @@
 
         </dependencies>
     </dependencyManagement>
-
 
 </project>

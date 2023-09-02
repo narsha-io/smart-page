@@ -9,6 +9,7 @@ import io.narsha.smartpage.core.filters.ContainsFilter;
 import io.narsha.smartpage.core.filters.EqualsFilter;
 import io.narsha.smartpage.core.filters.InFilter;
 import io.narsha.smartpage.spring.data.JdbcQueryExecutor;
+import io.narsha.smartpage.spring.data.filters.JdbcFilterRegistrationService;
 import io.narsha.smartpage.spring.test.SmartPageSpringTestApplication;
 import io.narsha.smartpage.spring.test.model.Person;
 import io.narsha.smartpage.spring.test.validator.PersonValidator;
@@ -30,13 +31,15 @@ class JdbcQueryExecutorTest {
 
   @Autowired private NamedParameterJdbcTemplate jdbcTemplate;
 
+  @Autowired private JdbcFilterRegistrationService jdbcFilterRegistrationService;
+
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Test
   @Order(1)
   void mappingTest() {
     final Pair<List<Person>, Long> res =
-        new JdbcQueryExecutor(jdbcTemplate)
+        new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService)
             .execute(
                 new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 10),
                 new RowMapper(objectMapper));
@@ -49,7 +52,7 @@ class JdbcQueryExecutorTest {
   @Order(2)
   void paginationTestPage0() {
     final Pair<List<Person>, Long> res =
-        new JdbcQueryExecutor(jdbcTemplate)
+        new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService)
             .execute(
                 new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 2),
                 new RowMapper(objectMapper));
@@ -62,7 +65,7 @@ class JdbcQueryExecutorTest {
   @Order(3)
   void paginationTestPage1() {
     final Pair<List<Person>, Long> res =
-        new JdbcQueryExecutor(jdbcTemplate)
+        new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService)
             .execute(
                 new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 1, 2),
                 new RowMapper(objectMapper));
@@ -76,10 +79,11 @@ class JdbcQueryExecutorTest {
   void paginationTestSortedPage0() {
     final var query =
         new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 2);
-    query.orders().put("firstName", "asc");
+    query.orders().put("first_name", "asc");
 
     final Pair<List<Person>, Long> res =
-        new JdbcQueryExecutor(jdbcTemplate).execute(query, new RowMapper(objectMapper));
+        new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService)
+            .execute(query, new RowMapper(objectMapper));
     assertThat(res.getKey()).hasSize(2);
     assertThat(res.getValue()).isEqualTo(5L);
     PersonValidator.containsIds(res.getKey(), Set.of(1L, 5L));
@@ -91,10 +95,11 @@ class JdbcQueryExecutorTest {
   void paginationTestSortedPage1() {
     final var query =
         new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 1, 2);
-    query.orders().put("firstName", "asc");
+    query.orders().put("first_name", "asc");
 
     final Pair<List<Person>, Long> res =
-        new JdbcQueryExecutor(jdbcTemplate).execute(query, new RowMapper(objectMapper));
+        new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService)
+            .execute(query, new RowMapper(objectMapper));
     assertThat(res.getKey()).hasSize(2);
     assertThat(res.getValue()).isEqualTo(5L);
     PersonValidator.containsIds(res.getKey(), Set.of(4L, 2L));
@@ -106,12 +111,13 @@ class JdbcQueryExecutorTest {
   void paginationTestEqualsStringFilter() {
     final var query =
         new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 2);
-    var filter = new EqualsFilter();
-    filter.parse(new ObjectMapper(), String.class, new String[] {"Perceval"});
-    query.filters().put("firstName", filter);
+    var filter = new EqualsFilter<>(String.class);
+    filter.parse(new ObjectMapper(), new String[] {"Perceval"});
+    query.filters().put("first_name", filter);
 
     final Pair<List<Person>, Long> res =
-        new JdbcQueryExecutor(jdbcTemplate).execute(query, new RowMapper(objectMapper));
+        new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService)
+            .execute(query, new RowMapper(objectMapper));
     assertThat(res.getKey()).hasSize(1);
     assertThat(res.getValue()).isEqualTo(1L);
     PersonValidator.containsIds(res.getKey(), Set.of(3L));
@@ -123,12 +129,13 @@ class JdbcQueryExecutorTest {
   void paginationTestEqualsLongFilter() {
     final var query =
         new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 2);
-    var filter = new EqualsFilter();
-    filter.parse(new ObjectMapper(), String.class, new String[] {"2"});
+    var filter = new EqualsFilter<>(String.class);
+    filter.parse(new ObjectMapper(), new String[] {"2"});
     query.filters().put("id", filter);
 
     final Pair<List<Person>, Long> res =
-        new JdbcQueryExecutor(jdbcTemplate).execute(query, new RowMapper(objectMapper));
+        new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService)
+            .execute(query, new RowMapper(objectMapper));
     assertThat(res.getKey()).hasSize(1);
     assertThat(res.getValue()).isEqualTo(1L);
     PersonValidator.containsIds(res.getKey(), Set.of(2L));
@@ -140,12 +147,13 @@ class JdbcQueryExecutorTest {
   void paginationTestInLongFilter() {
     final var query =
         new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 2);
-    var filter = new InFilter();
-    filter.parse(new ObjectMapper(), Long.class, new String[] {"2", "3"});
+    var filter = new InFilter<>(Long.class);
+    filter.parse(new ObjectMapper(), new String[] {"2", "3"});
     query.filters().put("id", filter);
 
     final Pair<List<Person>, Long> res =
-        new JdbcQueryExecutor(jdbcTemplate).execute(query, new RowMapper(objectMapper));
+        new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService)
+            .execute(query, new RowMapper(objectMapper));
     assertThat(res.getKey()).hasSize(2);
     assertThat(res.getValue()).isEqualTo(2L);
     PersonValidator.containsIds(res.getKey(), Set.of(2L, 3L));
@@ -157,12 +165,13 @@ class JdbcQueryExecutorTest {
   void paginationTestInStringFilter() {
     final var query =
         new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 2);
-    var filter = new InFilter();
-    filter.parse(new ObjectMapper(), String.class, new String[] {"Perceval", "Leodagan"});
-    query.filters().put("firstName", filter);
+    var filter = new InFilter<>(String.class);
+    filter.parse(new ObjectMapper(), new String[] {"Perceval", "Leodagan"});
+    query.filters().put("first_name", filter);
 
     final Pair<List<Person>, Long> res =
-        new JdbcQueryExecutor(jdbcTemplate).execute(query, new RowMapper(objectMapper));
+        new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService)
+            .execute(query, new RowMapper(objectMapper));
     assertThat(res.getKey()).hasSize(2);
     assertThat(res.getValue()).isEqualTo(2L);
     PersonValidator.containsIds(res.getKey(), Set.of(2L, 3L));
@@ -175,11 +184,12 @@ class JdbcQueryExecutorTest {
     final var query =
         new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 2);
     var filter = new ContainsFilter();
-    filter.parse(new ObjectMapper(), String.class, new String[] {"Ka"});
-    query.filters().put("firstName", filter);
+    filter.parse(new ObjectMapper(), new String[] {"Ka"});
+    query.filters().put("first_name", filter);
 
     final Pair<List<Person>, Long> res =
-        new JdbcQueryExecutor(jdbcTemplate).execute(query, new RowMapper(objectMapper));
+        new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService)
+            .execute(query, new RowMapper(objectMapper));
     assertThat(res.getKey()).hasSize(2);
     assertThat(res.getValue()).isEqualTo(2L);
     PersonValidator.containsIds(res.getKey(), Set.of(4L, 5L));

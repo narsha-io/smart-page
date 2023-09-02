@@ -2,11 +2,15 @@ package io.narsha.smartpage.core.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public abstract class FilterParser {
+public abstract class FilterParser<T, R> {
 
-  public abstract void parse(ObjectMapper objectMapper, Class<?> targetClass, String[] value);
+  protected Class<T> targetClass;
 
-  public abstract String getSQLFragment(String property);
+  protected FilterParser(Class<T> targetClass) {
+    this.targetClass = targetClass;
+  }
 
-  public abstract Object getValue();
+  public abstract void parse(ObjectMapper objectMapper, String[] value);
+
+  public abstract R getValue();
 }
