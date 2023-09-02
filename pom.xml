@@ -12,7 +12,6 @@
         <module>smart-page-core</module>
         <module>smart-page-spring</module>
         <module>smart-page-coverage</module>
-        <module>smart-page-spring/smart-page-spring-test</module>
     </modules>
 
     <properties>
@@ -22,6 +21,7 @@
         <sonar.organization>narsha-io</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <git-code-format-maven-plugin.version>4.2</git-code-format-maven-plugin.version>
+        <jacoco.overall.exec>target/jacoco_analysis/jacoco.exec</jacoco.overall.exec>
     </properties>
 
     <dependencies>
@@ -56,6 +56,10 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.10</version>
+                <configuration>
+                    <destFile>${jacoco.overall.exec}</destFile>
+                    <dataFile>${jacoco.overall.exec}</dataFile>
+                </configuration>
                 <executions>
                     <execution>
                         <id>jacoco-initialize</id>
