@@ -19,7 +19,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>smart-page-spring-data</artifactId>
+            <artifactId>smart-page-spring-sql</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

@@ -10,7 +10,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>smart-page-spring-data</artifactId>
+    <artifactId>smart-page-spring-sql</artifactId>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
