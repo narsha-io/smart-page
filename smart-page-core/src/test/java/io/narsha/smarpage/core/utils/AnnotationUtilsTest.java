@@ -94,7 +94,7 @@ class AnnotationUtilsTest {
   }
 
   @DataTable(value = "select 1")
-  public static class Person {
+  private static class Person {
 
     private Long id;
 
