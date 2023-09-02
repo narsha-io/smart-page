@@ -5,7 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.RowMapper;
+import io.narsha.smartpage.core.filters.ContainsFilter;
 import io.narsha.smartpage.core.filters.EqualsFilter;
+import io.narsha.smartpage.core.filters.InFilter;
 import io.narsha.smartpage.spring.data.JdbcQueryExecutor;
 import io.narsha.smartpage.spring.test.SmartPageSpringTestApplication;
 import io.narsha.smartpage.spring.test.model.Person;
@@ -130,6 +132,57 @@ class JdbcQueryExecutorTest {
     assertThat(res.getKey()).hasSize(1);
     assertThat(res.getValue()).isEqualTo(1L);
     PersonValidator.containsIds(res.getKey(), Set.of(2L));
+    PersonValidator.validate(res.getKey());
+  }
+
+  @Test
+  @Order(8)
+  void paginationTestInLongFilter() {
+    final var query =
+        new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 2);
+    var filter = new InFilter();
+    filter.parse(new ObjectMapper(), Long.class, new String[] {"2", "3"});
+    query.filters().put("id", filter);
+
+    final Pair<List<Person>, Long> res =
+        new JdbcQueryExecutor(jdbcTemplate).execute(query, new RowMapper(objectMapper));
+    assertThat(res.getKey()).hasSize(2);
+    assertThat(res.getValue()).isEqualTo(2L);
+    PersonValidator.containsIds(res.getKey(), Set.of(2L, 3L));
+    PersonValidator.validate(res.getKey());
+  }
+
+  @Test
+  @Order(9)
+  void paginationTestInStringFilter() {
+    final var query =
+        new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 2);
+    var filter = new InFilter();
+    filter.parse(new ObjectMapper(), String.class, new String[] {"Perceval", "Leodagan"});
+    query.filters().put("firstName", filter);
+
+    final Pair<List<Person>, Long> res =
+        new JdbcQueryExecutor(jdbcTemplate).execute(query, new RowMapper(objectMapper));
+    assertThat(res.getKey()).hasSize(2);
+    assertThat(res.getValue()).isEqualTo(2L);
+    PersonValidator.containsIds(res.getKey(), Set.of(2L, 3L));
+    PersonValidator.validate(res.getKey());
+  }
+
+  @Test
+  @Order(10)
+  void paginationTestContainsStringFilter() {
+    final var query =
+        new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 2);
+    var filter = new ContainsFilter();
+    filter.parse(new ObjectMapper(), String.class, new String[] {"Ka"});
+    query.filters().put("firstName", filter);
+
+    final Pair<List<Person>, Long> res =
+        new JdbcQueryExecutor(jdbcTemplate).execute(query, new RowMapper(objectMapper));
+    assertThat(res.getKey()).hasSize(2);
+    assertThat(res.getValue()).isEqualTo(2L);
+    PersonValidator.containsIds(res.getKey(), Set.of(4L, 5L));
     PersonValidator.validate(res.getKey());
   }
 }

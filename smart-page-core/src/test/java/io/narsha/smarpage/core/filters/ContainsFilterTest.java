@@ -9,58 +9,60 @@ import io.narsha.smartpage.core.filters.FilterParser;
 import java.util.function.Supplier;
 import org.junit.jupiter.api.Test;
 
-class EqualsFilterTest {
+class ContainsFilterTest {
 
   private static final ObjectMapper objectMapper = new ObjectMapper();
-  private static final Supplier<FilterParser> equalsParserSupplier = Filter.EQUALS.getParser();
+  private static final Supplier<FilterParser> containsParserSupplier = Filter.CONTAINS.getParser();
 
   @Test
   void emptyString() {
-    final var filter = equalsParserSupplier.get();
+    final var filter = containsParserSupplier.get();
     filter.parse(objectMapper, String.class, new String[] {""});
-    assertThat(filter.getValue()).isEqualTo("");
+    assertThat(filter.getValue()).isEqualTo("%%"); // TODO throw exception
   }
 
   @Test
   void simpleString() {
-    final var filter = equalsParserSupplier.get();
+    final var filter = containsParserSupplier.get();
     filter.parse(objectMapper, String.class, new String[] {"test"});
-    assertThat(filter.getValue()).isEqualTo("test");
-    assertThat(filter.getSQLFragment("name")).isEqualTo(" = :name");
+    assertThat(filter.getValue()).isEqualTo("%test%");
+    assertThat(filter.getSQLFragment("name")).isEqualTo(" like :name");
   }
 
   @Test
   void multipleString() {
-    final var filter = equalsParserSupplier.get();
+    final var filter = containsParserSupplier.get();
     filter.parse(objectMapper, String.class, new String[] {"test1", "test2"});
-    assertThat(filter.getValue()).isEqualTo("test1,test2");
+    assertThat(filter.getValue()).isEqualTo("%test1,test2%");
   }
 
   @Test
   void emptyLong() {
-    final var filter = equalsParserSupplier.get();
+    final var filter = containsParserSupplier.get();
     filter.parse(objectMapper, Long.class, new String[] {""});
-    assertThat(filter.getValue()).isNull();
+    assertThat(filter.getValue())
+        .isEqualTo("%null%"); // TODO must throw exception because mismatch type
   }
 
   @Test
   void simpleLong() {
-    final var filter = equalsParserSupplier.get();
-    filter.parse(objectMapper, Long.class, new String[] {"1"});
-    assertThat(filter.getValue()).isEqualTo(1L);
+    final var filter = containsParserSupplier.get();
+    filter.parse(objectMapper, String.class, new String[] {"1"});
+    assertThat(filter.getValue()).isEqualTo("%1%");
   }
 
   @Test
   void simpleInvalidLong() {
-    final var filter = equalsParserSupplier.get();
+    final var filter = containsParserSupplier.get();
+
     assertThrows(
         IllegalArgumentException.class,
-        () -> filter.parse(objectMapper, Long.class, new String[] {"tt"}));
+        () -> filter.parse(objectMapper, Long.class, new String[] {"toto"}));
   }
 
   @Test
   void multipleLong() {
-    final var filter = equalsParserSupplier.get();
+    final var filter = containsParserSupplier.get();
     assertThrows(
         IllegalArgumentException.class,
         () -> filter.parse(objectMapper, Long.class, new String[] {"1", "2"}));
@@ -68,7 +70,7 @@ class EqualsFilterTest {
 
   @Test
   void multipleInvalidLong() {
-    final var filter = equalsParserSupplier.get();
+    final var filter = containsParserSupplier.get();
     assertThrows(
         IllegalArgumentException.class,
         () -> filter.parse(objectMapper, Long.class, new String[] {"1", "toto"}));
