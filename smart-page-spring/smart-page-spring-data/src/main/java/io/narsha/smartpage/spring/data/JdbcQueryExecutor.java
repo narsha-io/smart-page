@@ -35,7 +35,13 @@ public class JdbcQueryExecutor implements QueryExecutor {
               return extractResultSet(paginatedFilteredQuery, rowMapper, rs);
             });
 
-    Long count = 1L;
+    Long count =
+        this.jdbcTemplate.query(
+            jdbcQueryParser.getCountQuery(),
+            rs -> {
+              rs.next();
+              return rs.getLong(1);
+            });
 
     return Pair.of(data, count);
   }
