@@ -4,7 +4,8 @@ import java.util.function.Supplier;
 
 public enum Filter {
   EQUALS(EqualsFilter::new),
-  IN(InFilter::new);
+  IN(InFilter::new),
+  CONTAINS(ContainsFilter::new);
 
   final Supplier<FilterParser> parser;
 
