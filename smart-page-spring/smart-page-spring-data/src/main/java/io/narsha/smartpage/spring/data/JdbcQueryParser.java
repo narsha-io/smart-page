@@ -23,10 +23,27 @@ public class JdbcQueryParser<T> {
   public void init() {
     buildQuery();
     buildCountQuery();
+    buildOffsetQuery();
+  }
+
+  private StringBuilder offsetQuery = new StringBuilder();
+
+  private void buildOffsetQuery() {
+    if (this.queryFilter.getPage() != null
+        && this.queryFilter.getPage() >= 0
+        && this.queryFilter.getSize() != null
+        && this.queryFilter.getSize() > 0) {
+      var offsetStart = this.queryFilter.getPage() * this.queryFilter.getSize();
+      this.offsetQuery
+          .append(" LIMIT ")
+          .append(this.queryFilter.getSize())
+          .append(" OFFSET ")
+          .append(offsetStart);
+    }
   }
 
   public String getQuery() {
-    return this.query.toString();
+    return this.query.toString() + this.offsetQuery.toString();
   }
 
   public String getCountQuery() {

@@ -19,13 +19,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 @SpringBootTest(classes = {SmartPageSpringTestApplication.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JdbcQueryExecutorTest {
 
-  @Autowired private JdbcTemplate jdbcTemplate;
+  @Autowired private NamedParameterJdbcTemplate jdbcTemplate;
 
   private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -94,7 +94,7 @@ class JdbcQueryExecutorTest {
   @Test
   @Order(6)
   void paginationTestEqualsStringFilter() {
-    final var query = new PaginatedFilteredQuery<>(Person.class, 1, 2);
+    final var query = new PaginatedFilteredQuery<>(Person.class, 0, 2);
     var filter = new EqualsFilter();
     filter.parse(new ObjectMapper(), String.class, new String[] {"Perceval"});
     query.getFilters().put("firstName", filter);
@@ -110,7 +110,7 @@ class JdbcQueryExecutorTest {
   @Test
   @Order(7)
   void paginationTestEqualsLongFilter() {
-    final var query = new PaginatedFilteredQuery<>(Person.class, 1, 2);
+    final var query = new PaginatedFilteredQuery<>(Person.class, 0, 2);
     var filter = new EqualsFilter();
     filter.parse(new ObjectMapper(), String.class, new String[] {"2"});
     query.getFilters().put("id", filter);

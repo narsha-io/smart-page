@@ -10,14 +10,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 public class JdbcQueryExecutor implements QueryExecutor {
 
-  private final JdbcTemplate jdbcTemplate;
+  private final NamedParameterJdbcTemplate jdbcTemplate;
 
-  public JdbcQueryExecutor(JdbcTemplate jdbcTemplate) {
+  public JdbcQueryExecutor(NamedParameterJdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
   }
 
@@ -28,9 +29,15 @@ public class JdbcQueryExecutor implements QueryExecutor {
     final var jdbcQueryParser = new JdbcQueryParser<T>(paginatedFilteredQuery);
     jdbcQueryParser.init();
 
+    var params =
+        paginatedFilteredQuery.getFilters().entrySet().stream()
+            .collect(Collectors.toMap(Map.Entry::getKey, f -> f.getValue().getValue()));
+
+    System.out.println("query = " + jdbcQueryParser.getQuery());
     List<T> data =
         this.jdbcTemplate.query(
             jdbcQueryParser.getQuery(),
+            params,
             rs -> {
               return extractResultSet(paginatedFilteredQuery, rowMapper, rs);
             });
@@ -38,6 +45,7 @@ public class JdbcQueryExecutor implements QueryExecutor {
     Long count =
         this.jdbcTemplate.query(
             jdbcQueryParser.getCountQuery(),
+            params,
             rs -> {
               rs.next();
               return rs.getLong(1);
