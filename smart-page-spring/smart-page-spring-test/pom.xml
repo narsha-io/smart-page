@@ -23,6 +23,11 @@
             <artifactId>smart-page-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.23.1</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -3,6 +3,7 @@ package io.narsha.smartpage.spring.data;
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.RowMapper;
+import io.narsha.smartpage.core.annotations.AnnotationUtils;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,20 +16,21 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class JdbcQueryExecutor implements QueryExecutor {
 
   private final JdbcTemplate jdbcTemplate;
-  private final JdbcQueryParser jdbcQueryParser;
 
-  public JdbcQueryExecutor(JdbcTemplate jdbcTemplate, JdbcQueryParser jdbcQueryParser) {
+  public JdbcQueryExecutor(JdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
-    this.jdbcQueryParser = jdbcQueryParser;
   }
 
   @Override
   public <T> Pair<List<T>, Long> execute(
       PaginatedFilteredQuery<T> paginatedFilteredQuery, RowMapper rowMapper) {
 
+    final var jdbcQueryParser = new JdbcQueryParser<T>(paginatedFilteredQuery);
+    jdbcQueryParser.init();
+
     List<T> data =
         this.jdbcTemplate.query(
-            "select id, first_name as firstName, role from person",
+            jdbcQueryParser.getQuery(),
             rs -> {
               return extractResultSet(paginatedFilteredQuery, rowMapper, rs);
             });
@@ -48,7 +50,10 @@ public class JdbcQueryExecutor implements QueryExecutor {
       final var object = new HashMap<String, Object>();
 
       for (var entry : queryDefinition.entrySet()) {
-        object.put(entry.getKey(), rs.getObject(entry.getValue()));
+        object.put(
+            AnnotationUtils.getJavaProperty(
+                paginatedFilteredQuery.getTargetClass(), entry.getKey()),
+            rs.getObject(entry.getValue()));
       }
       result.add(rowMapper.convert(object, paginatedFilteredQuery.getTargetClass()));
     }
