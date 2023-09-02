@@ -17,21 +17,21 @@ class ContainsFilterTest {
   void emptyString() {
     final var filter = containsFilterFactory.get(String.class);
     filter.parse(objectMapper, new String[] {""});
-    assertThat(filter.getValue()).isEqualTo("%%"); // TODO throw exception
+    assertThat(filter.getValue()).isEqualTo(""); // TODO throw exception
   }
 
   @Test
   void simpleString() {
     final var filter = containsFilterFactory.get(String.class);
     filter.parse(objectMapper, new String[] {"test"});
-    assertThat(filter.getValue()).isEqualTo("%test%");
+    assertThat(filter.getValue()).isEqualTo("test");
   }
 
   @Test
   void multipleString() {
     final var filter = containsFilterFactory.get(String.class);
     filter.parse(objectMapper, new String[] {"test1", "test2"});
-    assertThat(filter.getValue()).isEqualTo("%test1,test2%");
+    assertThat(filter.getValue()).isEqualTo("test1,test2");
   }
 
   @Test

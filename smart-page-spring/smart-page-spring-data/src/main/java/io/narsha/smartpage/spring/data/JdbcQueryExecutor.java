@@ -27,12 +27,19 @@ public class JdbcQueryExecutor implements QueryExecutor {
       PaginatedFilteredQuery<T> paginatedFilteredQuery, RowMapper rowMapper) {
 
     final var jdbcQueryParser =
-        new JdbcQueryParser<T>(paginatedFilteredQuery, jdbcFilterRegistrationService);
+        new JdbcQueryParser<>(paginatedFilteredQuery, jdbcFilterRegistrationService);
     jdbcQueryParser.init();
 
-    var params =
+    final var params =
         paginatedFilteredQuery.filters().entrySet().stream()
-            .collect(Collectors.toMap(Map.Entry::getKey, f -> f.getValue().getValue()));
+            .collect(
+                Collectors.toMap(
+                    Map.Entry::getKey,
+                    v ->
+                        jdbcFilterRegistrationService
+                            .get(v.getValue().getClass())
+                            .map(t -> t.getValue(v.getValue().getValue()))
+                            .orElse(v.getValue().getValue())));
 
     System.out.println(jdbcQueryParser.getQuery());
     List<T> data =

@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
+@Getter
 public class ContainsFilter extends FilterParser<String, String> {
 
   private String value;
@@ -25,9 +27,5 @@ public class ContainsFilter extends FilterParser<String, String> {
       tmp = "";
     }
     this.value = objectMapper.convertValue(tmp, targetClass);
-  }
-
-  public String getValue() {
-    return "%" + this.value + "%";
   }
 }
