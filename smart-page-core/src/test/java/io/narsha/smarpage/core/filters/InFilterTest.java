@@ -6,69 +6,73 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.narsha.smartpage.core.filters.Filter;
 import io.narsha.smartpage.core.filters.FilterParser;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Supplier;
 import org.junit.jupiter.api.Test;
 
-class EqualsFilterTest {
+class InFilterTest {
 
   private static final ObjectMapper objectMapper = new ObjectMapper();
-  private static final Supplier<FilterParser> equalsParserSupplier = Filter.EQUALS.getParser();
+  private static final Supplier<FilterParser> inParserSupplier = Filter.IN.getParser();
 
   @Test
   void emptyString() {
-    final var filter = equalsParserSupplier.get();
+    final var filter = inParserSupplier.get();
     filter.parse(objectMapper, String.class, new String[] {""});
-    assertThat(filter.getValue()).isEqualTo("");
+    assertThat(filter.getValue()).isEqualTo(Set.of(""));
   }
 
   @Test
   void simpleString() {
-    final var filter = equalsParserSupplier.get();
+    final var filter = inParserSupplier.get();
     filter.parse(objectMapper, String.class, new String[] {"test"});
-    assertThat(filter.getValue()).isEqualTo("test");
-    assertThat(filter.getSQLFragment("name")).isEqualTo(" = :name");
+    assertThat(filter.getValue()).isEqualTo(Set.of("test"));
+    assertThat(filter.getSQLFragment("name")).isEqualTo(" in (:name)");
   }
 
   @Test
   void multipleString() {
-    final var filter = equalsParserSupplier.get();
+    final var filter = inParserSupplier.get();
     filter.parse(objectMapper, String.class, new String[] {"test1", "test2"});
-    assertThat(filter.getValue()).isEqualTo("test1,test2");
+    assertThat(filter.getValue()).isEqualTo(Set.of("test1", "test2"));
   }
 
   @Test
   void emptyLong() {
-    final var filter = equalsParserSupplier.get();
+    final var filter = inParserSupplier.get();
     filter.parse(objectMapper, Long.class, new String[] {""});
-    assertThat(filter.getValue()).isNull();
+    final var set = new HashSet<Long>();
+    set.add(null);
+    assertThat(filter.getValue()).isEqualTo(set);
   }
 
   @Test
   void simpleLong() {
-    final var filter = equalsParserSupplier.get();
+    final var filter = inParserSupplier.get();
     filter.parse(objectMapper, Long.class, new String[] {"1"});
-    assertThat(filter.getValue()).isEqualTo(1L);
+    assertThat(filter.getValue()).isEqualTo(Set.of(1L));
   }
 
   @Test
   void simpleInvalidLong() {
-    final var filter = equalsParserSupplier.get();
+    final var filter = inParserSupplier.get();
+
     assertThrows(
         IllegalArgumentException.class,
-        () -> filter.parse(objectMapper, Long.class, new String[] {"tt"}));
+        () -> filter.parse(objectMapper, Long.class, new String[] {"toto"}));
   }
 
   @Test
   void multipleLong() {
-    final var filter = equalsParserSupplier.get();
-    assertThrows(
-        IllegalArgumentException.class,
-        () -> filter.parse(objectMapper, Long.class, new String[] {"1", "2"}));
+    final var filter = inParserSupplier.get();
+    filter.parse(objectMapper, Long.class, new String[] {"1", "2"});
+    assertThat(filter.getValue()).isEqualTo(Set.of(1L, 2L));
   }
 
   @Test
   void multipleInvalidLong() {
-    final var filter = equalsParserSupplier.get();
+    final var filter = inParserSupplier.get();
     assertThrows(
         IllegalArgumentException.class,
         () -> filter.parse(objectMapper, Long.class, new String[] {"1", "toto"}));

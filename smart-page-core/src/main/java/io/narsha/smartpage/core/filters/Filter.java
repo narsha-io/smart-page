@@ -3,7 +3,8 @@ package io.narsha.smartpage.core.filters;
 import java.util.function.Supplier;
 
 public enum Filter {
-  EQUALS(EqualsFilter::new);
+  EQUALS(EqualsFilter::new),
+  IN(InFilter::new);
 
   final Supplier<FilterParser> parser;
 
