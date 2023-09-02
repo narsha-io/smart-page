@@ -12,7 +12,6 @@
         <module>smart-page-core</module>
         <module>smart-page-spring</module>
         <module>smart-page-coverage</module>
-        <module>smart-page-spring/smart-page-spring-test</module>
     </modules>
 
     <properties>
@@ -69,6 +68,13 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <goals>
+                            <goal>report-aggregate</goal>
+                        </goals>
+                        <phase>verify</phase>
                     </execution>
                 </executions>
             </plugin>
