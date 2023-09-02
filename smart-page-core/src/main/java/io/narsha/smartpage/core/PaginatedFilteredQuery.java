@@ -5,7 +5,7 @@ import java.util.Map;
 
 public record PaginatedFilteredQuery<T>(
     Class<T> targetClass,
-    Map<String, FilterParser> filters,
+    Map<String, FilterParser<?, ?>> filters,
     Map<String, String> orders,
     Integer page,
     Integer size) {}

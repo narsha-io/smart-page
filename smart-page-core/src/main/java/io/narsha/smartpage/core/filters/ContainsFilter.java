@@ -6,12 +6,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 
-public class ContainsFilter extends FilterParser {
+public class ContainsFilter extends FilterParser<String, String> {
 
-  private Object value;
+  private String value;
+
+  public ContainsFilter() {
+    super(String.class);
+  }
 
   @Override
-  public void parse(ObjectMapper objectMapper, Class<?> targetClass, String[] value) {
+  public void parse(ObjectMapper objectMapper, String[] value) {
     var tmp =
         Stream.of(value)
             .filter(Objects::nonNull)
@@ -23,12 +27,7 @@ public class ContainsFilter extends FilterParser {
     this.value = objectMapper.convertValue(tmp, targetClass);
   }
 
-  @Override
-  public String getSQLFragment(String property) {
-    return String.format(" like :%s", property);
-  }
-
-  public Object getValue() {
+  public String getValue() {
     return "%" + this.value + "%";
   }
 }

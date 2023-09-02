@@ -1,6 +1,5 @@
 package io.narsha.smartpage.spring.core.web;
 
-import io.narsha.smartpage.core.exceptions.UnknownFilterException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -24,9 +23,9 @@ public class WebConfig implements WebMvcConfigurer {
   @ControllerAdvice
   public class PaginatedFilterControllerAdvice {
 
-    @ExceptionHandler(UnknownFilterException.class)
+    @ExceptionHandler(IllegalArgumentException.class)
     protected ResponseEntity<String> handleHttpRequestMethodNotSupportedException(
-        UnknownFilterException e) {
+        IllegalArgumentException e) {
       return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
   }

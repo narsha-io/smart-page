@@ -5,12 +5,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class InFilter extends FilterParser {
+public class InFilter<T> extends FilterParser<T, Set<T>> {
 
-  private Set<Object> value;
+  private Set<T> value;
+
+  public InFilter(Class<T> targetClass) {
+    super(targetClass);
+  }
 
   @Override
-  public void parse(ObjectMapper objectMapper, Class<?> targetClass, String[] value) {
+  public void parse(ObjectMapper objectMapper, String[] value) {
     if (value == null) {
       this.value = Set.of();
       return;
@@ -22,12 +26,7 @@ public class InFilter extends FilterParser {
             .collect(Collectors.toSet());
   }
 
-  @Override
-  public String getSQLFragment(String property) {
-    return String.format(" in (:%s)", property);
-  }
-
-  public Object getValue() {
+  public Set<T> getValue() {
     return this.value;
   }
 }

@@ -48,7 +48,7 @@ class ResolverTest {
         .isEqualTo(HttpStatus.OK);
     final var query = reference.get();
     assertPageAndTarget(query, 10, 300);
-    final var sort = Map.of("id", "asc", "firstName", "desc");
+    final var sort = Map.of("id", "ASC", "first_name", "DESC");
     assertThat(query.orders()).isEqualTo(sort);
     assertThat(query.filters()).isEmpty();
   }
@@ -60,7 +60,7 @@ class ResolverTest {
     final var query = reference.get();
     assertPageAndTarget(query, 10, 300);
 
-    final var sort = Map.of("id", "asc");
+    final var sort = Map.of("id", "ASC");
     assertThat(query.orders()).isEqualTo(sort);
     assertThat(query.filters()).isEmpty();
   }
@@ -90,29 +90,13 @@ class ResolverTest {
   @Test
   void withDefaultFilterAndUnknownFilter() {
     assertThat(call("?id=1&firstName=toto&filter=id,equals&filter=truc,equals").getStatusCode())
-        .isEqualTo(HttpStatus.OK);
-    final var query = reference.get();
-    assertPageAndTarget(query);
-
-    assertThat(query.orders()).isEmpty();
-
-    assertThat(query.filters()).hasSize(2);
-    assertThat(query.filters()).containsKey("id");
-    var filter = query.filters().get("id");
-    assertThat(filter).isInstanceOf(EqualsFilter.class);
-    assertThat(filter.getValue()).isEqualTo(1L);
-
-    assertThat(query.filters()).containsKey("firstName");
-    filter = query.filters().get("firstName");
-    assertThat(filter).isInstanceOf(EqualsFilter.class);
-    assertThat(filter.getValue()).isEqualTo("toto");
+        .isEqualTo(HttpStatus.BAD_REQUEST);
   }
 
   @Test
   void withInvalidFilterType() {
     var response = call("?id=1&firstName=toto&filter=id,equals&filter=firstName,truc");
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-    assertThat(response.getBody()).isEqualTo("Unrecognized filter type : truc");
   }
 
   private ResponseEntity<String> call(String param) {

@@ -2,24 +2,20 @@ package io.narsha.smartpage.spring.core.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
-import io.narsha.smartpage.core.exceptions.UnknownFilterException;
-import io.narsha.smartpage.core.filters.Filter;
+import io.narsha.smartpage.core.filters.EqualsFilter;
 import io.narsha.smartpage.core.filters.FilterParser;
-import java.lang.reflect.Field;
+import io.narsha.smartpage.core.filters.FilterRegistrationService;
+import io.narsha.smartpage.core.utils.AnnotationUtils;
+import io.narsha.smartpage.core.utils.ReflectionUtils;
 import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -32,6 +28,7 @@ public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentReso
 
   private final ObjectMapper objectMapper;
   private final PageableHandlerMethodArgumentResolver pageableHandlerMethodArgumentResolver;
+  private final FilterRegistrationService filterRegistrationService;
   private PathVariableMapMethodArgumentResolver pathVariableMapMethodArgumentResolver =
       new PathVariableMapMethodArgumentResolver();
 
@@ -47,21 +44,19 @@ public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentReso
       NativeWebRequest webRequest,
       WebDataBinderFactory binderFactory)
       throws Exception {
+
     final var targetClass =
         (Class<?>)
             ((ParameterizedType) parameter.getGenericParameterType()).getActualTypeArguments()[0];
 
     final var parameters = new HashMap<>(webRequest.getParameterMap());
-
-    final var httpFilters = parameters.getOrDefault("filter", new String[0]);
-
     addPathVariableIntoFilterMap(parameter, mavContainer, webRequest, binderFactory, parameters);
-    removeUnknownFilters(parameters, targetClass);
+
+    final var filtersParser = getFiltersParser(parameters, targetClass);
 
     final var pageable =
         pageableHandlerMethodArgumentResolver.resolveArgument(
             parameter, mavContainer, webRequest, binderFactory);
-    final var filters = getFilters(parameters, httpFilters, targetClass);
 
     final var paginatedFilteredQuery =
         new PaginatedFilteredQuery<>(
@@ -71,49 +66,9 @@ public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentReso
             pageable.getPageNumber(),
             pageable.getPageSize());
     paginatedFilteredQuery.orders().putAll(extractSort(targetClass, pageable));
-    paginatedFilteredQuery.filters().putAll(filters);
+    paginatedFilteredQuery.filters().putAll(filtersParser);
 
     return paginatedFilteredQuery;
-  }
-
-  private Map<String, FilterParser> getFilters(
-      Map<String, String[]> parameters, String[] httpFilters, Class<?> targetClass)
-      throws UnknownFilterException {
-    var filters =
-        Stream.of(httpFilters)
-            .map(e -> e.split(","))
-            .collect(Collectors.toMap(e -> e[0], e -> e[1]));
-
-    final var result = new HashMap<String, FilterParser>();
-
-    for (var entry : parameters.entrySet()) {
-      var filter = filters.getOrDefault(entry.getKey(), Filter.EQUALS.name());
-
-      if (!isValidFilter(filter)) {
-        throw new UnknownFilterException(filter);
-      }
-
-      // do not care about unknown property (can be used for something else in the http query)
-      getPropertyClass(entry.getKey(), targetClass)
-          .ifPresent(
-              propertyClass -> {
-                var parser = Filter.valueOf(filter.toUpperCase()).getParser().get();
-                parser.parse(objectMapper, propertyClass, entry.getValue());
-                result.put(entry.getKey(), parser);
-              });
-    }
-
-    return result;
-  }
-
-  private boolean isValidFilter(String name) {
-    return Stream.of(Filter.values())
-        .anyMatch(v -> Objects.equals(v.name().toLowerCase(), name.toLowerCase()));
-  }
-
-  private Optional<Class<?>> getPropertyClass(String property, Class<?> targetClass) {
-    return Optional.ofNullable(ReflectionUtils.findField(targetClass, property))
-        .map(Field::getType);
   }
 
   private void addPathVariableIntoFilterMap(
@@ -136,16 +91,51 @@ public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentReso
   private Map<String, String> extractSort(Class<?> targetClass, Pageable pageable) {
     var res =
         pageable.getSort().stream()
+            .filter(e -> !ReflectionUtils.getFieldClass(targetClass, e.getProperty()).isEmpty())
             .collect(
                 Collectors.toMap(
-                    Sort.Order::getProperty, sort -> sort.getDirection().name().toLowerCase()));
-    res.entrySet().removeIf(e -> ReflectionUtils.findField(targetClass, e.getKey()) == null);
+                    sort -> AnnotationUtils.getQueryProperty(targetClass, sort.getProperty()),
+                    sort -> sort.getDirection().name()));
+
     return res;
   }
 
-  private void removeUnknownFilters(Map<String, ?> parameters, Class<?> targetClass) {
-    parameters
-        .entrySet()
-        .removeIf(entry -> ReflectionUtils.findField(targetClass, entry.getKey()) == null);
+  private Map<String, FilterParser<?, ?>> getFiltersParser(
+      Map<String, String[]> parameters, Class<?> targetClass) {
+    final var res = new HashMap<String, FilterParser<?, ?>>();
+
+    var parsers = getParser(targetClass, parameters.getOrDefault("filter", new String[0]));
+
+    for (var entry : parameters.entrySet()) {
+      ReflectionUtils.getFieldClass(targetClass, entry.getKey())
+          .ifPresent(
+              type -> {
+                var parser = parsers.getOrDefault(entry.getKey(), new EqualsFilter<>(type));
+                parser.parse(objectMapper, entry.getValue());
+                res.put(entry.getKey(), parser);
+              });
+    }
+
+    return res;
+  }
+
+  private Map<String, FilterParser<?, ?>> getParser(Class<?> targetClass, String... filters) {
+    final var propertyParser = new HashMap<String, FilterParser<?, ?>>();
+
+    for (var filter : filters) {
+      var split = filter.split(",");
+
+      var javaProperty = split[0];
+      var filterType = split[1];
+      ReflectionUtils.getFieldClass(targetClass, javaProperty)
+          .flatMap(type -> this.filterRegistrationService.get(type, filterType))
+          .ifPresentOrElse(
+              parser -> propertyParser.put(javaProperty, parser),
+              () -> {
+                throw new IllegalArgumentException();
+              });
+    }
+
+    return propertyParser;
   }
 }

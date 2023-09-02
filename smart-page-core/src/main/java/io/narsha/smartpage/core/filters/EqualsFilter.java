@@ -1,22 +1,26 @@
 package io.narsha.smartpage.core.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 
-public class EqualsFilter extends FilterParser {
+@Getter
+public class EqualsFilter<T> extends FilterParser<T, Object> {
 
   private Object value;
 
-  @Override
-  public void parse(ObjectMapper objectMapper, Class<?> targetClass, String[] value) {
-    this.value = objectMapper.convertValue(String.join(",", value), targetClass);
+  public EqualsFilter(Class<T> targetClass) {
+    super(targetClass);
   }
 
   @Override
-  public String getSQLFragment(String property) {
-    return String.format(" = :%s", property);
-  }
-
-  public Object getValue() {
-    return this.value;
+  public void parse(ObjectMapper objectMapper, String[] value) {
+    if (value.length > 1 && !targetClass.equals(String.class)) {
+      throw new IllegalArgumentException(); // TODO custom exception cannot manage more than one
+                                            // element if not string
+    } else if (value.length > 1) {
+      this.value = objectMapper.convertValue(String.join(",", value), targetClass);
+    } else {
+      this.value = objectMapper.convertValue(value[0], targetClass);
+    }
   }
 }

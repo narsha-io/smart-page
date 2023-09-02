@@ -3,7 +3,8 @@ package io.narsha.smartpage.spring.data;
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.RowMapper;
-import io.narsha.smartpage.core.annotations.AnnotationUtils;
+import io.narsha.smartpage.core.utils.AnnotationUtils;
+import io.narsha.smartpage.spring.data.filters.JdbcFilterRegistrationService;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,22 +12,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+@RequiredArgsConstructor
 public class JdbcQueryExecutor implements QueryExecutor {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
-
-  public JdbcQueryExecutor(NamedParameterJdbcTemplate jdbcTemplate) {
-    this.jdbcTemplate = jdbcTemplate;
-  }
+  private final JdbcFilterRegistrationService jdbcFilterRegistrationService;
 
   @Override
   public <T> Pair<List<T>, Long> execute(
       PaginatedFilteredQuery<T> paginatedFilteredQuery, RowMapper rowMapper) {
 
-    final var jdbcQueryParser = new JdbcQueryParser<T>(paginatedFilteredQuery);
+    final var jdbcQueryParser =
+        new JdbcQueryParser<T>(paginatedFilteredQuery, jdbcFilterRegistrationService);
     jdbcQueryParser.init();
 
     var params =

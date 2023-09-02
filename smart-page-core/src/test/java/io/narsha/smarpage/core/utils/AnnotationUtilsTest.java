@@ -1,13 +1,13 @@
-package io.narsha.smarpage.core.annotations;
+package io.narsha.smarpage.core.utils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import io.narsha.smartpage.core.annotations.AnnotationUtils;
 import io.narsha.smartpage.core.annotations.DataTable;
 import io.narsha.smartpage.core.annotations.DataTableIgnore;
 import io.narsha.smartpage.core.annotations.DataTableProperty;
 import io.narsha.smartpage.core.exceptions.InternalException;
+import io.narsha.smartpage.core.utils.AnnotationUtils;
 import org.junit.jupiter.api.Test;
 
 class AnnotationUtilsTest {
