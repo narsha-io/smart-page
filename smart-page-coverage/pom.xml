@@ -19,11 +19,6 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>smart-page-spring-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>smart-page-spring-data</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -39,7 +34,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.10</version>
+                <version>${jacoco.version}</version>
                 <executions>
                     <execution>
                         <id>jacoco-site-aggregate</id>
