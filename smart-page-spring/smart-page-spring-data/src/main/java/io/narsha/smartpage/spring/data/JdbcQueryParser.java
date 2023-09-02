@@ -89,7 +89,7 @@ public class JdbcQueryParser<T> {
 
   private String getBaseQuery() {
     final var reference =
-        AnnotationUtils.getAnnotationProperty(
+        AnnotationUtils.getClassAnnotationValue(
             this.queryFilter.getTargetClass(), DataTable.class, DataTable::value);
     return getSQLFileContent(reference);
   }
@@ -108,7 +108,7 @@ public class JdbcQueryParser<T> {
 
   private String getFilterParamValue(String prop) {
     try {
-      return AnnotationUtils.getAnnotationProperty(
+      return AnnotationUtils.getFieldAnnotationValue(
           this.queryFilter.getTargetClass(),
           prop,
           DataTableProperty.class,
