@@ -6,7 +6,7 @@ public abstract class FilterParser<T, R> {
 
   protected Class<T> targetClass;
 
-  public FilterParser(Class<T> targetClass) {
+  protected FilterParser(Class<T> targetClass) {
     this.targetClass = targetClass;
   }
 

@@ -13,11 +13,9 @@ class ReflectionUtilsTest {
   @Test
   void testValidField() {
     var idClass = ReflectionUtils.getFieldClass(Person.class, "id");
-    assertThat(idClass).isPresent();
     assertThat(idClass).hasValue(Long.class);
 
     var firstNameClass = ReflectionUtils.getFieldClass(Person.class, "firstName");
-    assertThat(firstNameClass).isPresent();
     assertThat(firstNameClass).hasValue(String.class);
   }
 
