@@ -30,7 +30,7 @@ public class JdbcQueryExecutor implements QueryExecutor {
     jdbcQueryParser.init();
 
     var params =
-        paginatedFilteredQuery.getFilters().entrySet().stream()
+        paginatedFilteredQuery.filters().entrySet().stream()
             .collect(Collectors.toMap(Map.Entry::getKey, f -> f.getValue().getValue()));
 
     System.out.println("query = " + jdbcQueryParser.getQuery());
@@ -65,11 +65,10 @@ public class JdbcQueryExecutor implements QueryExecutor {
 
       for (var entry : queryDefinition.entrySet()) {
         object.put(
-            AnnotationUtils.getJavaProperty(
-                paginatedFilteredQuery.getTargetClass(), entry.getKey()),
+            AnnotationUtils.getJavaProperty(paginatedFilteredQuery.targetClass(), entry.getKey()),
             rs.getObject(entry.getValue()));
       }
-      result.add(rowMapper.convert(object, paginatedFilteredQuery.getTargetClass()));
+      result.add(rowMapper.convert(object, paginatedFilteredQuery.targetClass()));
     }
     return result;
   }

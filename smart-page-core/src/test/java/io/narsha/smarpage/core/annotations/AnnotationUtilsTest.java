@@ -47,11 +47,14 @@ public class AnnotationUtilsTest {
 
   @Test
   void getFieldAnnotationValueNoMatch() {
-    assertThrows(
-        InternalException.class,
-        () ->
-            AnnotationUtils.getFieldAnnotationValue(
-                Person.class, "role", DataTableProperty.class, DataTableProperty::columnName));
+    var ex =
+        assertThrows(
+            InternalException.class,
+            () ->
+                AnnotationUtils.getFieldAnnotationValue(
+                    Person.class, "role", DataTableProperty.class, DataTableProperty::columnName));
+
+    assertThat(ex.getMessage()).isEqualTo("Cannot parse the current object");
   }
 
   @Test
