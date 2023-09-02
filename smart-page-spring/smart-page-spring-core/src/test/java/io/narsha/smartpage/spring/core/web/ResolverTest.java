@@ -88,6 +88,21 @@ class ResolverTest {
   }
 
   @Test
+  void withIgnoreFilterAndValidFilters() {
+    assertThat(call("?id=1&role=toto&filter=id,equals").getStatusCode()).isEqualTo(HttpStatus.OK);
+    final var query = reference.get();
+    assertPageAndTarget(query);
+
+    assertThat(query.orders()).isEmpty();
+
+    assertThat(query.filters()).hasSize(1);
+    assertThat(query.filters()).containsKey("id");
+    var filter = query.filters().get("id");
+    assertThat(filter).isInstanceOf(EqualsFilter.class);
+    assertThat(filter.getValue()).isEqualTo(1L);
+  }
+
+  @Test
   void withDefaultFilterAndUnknownFilter() {
     assertThat(call("?id=1&firstName=toto&filter=id,equals&filter=truc,equals").getStatusCode())
         .isEqualTo(HttpStatus.BAD_REQUEST);

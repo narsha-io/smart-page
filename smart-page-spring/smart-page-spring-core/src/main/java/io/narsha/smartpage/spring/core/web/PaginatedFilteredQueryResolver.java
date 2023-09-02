@@ -2,6 +2,7 @@ package io.narsha.smartpage.spring.core.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
+import io.narsha.smartpage.core.annotations.DataTableIgnore;
 import io.narsha.smartpage.core.filters.EqualsFilter;
 import io.narsha.smartpage.core.filters.FilterParser;
 import io.narsha.smartpage.core.filters.FilterRegistrationService;
@@ -91,7 +92,7 @@ public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentReso
   private Map<String, String> extractSort(Class<?> targetClass, Pageable pageable) {
     var res =
         pageable.getSort().stream()
-            .filter(e -> !ReflectionUtils.getFieldClass(targetClass, e.getProperty()).isEmpty())
+            .filter(e -> ReflectionUtils.getFieldClass(targetClass, e.getProperty()).isPresent())
             .collect(
                 Collectors.toMap(
                     sort -> AnnotationUtils.getQueryProperty(targetClass, sort.getProperty()),
@@ -107,6 +108,9 @@ public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentReso
     var parsers = getParser(targetClass, parameters.getOrDefault("filter", new String[0]));
 
     for (var entry : parameters.entrySet()) {
+      if (AnnotationUtils.isAnnotated(targetClass, entry.getKey(), DataTableIgnore.class)) {
+        continue;
+      }
       ReflectionUtils.getFieldClass(targetClass, entry.getKey())
           .ifPresent(
               type -> {

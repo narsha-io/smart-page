@@ -51,4 +51,14 @@ public class AnnotationUtils {
         .findFirst()
         .orElse(queryProperty);
   }
+
+  public static boolean isAnnotated(
+      Class<?> objectClass, String fieldName, Class<? extends Annotation> annotationClass) {
+    try {
+      final var field = objectClass.getDeclaredField(fieldName);
+      return field.getAnnotation(annotationClass) != null;
+    } catch (Exception e) {
+      return false;
+    }
+  }
 }
