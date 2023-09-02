@@ -48,7 +48,11 @@
                 <version>3.23.1</version>
                 <scope>test</scope>
             </dependency>
-
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>0.10.2</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -63,11 +67,6 @@
             <artifactId>lombok</artifactId>
             <version>1.18.28</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.10.2</version>
         </dependency>
     </dependencies>
 
