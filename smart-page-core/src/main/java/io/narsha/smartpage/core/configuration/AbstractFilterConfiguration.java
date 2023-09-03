@@ -9,7 +9,7 @@ import org.reflections.scanners.Scanners;
 public abstract class AbstractFilterConfiguration<E, T extends AbstractRegistrationService<E>> {
 
   protected T init(Class<E> targetClass) throws Exception {
-
+    // TODO NO NEED CLASS<E> WE CAN GET IT FROM SIGNATURE
     var abstractFilterConfiguration = getClass().getGenericSuperclass();
 
     // TODO check more carefully here

@@ -10,6 +10,7 @@ import io.narsha.smartpage.core.annotations.DataTableProperty;
 import io.narsha.smartpage.core.filters.ContainsFilter;
 import io.narsha.smartpage.core.filters.EqualsFilter;
 import io.narsha.smartpage.core.filters.InFilter;
+import io.narsha.smartpage.spring.mongo.filters.MongoFilterRegistrationService;
 import io.narsha.smartpage.spring.test.SmartPageSpringTestApplication;
 import io.narsha.smartpage.spring.test.validator.PersonValidator;
 import java.util.HashMap;
@@ -39,6 +40,7 @@ import org.testcontainers.utility.DockerImageName;
 class MongoQueryExecutorTest {
 
   @Autowired private MongoTemplate mongoTemplate;
+  @Autowired private MongoFilterRegistrationService mongoFilterRegistrationService;
 
   private final ObjectMapper objectMapper = new ObjectMapper();
   private static final String COLLECTION = "person";
@@ -98,7 +100,7 @@ class MongoQueryExecutorTest {
   @Order(1)
   void mappingTest() {
     final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate)
+        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
             .execute(
                 new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 10),
                 new RowMapper(objectMapper));
@@ -111,7 +113,7 @@ class MongoQueryExecutorTest {
   @Order(2)
   void paginationTestPage0() {
     final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate)
+        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
             .execute(
                 new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 2),
                 new RowMapper(objectMapper));
@@ -124,7 +126,7 @@ class MongoQueryExecutorTest {
   @Order(3)
   void paginationTestPage1() {
     final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate)
+        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
             .execute(
                 new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 2, 2),
                 new RowMapper(objectMapper));
@@ -141,7 +143,8 @@ class MongoQueryExecutorTest {
     query.orders().put("first_name", "asc");
 
     final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate).execute(query, new RowMapper(objectMapper));
+        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
+            .execute(query, new RowMapper(objectMapper));
     assertThat(res.getKey()).hasSize(2);
     assertThat(res.getValue()).isEqualTo(5L);
     PersonValidator.containsIds(res.getKey(), Set.of(1L, 5L));
@@ -156,7 +159,8 @@ class MongoQueryExecutorTest {
     query.orders().put("first_name", "asc");
 
     final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate).execute(query, new RowMapper(objectMapper));
+        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
+            .execute(query, new RowMapper(objectMapper));
     assertThat(res.getKey()).hasSize(2);
     assertThat(res.getValue()).isEqualTo(5L);
     PersonValidator.containsIds(res.getKey(), Set.of(4L, 2L));
@@ -173,7 +177,8 @@ class MongoQueryExecutorTest {
     query.filters().put("first_name", filter);
 
     final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate).execute(query, new RowMapper(objectMapper));
+        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
+            .execute(query, new RowMapper(objectMapper));
     assertThat(res.getKey()).hasSize(1);
     assertThat(res.getValue()).isEqualTo(1L);
     PersonValidator.containsIds(res.getKey(), Set.of(3L));
@@ -185,12 +190,13 @@ class MongoQueryExecutorTest {
   void paginationTestEqualsLongFilter() {
     final var query =
         new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 2);
-    var filter = new EqualsFilter<>(String.class);
+    var filter = new EqualsFilter<>(Long.class);
     filter.parse(new ObjectMapper(), new String[] {"2"});
-    query.filters().put("id", filter);
+    query.filters().put("_id", filter);
 
     final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate).execute(query, new RowMapper(objectMapper));
+        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
+            .execute(query, new RowMapper(objectMapper));
     assertThat(res.getKey()).hasSize(1);
     assertThat(res.getValue()).isEqualTo(1L);
     PersonValidator.containsIds(res.getKey(), Set.of(2L));
@@ -204,10 +210,11 @@ class MongoQueryExecutorTest {
         new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 2);
     var filter = new InFilter<>(Long.class);
     filter.parse(new ObjectMapper(), new String[] {"2", "3"});
-    query.filters().put("id", filter);
+    query.filters().put("_id", filter);
 
     final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate).execute(query, new RowMapper(objectMapper));
+        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
+            .execute(query, new RowMapper(objectMapper));
     assertThat(res.getKey()).hasSize(2);
     assertThat(res.getValue()).isEqualTo(2L);
     PersonValidator.containsIds(res.getKey(), Set.of(2L, 3L));
@@ -224,7 +231,8 @@ class MongoQueryExecutorTest {
     query.filters().put("first_name", filter);
 
     final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate).execute(query, new RowMapper(objectMapper));
+        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
+            .execute(query, new RowMapper(objectMapper));
     assertThat(res.getKey()).hasSize(2);
     assertThat(res.getValue()).isEqualTo(2L);
     PersonValidator.containsIds(res.getKey(), Set.of(2L, 3L));
@@ -241,7 +249,8 @@ class MongoQueryExecutorTest {
     query.filters().put("first_name", filter);
 
     final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate).execute(query, new RowMapper(objectMapper));
+        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
+            .execute(query, new RowMapper(objectMapper));
     assertThat(res.getKey()).hasSize(2);
     assertThat(res.getValue()).isEqualTo(2L);
     PersonValidator.containsIds(res.getKey(), Set.of(4L, 5L));

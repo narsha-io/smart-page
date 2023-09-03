@@ -129,7 +129,7 @@ class JdbcQueryExecutorTest {
   void paginationTestEqualsLongFilter() {
     final var query =
         new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 2);
-    var filter = new EqualsFilter<>(String.class);
+    var filter = new EqualsFilter<>(Long.class);
     filter.parse(new ObjectMapper(), new String[] {"2"});
     query.filters().put("id", filter);
 

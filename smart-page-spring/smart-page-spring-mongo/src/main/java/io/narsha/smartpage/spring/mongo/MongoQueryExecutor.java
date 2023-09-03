@@ -4,6 +4,7 @@ import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.RowMapper;
 import io.narsha.smartpage.core.utils.ResolverUtils;
+import io.narsha.smartpage.spring.mongo.filters.MongoFilterRegistrationService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,8 @@ import org.springframework.data.mongodb.core.query.Query;
 public class MongoQueryExecutor implements QueryExecutor {
 
   private final MongoTemplate mongoTemplate;
+
+  private final MongoFilterRegistrationService mongoFilterRegistrationService;
 
   @Override
   public <T> Pair<List<T>, Long> execute(
@@ -38,11 +41,24 @@ public class MongoQueryExecutor implements QueryExecutor {
         PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(orders));
 
     Query query = new Query().with(pageRequest);
-    // .skip(pageable.getPageSize() * pageable.getPageNumber()) // offset
-    // .limit(pageable.getPageSize());
 
-    // Add Filtered
-    //    query.addCriteria(Criteria.where("projectId").is(projectId));
+    paginatedFilteredQuery.filters().entrySet().stream()
+        .forEach(
+            v -> {
+              var key = v.getKey();
+
+              this.mongoFilterRegistrationService
+                  .get(v.getValue().getClass())
+                  .ifPresent(
+                      action -> {
+
+                        // TODO impossible to keep this need renaming
+                        var value = action.getValue(v.getValue().getValue());
+
+                        var criteria = action.getMongoCriteria(key, value);
+                        query.addCriteria(criteria);
+                      });
+            });
 
     final var collection = ResolverUtils.getDataTableValue(paginatedFilteredQuery.targetClass());
 
@@ -52,7 +68,6 @@ public class MongoQueryExecutor implements QueryExecutor {
         filtered.stream()
             .map(map -> (T) convert(paginatedFilteredQuery.targetClass(), map, rowMapper))
             .toList();
-    // must transform object to target here
     long count = mongoTemplate.count(query.skip(-1).limit(-1), collection);
 
     return Pair.of(res, count);
