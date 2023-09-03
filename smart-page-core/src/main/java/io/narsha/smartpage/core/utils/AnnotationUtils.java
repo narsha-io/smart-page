@@ -23,23 +23,23 @@ public class AnnotationUtils {
     }
   }
 
-  public static <R, A extends Annotation> R getFieldAnnotationValue(
+  public static <R, A extends Annotation> Optional<R> getFieldAnnotationValue(
       Class<?> objectClass, String fieldName, Class<A> annotationClass, Function<A, R> function) {
     try {
       final var field = objectClass.getDeclaredField(fieldName);
       final var annotation = field.getAnnotation(annotationClass);
-      return function.apply(annotation);
+      return Optional.ofNullable(function.apply(annotation));
     } catch (Exception e) {
-      throw new InternalException();
+      return Optional.empty();
     }
   }
 
-  public static String getQueryProperty(Class<?> objectClass, String javaProperty) {
+  public static Optional<String> getQueryProperty(Class<?> objectClass, String javaProperty) {
     try {
       return getFieldAnnotationValue(
           objectClass, javaProperty, DataTableProperty.class, DataTableProperty::columnName);
     } catch (Exception e) {
-      return javaProperty;
+      return Optional.empty();
     }
   }
 
@@ -47,9 +47,12 @@ public class AnnotationUtils {
     return Stream.of(objectClass.getDeclaredFields())
         .map(Field::getName)
         .filter(
-            javaProperty ->
-                getQueryProperty(objectClass, javaProperty).equalsIgnoreCase(queryProperty)
-                    || javaProperty.equals(queryProperty))
+            javaProperty -> {
+              // TODO externalize
+              return getQueryProperty(objectClass, javaProperty)
+                  .map(e -> e.equalsIgnoreCase(queryProperty))
+                  .orElse(javaProperty.equals(queryProperty));
+            })
         .findFirst();
   }
 

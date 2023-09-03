@@ -1,9 +1,9 @@
 package io.narsha.smartpage.spring.mongo;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.RowMapper;
+import io.narsha.smartpage.core.annotations.DataTable;
 import io.narsha.smartpage.core.utils.AnnotationUtils;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +11,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 
@@ -18,7 +19,6 @@ import org.springframework.data.mongodb.core.query.Query;
 public class MongoQueryExecutor implements QueryExecutor {
 
   private final MongoTemplate mongoTemplate;
-  private final ObjectMapper objectMapper;
 
   @Override
   public <T> Pair<List<T>, Long> execute(
@@ -26,31 +26,45 @@ public class MongoQueryExecutor implements QueryExecutor {
 
     var pageable = PageRequest.of(paginatedFilteredQuery.page(), paginatedFilteredQuery.size());
 
-    Query query =
-        new Query()
-            .with(pageable)
-            .skip(pageable.getPageSize() * pageable.getPageNumber()) // offset
-            .limit(pageable.getPageSize());
+    var orders =
+        paginatedFilteredQuery.orders().entrySet().stream()
+            .map(
+                order -> {
+                  return Sort.Order.by(order.getKey())
+                      .with(Sort.Direction.fromString(order.getValue()));
+                })
+            .toList();
+
+    final var pageRequest =
+        PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(orders));
+
+    Query query = new Query().with(pageRequest);
+    // .skip(pageable.getPageSize() * pageable.getPageNumber()) // offset
+    // .limit(pageable.getPageSize());
 
     // Add Filtered
     //    query.addCriteria(Criteria.where("projectId").is(projectId));
 
-    final var filtered = mongoTemplate.find(query, Map.class, "person");
+    final var collection =
+        AnnotationUtils.getClassAnnotationValue(
+            paginatedFilteredQuery.targetClass(), DataTable.class, DataTable::value);
+
+    final var filtered = mongoTemplate.find(query, Map.class, collection);
 
     final var res =
         filtered.stream()
-            .map(map -> (T) convert(paginatedFilteredQuery.targetClass(), map, objectMapper))
+            .map(map -> (T) convert(paginatedFilteredQuery.targetClass(), map, rowMapper))
             .toList();
     // must transform object to target here
-    long count = mongoTemplate.count(query.skip(-1).limit(-1), "person");
+    long count = mongoTemplate.count(query.skip(-1).limit(-1), collection);
 
     return Pair.of(res, count);
   }
 
-  private <T> T convert(Class<T> targetClass, Map<Object, Object> map, ObjectMapper objectMapper) {
+  private <T> T convert(Class<T> targetClass, Map<Object, Object> map, RowMapper rowMapper) {
     final var convertedMap = new HashMap<String, Object>();
     convertSubMap(targetClass, map, null, convertedMap);
-    return objectMapper.convertValue(convertedMap, targetClass);
+    return rowMapper.convert(convertedMap, targetClass);
   }
 
   private <T> void convertSubMap(

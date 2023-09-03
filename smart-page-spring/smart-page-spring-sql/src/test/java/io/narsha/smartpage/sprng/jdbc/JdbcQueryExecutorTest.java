@@ -67,9 +67,9 @@ class JdbcQueryExecutorTest {
     final Pair<List<Person>, Long> res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService)
             .execute(
-                new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 1, 2),
+                new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 2, 2),
                 new RowMapper(objectMapper));
-    assertThat(res.getKey()).hasSize(2);
+    assertThat(res.getKey()).hasSize(1);
     assertThat(res.getValue()).isEqualTo(5L);
     PersonValidator.validate(res.getKey());
   }
