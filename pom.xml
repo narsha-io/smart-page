@@ -22,7 +22,6 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <git-code-format-maven-plugin.version>4.2</git-code-format-maven-plugin.version>
         <jacoco.version>0.8.10</jacoco.version>
-        <testcontainers.version>1.19.0</testcontainers.version>
     </properties>
 
     <dependencyManagement>
