@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-@SpringBootTest(classes = {SmartPageSpringTestApplication.class})
+@SpringBootTest(classes = SmartPageSpringTestApplication.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JdbcQueryExecutorTest {
 
