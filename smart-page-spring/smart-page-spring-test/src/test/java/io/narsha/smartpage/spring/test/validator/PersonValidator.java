@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PersonValidator {
 
-  public static void containsIds(List<Person> persons, Set<Long> ids) {
+  public static void containsIds(List<? extends Person> persons, Set<Long> ids) {
     assertThat(persons).isNotNull();
     assertThat(ids).isNotNull();
     final var personsId = persons.stream().map(Person::getId).collect(Collectors.toSet());
@@ -20,7 +20,7 @@ public class PersonValidator {
     assertThat(personsId).containsAll(ids);
   }
 
-  public static void validate(List<Person> persons) {
+  public static void validate(List<? extends Person> persons) {
     assertThat(persons).isNotNull();
     persons.forEach(
         p -> {

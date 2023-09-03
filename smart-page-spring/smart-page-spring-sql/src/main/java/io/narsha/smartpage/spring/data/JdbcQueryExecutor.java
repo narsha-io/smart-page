@@ -72,9 +72,11 @@ public class JdbcQueryExecutor implements QueryExecutor {
       final var object = new HashMap<String, Object>();
 
       for (var entry : queryDefinition.entrySet()) {
-        object.put(
-            AnnotationUtils.getJavaProperty(paginatedFilteredQuery.targetClass(), entry.getKey()),
-            rs.getObject(entry.getValue()));
+        var javaProperty =
+            AnnotationUtils.getJavaProperty(paginatedFilteredQuery.targetClass(), entry.getKey());
+        if (javaProperty.isPresent()) {
+          object.put(javaProperty.get(), rs.getObject(entry.getValue()));
+        }
       }
       result.add(rowMapper.convert(object, paginatedFilteredQuery.targetClass()));
     }

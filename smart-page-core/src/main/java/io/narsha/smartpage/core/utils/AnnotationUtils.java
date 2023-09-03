@@ -4,6 +4,7 @@ import io.narsha.smartpage.core.annotations.DataTableProperty;
 import io.narsha.smartpage.core.exceptions.InternalException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
@@ -42,14 +43,14 @@ public class AnnotationUtils {
     }
   }
 
-  public static String getJavaProperty(Class<?> objectClass, String queryProperty) {
+  public static Optional<String> getJavaProperty(Class<?> objectClass, String queryProperty) {
     return Stream.of(objectClass.getDeclaredFields())
         .map(Field::getName)
         .filter(
             javaProperty ->
-                getQueryProperty(objectClass, javaProperty).equalsIgnoreCase(queryProperty))
-        .findFirst()
-        .orElse(queryProperty);
+                getQueryProperty(objectClass, javaProperty).equalsIgnoreCase(queryProperty)
+                    || javaProperty.equals(queryProperty))
+        .findFirst();
   }
 
   public static boolean isAnnotated(
