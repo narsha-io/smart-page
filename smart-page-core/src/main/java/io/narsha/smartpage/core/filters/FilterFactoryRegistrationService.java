@@ -1,20 +1,13 @@
 package io.narsha.smartpage.core.filters;
 
-import java.util.HashSet;
+import io.narsha.smartpage.core.AbstractRegistrationService;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
-public class FilterRegistrationService {
-
-  private final Set<FilterFactory> filters = new HashSet<>();
-
-  public void register(FilterFactory filter) {
-    this.filters.add(filter);
-  }
+public class FilterFactoryRegistrationService extends AbstractRegistrationService<FilterFactory> {
 
   public Optional<? extends FilterParser<?, ?>> get(Class<?> targetClass, String identifier) {
-    return filters.stream()
+    return super.registeredService.stream()
         .filter(
             filterFactory ->
                 Objects.equals(

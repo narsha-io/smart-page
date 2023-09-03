@@ -1,14 +1,8 @@
-package io.narsha.smartpage.spring.data.filters;
+package io.narsha.smartpage.spring.data.sql.filters;
 
-import io.narsha.smartpage.core.filters.FilterParser;
+import io.narsha.smartpage.spring.core.filters.Filter;
 
-public interface JdbcFilter<T> {
-
-  Class<? extends FilterParser> getParserType();
+public interface JdbcFilter<T> extends Filter<T> {
 
   String getSQLFragment(String property);
-
-  default T getValue(T object) {
-    return object;
-  }
 }

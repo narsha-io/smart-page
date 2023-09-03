@@ -4,11 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-class FilterRegistrationServiceTest {
+class FilterFactoryRegistrationServiceTest {
 
   @Test
   void validTest() {
-    final var service = new FilterRegistrationService();
+    final var service = new FilterFactoryRegistrationService();
     service.register(new InFilterFactory());
     var res = service.get(String.class, "in");
     assertThat(res).isPresent();
@@ -16,7 +16,7 @@ class FilterRegistrationServiceTest {
 
   @Test
   void invalidTest() {
-    final var service = new FilterRegistrationService();
+    final var service = new FilterFactoryRegistrationService();
     service.register(new InFilterFactory());
     var res = service.get(String.class, "equals");
     assertThat(res).isEmpty();

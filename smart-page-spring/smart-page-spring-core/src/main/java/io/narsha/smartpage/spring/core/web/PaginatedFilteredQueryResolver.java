@@ -3,8 +3,8 @@ package io.narsha.smartpage.spring.core.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.filters.EqualsFilter;
+import io.narsha.smartpage.core.filters.FilterFactoryRegistrationService;
 import io.narsha.smartpage.core.filters.FilterParser;
-import io.narsha.smartpage.core.filters.FilterRegistrationService;
 import io.narsha.smartpage.core.utils.ReflectionUtils;
 import io.narsha.smartpage.core.utils.ResolverUtils;
 import java.lang.reflect.ParameterizedType;
@@ -29,7 +29,7 @@ public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentReso
 
   private final ObjectMapper objectMapper;
   private final PageableHandlerMethodArgumentResolver pageableHandlerMethodArgumentResolver;
-  private final FilterRegistrationService filterRegistrationService;
+  private final FilterFactoryRegistrationService filterFactoryRegistrationService;
   private PathVariableMapMethodArgumentResolver pathVariableMapMethodArgumentResolver =
       new PathVariableMapMethodArgumentResolver();
 
@@ -132,7 +132,7 @@ public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentReso
       var javaProperty = split[0];
       var filterType = split[1];
       ReflectionUtils.getFieldClass(targetClass, javaProperty)
-          .flatMap(type -> this.filterRegistrationService.get(type, filterType))
+          .flatMap(type -> this.filterFactoryRegistrationService.get(type, filterType))
           .ifPresentOrElse(
               parser -> propertyParser.put(javaProperty, parser),
               () -> {

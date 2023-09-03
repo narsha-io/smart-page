@@ -1,9 +1,9 @@
-package io.narsha.smartpage.spring.data.configuration;
+package io.narsha.smartpage.spring.data.sql.configuration;
 
 import static org.reflections.scanners.Scanners.SubTypes;
 
-import io.narsha.smartpage.spring.data.filters.JdbcFilter;
-import io.narsha.smartpage.spring.data.filters.JdbcFilterRegistrationService;
+import io.narsha.smartpage.spring.data.sql.filters.JdbcFilter;
+import io.narsha.smartpage.spring.data.sql.filters.JdbcFilterRegistrationService;
 import java.util.Set;
 import org.reflections.Reflections;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +30,7 @@ public class JdbcFilterConfiguration {
   }
 
   private Set<Class<?>> findInternalJdbcFilterFactories() {
-    Reflections reflections = new Reflections("io.narsha.smartpage.spring.data.filters");
+    Reflections reflections = new Reflections("io.narsha.smartpage.spring.data.sql.filters");
     return reflections.get(SubTypes.of(JdbcFilter.class).asClass());
   }
 }

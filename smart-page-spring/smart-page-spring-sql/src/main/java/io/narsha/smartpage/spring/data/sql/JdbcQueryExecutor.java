@@ -1,10 +1,10 @@
-package io.narsha.smartpage.spring.data;
+package io.narsha.smartpage.spring.data.sql;
 
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.RowMapper;
 import io.narsha.smartpage.core.utils.ResolverUtils;
-import io.narsha.smartpage.spring.data.filters.JdbcFilterRegistrationService;
+import io.narsha.smartpage.spring.data.sql.filters.JdbcFilterRegistrationService;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
