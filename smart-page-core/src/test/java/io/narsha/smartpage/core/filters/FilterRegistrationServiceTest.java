@@ -1,9 +1,7 @@
-package io.narsha.smarpage.core.filters;
+package io.narsha.smartpage.core.filters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.narsha.smartpage.core.filters.FilterRegistrationService;
-import io.narsha.smartpage.core.filters.InFilterFactory;
 import org.junit.jupiter.api.Test;
 
 class FilterRegistrationServiceTest {

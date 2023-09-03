@@ -2,8 +2,7 @@ package io.narsha.smartpage.spring.data;
 
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.QueryExecutor;
-import io.narsha.smartpage.core.annotations.DataTable;
-import io.narsha.smartpage.core.utils.AnnotationUtils;
+import io.narsha.smartpage.core.utils.ResolverUtils;
 import io.narsha.smartpage.spring.data.filters.JdbcFilterRegistrationService;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -83,9 +82,7 @@ public class JdbcQueryParser<T> {
   }
 
   private String getBaseQuery() {
-    final var reference =
-        AnnotationUtils.getClassAnnotationValue(
-            this.queryFilter.targetClass(), DataTable.class, DataTable::value);
+    final var reference = ResolverUtils.getDataTableValue(this.queryFilter.targetClass());
     return getSQLFileContent(reference);
   }
 

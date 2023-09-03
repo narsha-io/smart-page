@@ -3,7 +3,7 @@ package io.narsha.smartpage.spring.data;
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.RowMapper;
-import io.narsha.smartpage.core.utils.AnnotationUtils;
+import io.narsha.smartpage.core.utils.ResolverUtils;
 import io.narsha.smartpage.spring.data.filters.JdbcFilterRegistrationService;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -73,7 +73,7 @@ public class JdbcQueryExecutor implements QueryExecutor {
 
       for (var entry : queryDefinition.entrySet()) {
         var javaProperty =
-            AnnotationUtils.getJavaProperty(paginatedFilteredQuery.targetClass(), entry.getKey());
+            ResolverUtils.getJavaProperty(paginatedFilteredQuery.targetClass(), entry.getKey());
         if (javaProperty.isPresent()) {
           object.put(javaProperty.get(), rs.getObject(entry.getValue()));
         }

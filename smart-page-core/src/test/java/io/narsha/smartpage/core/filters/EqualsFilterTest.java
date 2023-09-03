@@ -1,11 +1,9 @@
-package io.narsha.smarpage.core.filters;
+package io.narsha.smartpage.core.filters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.narsha.smartpage.core.filters.EqualsFilterFactory;
-import io.narsha.smartpage.core.filters.FilterFactory;
 import org.junit.jupiter.api.Test;
 
 class EqualsFilterTest {

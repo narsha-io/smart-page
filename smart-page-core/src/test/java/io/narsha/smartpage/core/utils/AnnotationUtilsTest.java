@@ -1,4 +1,4 @@
-package io.narsha.smarpage.core.utils;
+package io.narsha.smartpage.core.utils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -7,7 +7,7 @@ import io.narsha.smartpage.core.annotations.DataTable;
 import io.narsha.smartpage.core.annotations.DataTableIgnore;
 import io.narsha.smartpage.core.annotations.DataTableProperty;
 import io.narsha.smartpage.core.exceptions.InternalException;
-import io.narsha.smartpage.core.utils.AnnotationUtils;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 class AnnotationUtilsTest {
@@ -33,64 +33,59 @@ class AnnotationUtilsTest {
     var res =
         AnnotationUtils.getFieldAnnotationValue(
             Person.class, "firstName", DataTableProperty.class, DataTableProperty::columnName);
-    assertThat(res).isEqualTo("first_name");
+    assertThat(res).isEqualTo(Optional.of("first_name"));
   }
 
   @Test
   void getFieldAnnotationValueUnknownField() {
-    assertThrows(
-        InternalException.class,
-        () ->
+    assertThat(
             AnnotationUtils.getFieldAnnotationValue(
-                Person.class, "truc", DataTableProperty.class, DataTableProperty::columnName));
+                Person.class, "truc", DataTableProperty.class, DataTableProperty::columnName))
+        .isEmpty();
   }
 
   @Test
   void getFieldAnnotationValueNoMatch() {
-    var ex =
-        assertThrows(
-            InternalException.class,
-            () ->
-                AnnotationUtils.getFieldAnnotationValue(
-                    Person.class, "role", DataTableProperty.class, DataTableProperty::columnName));
-
-    assertThat(ex.getMessage()).isEqualTo("Cannot parse the current object");
+    assertThat(
+            AnnotationUtils.getFieldAnnotationValue(
+                Person.class, "role", DataTableProperty.class, DataTableProperty::columnName))
+        .isEmpty();
   }
 
   @Test
   void getQueryPropertyNoRename() {
     var res = AnnotationUtils.getQueryProperty(Person.class, "id");
-    assertThat(res).isEqualTo("id");
+    assertThat(res).isEqualTo(Optional.empty());
   }
 
   @Test
   void getQueryPropertyWithRename() {
     var res = AnnotationUtils.getQueryProperty(Person.class, "firstName");
-    assertThat(res).isEqualTo("first_name");
+    assertThat(res).isEqualTo(Optional.of("first_name"));
   }
 
   @Test
   void getQueryPropertyUnknownField() {
     var res = AnnotationUtils.getQueryProperty(Person.class, "test");
-    assertThat(res).isEqualTo("test"); // TODO do I want to keep this ?
+    assertThat(res).isEmpty();
   }
 
   @Test
   void getJavaProperty() {
     var res = AnnotationUtils.getJavaProperty(Person.class, "id");
-    assertThat(res).isEqualTo("id");
+    assertThat(res).isEqualTo(Optional.of("id"));
   }
 
   @Test
   void getJavaPropertyWithRename() {
     var res = AnnotationUtils.getJavaProperty(Person.class, "first_name");
-    assertThat(res).isEqualTo("firstName");
+    assertThat(res).isEqualTo(Optional.of("firstName"));
   }
 
   @Test
   void getJavaPropertyUnknownField() {
     var res = AnnotationUtils.getJavaProperty(Person.class, "test");
-    assertThat(res).isEqualTo("test"); // TODO do I want to keep this ?
+    assertThat(res).isEmpty();
   }
 
   @DataTable(value = "select 1")

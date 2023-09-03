@@ -11,7 +11,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class AnnotationUtils {
+class AnnotationUtils {
 
   public static <R, A extends Annotation> R getClassAnnotationValue(
       Class<?> objectClass, Class<A> annotationClass, Function<A, R> function) {
@@ -34,7 +34,7 @@ public class AnnotationUtils {
     }
   }
 
-  public static Optional<String> getQueryProperty(Class<?> objectClass, String javaProperty) {
+  static Optional<String> getQueryProperty(Class<?> objectClass, String javaProperty) {
     try {
       return getFieldAnnotationValue(
           objectClass, javaProperty, DataTableProperty.class, DataTableProperty::columnName);
@@ -43,7 +43,7 @@ public class AnnotationUtils {
     }
   }
 
-  public static Optional<String> getJavaProperty(Class<?> objectClass, String queryProperty) {
+  static Optional<String> getJavaProperty(Class<?> objectClass, String queryProperty) {
     return Stream.of(objectClass.getDeclaredFields())
         .map(Field::getName)
         .filter(
@@ -51,7 +51,7 @@ public class AnnotationUtils {
               // TODO externalize
               return getQueryProperty(objectClass, javaProperty)
                   .map(e -> e.equalsIgnoreCase(queryProperty))
-                  .orElse(javaProperty.equals(queryProperty));
+                  .orElse(javaProperty.equalsIgnoreCase(queryProperty));
             })
         .findFirst();
   }
@@ -61,6 +61,15 @@ public class AnnotationUtils {
     try {
       final var field = objectClass.getDeclaredField(fieldName);
       return field.getAnnotation(annotationClass) != null;
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  public static boolean isFieldExists(Class<?> objectClass, String fieldName) {
+    try {
+      objectClass.getDeclaredField(fieldName);
+      return true;
     } catch (Exception e) {
       return false;
     }

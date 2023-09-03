@@ -2,17 +2,17 @@ package io.narsha.smartpage.spring.core.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
-import io.narsha.smartpage.core.annotations.DataTableIgnore;
 import io.narsha.smartpage.core.filters.EqualsFilter;
 import io.narsha.smartpage.core.filters.FilterParser;
 import io.narsha.smartpage.core.filters.FilterRegistrationService;
-import io.narsha.smartpage.core.utils.AnnotationUtils;
 import io.narsha.smartpage.core.utils.ReflectionUtils;
+import io.narsha.smartpage.core.utils.ResolverUtils;
 import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
@@ -90,15 +90,15 @@ public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentReso
   }
 
   private Map<String, String> extractSort(Class<?> targetClass, Pageable pageable) {
-    var res =
-        pageable.getSort().stream()
-            .filter(e -> ReflectionUtils.getFieldClass(targetClass, e.getProperty()).isPresent())
-            .collect(
-                Collectors.toMap(
-                    sort -> AnnotationUtils.getQueryProperty(targetClass, sort.getProperty()),
-                    sort -> sort.getDirection().name()));
-
-    return res;
+    return pageable.getSort().stream()
+        .filter(e -> ReflectionUtils.getFieldClass(targetClass, e.getProperty()).isPresent())
+        .map(
+            e ->
+                Pair.of(
+                    ResolverUtils.getQueryProperty(targetClass, e.getProperty()).orElse(null),
+                    e.getDirection().name()))
+        .filter(e -> e.getKey() != null)
+        .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
   }
 
   private Map<String, FilterParser<?, ?>> getFiltersParser(
@@ -108,7 +108,7 @@ public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentReso
     var parsers = getParser(targetClass, parameters.getOrDefault("filter", new String[0]));
 
     for (var entry : parameters.entrySet()) {
-      if (AnnotationUtils.isAnnotated(targetClass, entry.getKey(), DataTableIgnore.class)) {
+      if (ResolverUtils.isIgnoredField(targetClass, entry.getKey())) {
         continue;
       }
       ReflectionUtils.getFieldClass(targetClass, entry.getKey())

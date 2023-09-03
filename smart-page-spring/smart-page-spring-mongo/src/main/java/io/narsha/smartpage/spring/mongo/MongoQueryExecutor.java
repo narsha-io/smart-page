@@ -3,8 +3,7 @@ package io.narsha.smartpage.spring.mongo;
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.RowMapper;
-import io.narsha.smartpage.core.annotations.DataTable;
-import io.narsha.smartpage.core.utils.AnnotationUtils;
+import io.narsha.smartpage.core.utils.ResolverUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,9 +44,7 @@ public class MongoQueryExecutor implements QueryExecutor {
     // Add Filtered
     //    query.addCriteria(Criteria.where("projectId").is(projectId));
 
-    final var collection =
-        AnnotationUtils.getClassAnnotationValue(
-            paginatedFilteredQuery.targetClass(), DataTable.class, DataTable::value);
+    final var collection = ResolverUtils.getDataTableValue(paginatedFilteredQuery.targetClass());
 
     final var filtered = mongoTemplate.find(query, Map.class, collection);
 
@@ -78,7 +75,7 @@ public class MongoQueryExecutor implements QueryExecutor {
           if (v instanceof Map map) {
             convertSubMap(targetClass, map, key, outputMap);
           } else {
-            AnnotationUtils.getJavaProperty(targetClass, key)
+            ResolverUtils.getJavaProperty(targetClass, key)
                 .ifPresent(javaProperty -> outputMap.put(javaProperty, v));
           }
         });

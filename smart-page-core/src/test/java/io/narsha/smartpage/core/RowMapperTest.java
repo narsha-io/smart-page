@@ -1,9 +1,8 @@
-package io.narsha.smarpage.core;
+package io.narsha.smartpage.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.narsha.smartpage.core.RowMapper;
 import java.util.Map;
 import lombok.Setter;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,7 @@
-package io.narsha.smarpage.core.utils;
+package io.narsha.smartpage.core.utils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.narsha.smartpage.core.utils.ReflectionUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Test;
