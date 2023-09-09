@@ -55,7 +55,7 @@ class AnnotationUtilsTest {
   @Test
   void getQueryPropertyNoRename() {
     var res = AnnotationUtils.getQueryProperty(Person.class, "id");
-    assertThat(res).isEqualTo(Optional.empty());
+    assertThat(res).isEmpty();
   }
 
   @Test

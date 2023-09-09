@@ -8,7 +8,7 @@ public class InFilterFactory implements FilterFactory {
   }
 
   @Override
-  public <R> InFilter<R> get(Class<R> targetClass) {
+  public InFilter<?> get(Class<?> targetClass) {
     return new InFilter<>(targetClass);
   }
 }

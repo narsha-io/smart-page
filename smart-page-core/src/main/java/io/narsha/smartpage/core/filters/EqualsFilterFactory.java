@@ -8,7 +8,7 @@ public class EqualsFilterFactory implements FilterFactory {
   }
 
   @Override
-  public <R> EqualsFilter<R> get(Class<R> targetClass) {
+  public EqualsFilter<?> get(Class<?> targetClass) {
     return new EqualsFilter<>(targetClass);
   }
 }

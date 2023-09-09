@@ -46,14 +46,15 @@ class AnnotationUtils {
   static Optional<String> getJavaProperty(Class<?> objectClass, String queryProperty) {
     return Stream.of(objectClass.getDeclaredFields())
         .map(Field::getName)
-        .filter(
-            javaProperty -> {
-              // TODO externalize
-              return getQueryProperty(objectClass, javaProperty)
-                  .map(e -> e.equalsIgnoreCase(queryProperty))
-                  .orElse(javaProperty.equalsIgnoreCase(queryProperty));
-            })
+        .filter(javaProperty -> isValidProperty(objectClass, javaProperty, queryProperty))
         .findFirst();
+  }
+
+  private static Boolean isValidProperty(
+      Class<?> objectClass, String javaProperty, String queryProperty) {
+    return getQueryProperty(objectClass, javaProperty)
+        .map(e -> e.equalsIgnoreCase(queryProperty))
+        .orElse(javaProperty.equalsIgnoreCase(queryProperty));
   }
 
   public static boolean isAnnotated(

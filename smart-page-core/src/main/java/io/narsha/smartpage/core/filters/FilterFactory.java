@@ -4,5 +4,5 @@ public interface FilterFactory {
 
   String getIdentifier();
 
-  <R> FilterParser<?, ?> get(Class<R> targetClass);
+  FilterParser<?, ?> get(Class<?> targetClass);
 }
