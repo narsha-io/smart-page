@@ -38,7 +38,7 @@ public class JdbcQueryExecutor implements QueryExecutor {
                     v ->
                         jdbcFilterRegistrationService
                             .get(v.getValue().getClass())
-                            .map(t -> t.getValue(v.getValue().getValue()))
+                            .map(t -> t.getParsedValue(v.getValue().getValue()))
                             .orElse(v.getValue().getValue())));
 
     System.out.println(jdbcQueryParser.getQuery());

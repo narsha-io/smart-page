@@ -50,11 +50,10 @@ public class MongoQueryExecutor implements QueryExecutor {
                   .get(v.getValue().getClass())
                   .ifPresent(
                       action -> {
-
-                        // TODO impossible to keep this need renaming
-                        var value = action.getValue(v.getValue().getValue());
-
-                        var criteria = action.getMongoCriteria(key, value);
+                        final var parser = v.getValue();
+                        final var value = parser.getValue();
+                        var parsedValue = action.getParsedValue(value);
+                        var criteria = action.getMongoCriteria(key, parsedValue);
                         query.addCriteria(criteria);
                       });
             });

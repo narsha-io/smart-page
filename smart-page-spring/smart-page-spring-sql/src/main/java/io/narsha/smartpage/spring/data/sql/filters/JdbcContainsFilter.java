@@ -16,7 +16,7 @@ public class JdbcContainsFilter implements JdbcFilter<String> {
   }
 
   @Override
-  public String getValue(String value) {
+  public String getParsedValue(String value) {
     return "%" + value + "%";
   }
 }

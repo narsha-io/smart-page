@@ -6,7 +6,7 @@ public interface Filter<T> {
 
   Class<? extends FilterParser> getParserType();
 
-  default T getValue(T object) {
+  default T getParsedValue(T object) {
     return object;
   }
 }
