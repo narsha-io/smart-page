@@ -32,10 +32,8 @@ public class MongoQueryExecutor implements QueryExecutor {
     var orders =
         paginatedFilteredQuery.orders().entrySet().stream()
             .map(
-                order -> {
-                  return Sort.Order.by(order.getKey())
-                      .with(Sort.Direction.fromString(order.getValue()));
-                })
+                order ->
+                    Sort.Order.by(order.getKey()).with(Sort.Direction.fromString(order.getValue())))
             .toList();
 
     final var pageRequest =
