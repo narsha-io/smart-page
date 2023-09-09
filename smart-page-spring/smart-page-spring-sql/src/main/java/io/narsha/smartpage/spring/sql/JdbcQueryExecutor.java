@@ -21,10 +21,10 @@ public class JdbcQueryExecutor implements QueryExecutor {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
   private final JdbcFilterRegistrationService jdbcFilterRegistrationService;
+  private final RowMapper rowMapper;
 
   @Override
-  public <T> Pair<List<T>, Long> execute(
-      PaginatedFilteredQuery<T> paginatedFilteredQuery, RowMapper rowMapper) {
+  public <T> Pair<List<T>, Long> execute(PaginatedFilteredQuery<T> paginatedFilteredQuery) {
 
     final var jdbcQueryParser =
         new JdbcQueryParser<>(paginatedFilteredQuery, jdbcFilterRegistrationService);
@@ -42,7 +42,6 @@ public class JdbcQueryExecutor implements QueryExecutor {
                             .map(t -> t.getParsedValue(v.getValue().getValue()))
                             .orElse(v.getValue().getValue())));
 
-    System.out.println(jdbcQueryParser.getQuery());
     List<T> data =
         this.jdbcTemplate.query(
             jdbcQueryParser.getQuery(),

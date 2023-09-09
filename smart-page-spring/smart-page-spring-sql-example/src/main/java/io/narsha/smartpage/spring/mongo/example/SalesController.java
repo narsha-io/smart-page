@@ -1,8 +1,6 @@
 package io.narsha.smartpage.spring.mongo.example;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
-import io.narsha.smartpage.core.RowMapper;
 import io.narsha.smartpage.spring.sql.JdbcQueryExecutor;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,6 @@ public class SalesController {
    */
   @GetMapping
   public List<Sales> sales(PaginatedFilteredQuery<Sales> query) {
-    // TODO rowMapper as a been inside executor
-    return executor.execute(query, new RowMapper(new ObjectMapper())).getKey();
+    return executor.execute(query).getKey();
   }
 }

@@ -1,5 +1,7 @@
 package io.narsha.smartpage.spring.sql.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.narsha.smartpage.core.RowMapper;
 import io.narsha.smartpage.core.configuration.AbstractFilterConfiguration;
 import io.narsha.smartpage.spring.sql.JdbcQueryExecutor;
 import io.narsha.smartpage.spring.sql.filters.JdbcFilter;
@@ -20,7 +22,14 @@ public class JdbcFilterConfiguration
   @Bean
   public JdbcQueryExecutor jdbcQueryExecutor(
       NamedParameterJdbcTemplate namedParameterJdbcTemplate,
-      JdbcFilterRegistrationService jdbcFilterRegistrationService) {
-    return new JdbcQueryExecutor(namedParameterJdbcTemplate, jdbcFilterRegistrationService);
+      JdbcFilterRegistrationService jdbcFilterRegistrationService,
+      RowMapper rowMapper) {
+    return new JdbcQueryExecutor(
+        namedParameterJdbcTemplate, jdbcFilterRegistrationService, rowMapper);
+  }
+
+  @Bean
+  public RowMapper rowMapper() {
+    return new RowMapper(new ObjectMapper());
   }
 }

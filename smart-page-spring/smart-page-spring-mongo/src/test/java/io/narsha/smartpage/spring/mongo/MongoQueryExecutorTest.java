@@ -45,8 +45,8 @@ class MongoQueryExecutorTest {
 
   @Autowired private MongoTemplate mongoTemplate;
   @Autowired private MongoFilterRegistrationService mongoFilterRegistrationService;
+  @Autowired private RowMapper rowMapper;
 
-  private final ObjectMapper objectMapper = new ObjectMapper();
   private static final String COLLECTION = "person";
 
   @BeforeEach
@@ -106,11 +106,10 @@ class MongoQueryExecutorTest {
   void mappingTest(
       Integer page, Integer size, Integer exceptedPageSize, Integer exceptedTotalElement) {
     final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
+        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
             .execute(
                 new PaginatedFilteredQuery<>(
-                    Person.class, new HashMap<>(), new HashMap<>(), page, size),
-                new RowMapper(objectMapper));
+                    Person.class, new HashMap<>(), new HashMap<>(), page, size));
     assertThat(res.getKey()).hasSize(exceptedPageSize);
     assertThat(res.getValue()).isEqualTo(Long.valueOf(exceptedTotalElement));
     PersonValidator.validate(res.getKey());
@@ -128,8 +127,8 @@ class MongoQueryExecutorTest {
     query.orders().put("first_name", "asc");
 
     final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
-            .execute(query, new RowMapper(objectMapper));
+        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
+            .execute(query);
     assertThat(res.getKey()).hasSize(2);
     assertThat(res.getValue()).isEqualTo(5L);
     PersonValidator.containsIds(res.getKey(), Set.of(1L, 5L));
@@ -144,8 +143,8 @@ class MongoQueryExecutorTest {
     query.orders().put("first_name", "asc");
 
     final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
-            .execute(query, new RowMapper(objectMapper));
+        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
+            .execute(query);
     assertThat(res.getKey()).hasSize(2);
     assertThat(res.getValue()).isEqualTo(5L);
     PersonValidator.containsIds(res.getKey(), Set.of(4L, 2L));
@@ -162,8 +161,8 @@ class MongoQueryExecutorTest {
     query.filters().put("first_name", filter);
 
     final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
-            .execute(query, new RowMapper(objectMapper));
+        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
+            .execute(query);
     assertThat(res.getKey()).hasSize(1);
     assertThat(res.getValue()).isEqualTo(1L);
     PersonValidator.containsIds(res.getKey(), Set.of(3L));
@@ -180,8 +179,8 @@ class MongoQueryExecutorTest {
     query.filters().put("_id", filter);
 
     final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
-            .execute(query, new RowMapper(objectMapper));
+        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
+            .execute(query);
     assertThat(res.getKey()).hasSize(1);
     assertThat(res.getValue()).isEqualTo(1L);
     PersonValidator.containsIds(res.getKey(), Set.of(2L));
@@ -198,8 +197,8 @@ class MongoQueryExecutorTest {
     query.filters().put("_id", filter);
 
     final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
-            .execute(query, new RowMapper(objectMapper));
+        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
+            .execute(query);
     assertThat(res.getKey()).hasSize(2);
     assertThat(res.getValue()).isEqualTo(2L);
     PersonValidator.containsIds(res.getKey(), Set.of(2L, 3L));
@@ -216,8 +215,8 @@ class MongoQueryExecutorTest {
     query.filters().put("first_name", filter);
 
     final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
-            .execute(query, new RowMapper(objectMapper));
+        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
+            .execute(query);
     assertThat(res.getKey()).hasSize(2);
     assertThat(res.getValue()).isEqualTo(2L);
     PersonValidator.containsIds(res.getKey(), Set.of(2L, 3L));
@@ -234,8 +233,8 @@ class MongoQueryExecutorTest {
     query.filters().put("first_name", filter);
 
     final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
-            .execute(query, new RowMapper(objectMapper));
+        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
+            .execute(query);
     assertThat(res.getKey()).hasSize(2);
     assertThat(res.getValue()).isEqualTo(2L);
     PersonValidator.containsIds(res.getKey(), Set.of(4L, 5L));

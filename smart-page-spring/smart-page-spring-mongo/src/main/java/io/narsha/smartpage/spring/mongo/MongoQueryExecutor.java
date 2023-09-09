@@ -21,10 +21,10 @@ public class MongoQueryExecutor implements QueryExecutor {
   private final MongoTemplate mongoTemplate;
 
   private final MongoFilterRegistrationService mongoFilterRegistrationService;
+  private final RowMapper rowMapper;
 
   @Override
-  public <T> Pair<List<T>, Long> execute(
-      PaginatedFilteredQuery<T> paginatedFilteredQuery, RowMapper rowMapper) {
+  public <T> Pair<List<T>, Long> execute(PaginatedFilteredQuery<T> paginatedFilteredQuery) {
 
     var pageable = PageRequest.of(paginatedFilteredQuery.page(), paginatedFilteredQuery.size());
 

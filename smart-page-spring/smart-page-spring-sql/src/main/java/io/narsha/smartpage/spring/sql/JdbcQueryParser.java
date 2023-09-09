@@ -71,9 +71,7 @@ public class JdbcQueryParser<T> {
                 this.jdbcFilterRegistrationService
                     .get(parser.getClass())
                     .ifPresentOrElse(
-                        sql -> {
-                          filterBuilder.append(" AND ").append(sql.getSQLFragment(prop));
-                        },
+                        sql -> filterBuilder.append(" AND ").append(sql.getSQLFragment(prop)),
                         () -> {
                           throw new IllegalArgumentException();
                         }));
