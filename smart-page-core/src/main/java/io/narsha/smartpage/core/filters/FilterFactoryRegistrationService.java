@@ -7,8 +7,8 @@ import java.util.stream.Stream;
 
 public class FilterFactoryRegistrationService extends AbstractRegistrationService<FilterFactory> {
 
-  public Optional<FilterParser<?, ?>> get(Class<?> targetClass, String identifier) {
-    final Stream<FilterParser<?, ?>> filterStream =
+  public Optional<FilterParser> get(Class<?> targetClass, String identifier) {
+    final Stream<FilterParser> filterStream =
         super.registeredService.stream()
             .filter(
                 filterFactory ->

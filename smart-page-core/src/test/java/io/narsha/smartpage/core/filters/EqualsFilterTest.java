@@ -15,7 +15,8 @@ class EqualsFilterTest {
   void emptyString() {
     final var filter = equalsFilterFactory.get(String.class);
     filter.parse(objectMapper, new String[] {""});
-    assertThat(filter.getValue()).isEqualTo("");
+    final String value = (String) filter.getValue();
+    assertThat(value).isEmpty();
   }
 
   @Test

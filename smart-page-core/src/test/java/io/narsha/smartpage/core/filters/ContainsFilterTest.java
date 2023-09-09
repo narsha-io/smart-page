@@ -15,7 +15,8 @@ class ContainsFilterTest {
   void emptyString() {
     final var filter = containsFilterFactory.get(String.class);
     filter.parse(objectMapper, new String[] {""});
-    assertThat(filter.getValue()).isEqualTo(""); // TODO throw exception
+    final String value = (String) filter.getValue();
+    assertThat(value).isEmpty();
   }
 
   @Test

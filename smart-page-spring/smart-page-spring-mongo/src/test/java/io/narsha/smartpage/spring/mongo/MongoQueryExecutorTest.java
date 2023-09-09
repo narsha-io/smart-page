@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bson.Document;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +25,9 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.util.TestPropertyValues;
@@ -96,43 +100,24 @@ class MongoQueryExecutorTest {
                         Map.of("role", "Elle est où la poulette ?")))));
   }
 
-  @Test
   @Order(1)
-  void mappingTest() {
+  @ParameterizedTest
+  @MethodSource("simplePaginatedTest")
+  void mappingTest(
+      Integer page, Integer size, Integer exceptedPageSize, Integer exceptedTotalElement) {
     final Pair<List<Person>, Long> res =
         new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
             .execute(
-                new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 10),
+                new PaginatedFilteredQuery<>(
+                    Person.class, new HashMap<>(), new HashMap<>(), page, size),
                 new RowMapper(objectMapper));
-    assertThat(res.getKey()).hasSize(5);
-    assertThat(res.getValue()).isEqualTo(5L);
+    assertThat(res.getKey()).hasSize(exceptedPageSize);
+    assertThat(res.getValue()).isEqualTo(Long.valueOf(exceptedTotalElement));
     PersonValidator.validate(res.getKey());
   }
 
-  @Test
-  @Order(2)
-  void paginationTestPage0() {
-    final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
-            .execute(
-                new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 2),
-                new RowMapper(objectMapper));
-    assertThat(res.getKey()).hasSize(2);
-    assertThat(res.getValue()).isEqualTo(5L);
-    PersonValidator.validate(res.getKey());
-  }
-
-  @Test
-  @Order(3)
-  void paginationTestPage1() {
-    final Pair<List<Person>, Long> res =
-        new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService)
-            .execute(
-                new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 2, 2),
-                new RowMapper(objectMapper));
-    assertThat(res.getKey()).hasSize(1);
-    assertThat(res.getValue()).isEqualTo(5L);
-    PersonValidator.validate(res.getKey());
+  private static Stream<Arguments> simplePaginatedTest() {
+    return Stream.of(Arguments.of(0, 10, 5, 5), Arguments.of(0, 2, 2, 5), Arguments.of(2, 2, 1, 5));
   }
 
   @Test
