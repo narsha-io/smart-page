@@ -1,4 +1,4 @@
-package io.narsha.smartpage.spring.data.sql.filters;
+package io.narsha.smartpage.spring.sql.filters;
 
 import io.narsha.smartpage.core.filters.FilterParser;
 import io.narsha.smartpage.core.filters.InFilter;

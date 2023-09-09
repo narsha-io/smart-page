@@ -1,4 +1,4 @@
-package io.narsha.smartpage.spring.data.example;
+package io.narsha.smartpage.spring.mongo.example;
 
 import io.narsha.smartpage.core.annotations.DataTable;
 import io.narsha.smartpage.core.annotations.DataTableProperty;

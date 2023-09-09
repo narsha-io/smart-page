@@ -1,9 +1,9 @@
-package io.narsha.smartpage.spring.data.example;
+package io.narsha.smartpage.spring.mongo.example;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.RowMapper;
-import io.narsha.smartpage.spring.data.sql.JdbcQueryExecutor;
+import io.narsha.smartpage.spring.sql.JdbcQueryExecutor;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

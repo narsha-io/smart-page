@@ -1,8 +1,8 @@
-package io.narsha.smartpage.spring.data.example;
+package io.narsha.smartpage.spring.mongo.example;
 
 import io.narsha.smartpage.spring.core.configuration.FilterFactoryConfiguration;
 import io.narsha.smartpage.spring.core.configuration.SmartPageResolverWebConfiguration;
-import io.narsha.smartpage.spring.data.sql.configuration.JdbcFilterConfiguration;
+import io.narsha.smartpage.spring.sql.configuration.JdbcFilterConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;

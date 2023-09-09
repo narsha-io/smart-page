@@ -1,9 +1,9 @@
-package io.narsha.smartpage.spring.data.sql.configuration;
+package io.narsha.smartpage.spring.sql.configuration;
 
 import io.narsha.smartpage.core.configuration.AbstractFilterConfiguration;
-import io.narsha.smartpage.spring.data.sql.JdbcQueryExecutor;
-import io.narsha.smartpage.spring.data.sql.filters.JdbcFilter;
-import io.narsha.smartpage.spring.data.sql.filters.JdbcFilterRegistrationService;
+import io.narsha.smartpage.spring.sql.JdbcQueryExecutor;
+import io.narsha.smartpage.spring.sql.filters.JdbcFilter;
+import io.narsha.smartpage.spring.sql.filters.JdbcFilterRegistrationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;

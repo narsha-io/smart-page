@@ -1,13 +1,14 @@
-package io.narsha.smartpage.spring.data.sql;
+package io.narsha.smartpage.spring.sql;
 
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.utils.ResolverUtils;
-import io.narsha.smartpage.spring.data.sql.filters.JdbcFilterRegistrationService;
+import io.narsha.smartpage.spring.sql.filters.JdbcFilterRegistrationService;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
