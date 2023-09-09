@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -29,6 +28,7 @@ public class JdbcQueryExecutor implements QueryExecutor {
 
     final var jdbcQueryParser =
         new JdbcQueryParser<>(paginatedFilteredQuery, jdbcFilterRegistrationService);
+
     jdbcQueryParser.init();
 
     final var params =
