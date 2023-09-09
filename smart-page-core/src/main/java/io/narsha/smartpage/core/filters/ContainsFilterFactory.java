@@ -8,7 +8,7 @@ public class ContainsFilterFactory implements FilterFactory {
   }
 
   @Override
-  public <R> ContainsFilter get(Class<R> targetClass) {
+  public ContainsFilter get(Class targetClass) {
     if (!targetClass.equals(String.class)) {
       throw new IllegalArgumentException();
       // TODO custom exception

@@ -4,13 +4,14 @@ import io.narsha.smartpage.core.annotations.DataTableProperty;
 import io.narsha.smartpage.core.exceptions.InternalException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class AnnotationUtils {
+class AnnotationUtils {
 
   public static <R, A extends Annotation> R getClassAnnotationValue(
       Class<?> objectClass, Class<A> annotationClass, Function<A, R> function) {
@@ -22,34 +23,38 @@ public class AnnotationUtils {
     }
   }
 
-  public static <R, A extends Annotation> R getFieldAnnotationValue(
+  public static <R, A extends Annotation> Optional<R> getFieldAnnotationValue(
       Class<?> objectClass, String fieldName, Class<A> annotationClass, Function<A, R> function) {
     try {
       final var field = objectClass.getDeclaredField(fieldName);
       final var annotation = field.getAnnotation(annotationClass);
-      return function.apply(annotation);
+      return Optional.ofNullable(function.apply(annotation));
     } catch (Exception e) {
-      throw new InternalException();
+      return Optional.empty();
     }
   }
 
-  public static String getQueryProperty(Class<?> objectClass, String javaProperty) {
+  static Optional<String> getQueryProperty(Class<?> objectClass, String javaProperty) {
     try {
       return getFieldAnnotationValue(
           objectClass, javaProperty, DataTableProperty.class, DataTableProperty::columnName);
     } catch (Exception e) {
-      return javaProperty;
+      return Optional.empty();
     }
   }
 
-  public static String getJavaProperty(Class<?> objectClass, String queryProperty) {
+  static Optional<String> getJavaProperty(Class<?> objectClass, String queryProperty) {
     return Stream.of(objectClass.getDeclaredFields())
         .map(Field::getName)
-        .filter(
-            javaProperty ->
-                getQueryProperty(objectClass, javaProperty).equalsIgnoreCase(queryProperty))
-        .findFirst()
-        .orElse(queryProperty);
+        .filter(javaProperty -> isValidProperty(objectClass, javaProperty, queryProperty))
+        .findFirst();
+  }
+
+  private static Boolean isValidProperty(
+      Class<?> objectClass, String javaProperty, String queryProperty) {
+    return getQueryProperty(objectClass, javaProperty)
+        .map(e -> e.equalsIgnoreCase(queryProperty))
+        .orElse(javaProperty.equalsIgnoreCase(queryProperty));
   }
 
   public static boolean isAnnotated(
@@ -57,6 +62,15 @@ public class AnnotationUtils {
     try {
       final var field = objectClass.getDeclaredField(fieldName);
       return field.getAnnotation(annotationClass) != null;
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  public static boolean isFieldExists(Class<?> objectClass, String fieldName) {
+    try {
+      objectClass.getDeclaredField(fieldName);
+      return true;
     } catch (Exception e) {
       return false;
     }
