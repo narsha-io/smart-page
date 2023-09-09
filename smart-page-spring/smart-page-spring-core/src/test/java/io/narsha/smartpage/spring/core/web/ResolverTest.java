@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.filters.EqualsFilter;
+import io.narsha.smartpage.spring.core.configuration.SmartPageResolverWebConfiguration;
 import io.narsha.smartpage.spring.test.SmartPageSpringTestApplication;
 import io.narsha.smartpage.spring.test.model.Person;
 import java.util.Map;
@@ -21,7 +22,11 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableAutoConfiguration
 @EnableWebMvc
 @SpringBootTest(
-    classes = {SmartPageSpringTestApplication.class, WebConfig.class},
+    classes = {
+      SmartPageSpringTestApplication.class,
+      SmartPageResolverWebConfiguration.class,
+      WebConfig.class
+    },
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ResolverTest {
 

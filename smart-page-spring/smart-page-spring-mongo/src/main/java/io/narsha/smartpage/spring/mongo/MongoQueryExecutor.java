@@ -28,6 +28,7 @@ public class MongoQueryExecutor implements QueryExecutor {
 
     var pageable = PageRequest.of(paginatedFilteredQuery.page(), paginatedFilteredQuery.size());
 
+    // TODO move in an utils class
     var orders =
         paginatedFilteredQuery.orders().entrySet().stream()
             .map(
