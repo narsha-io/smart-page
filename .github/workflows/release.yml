@@ -29,8 +29,8 @@ jobs:
       - name: Publish package
         run: |
           ./mvnw -B -U \
-              -DskipTests=true 
-              -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }}
+              -DskipTests=true  \
+              -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} \
               -Pci-cd \
               release:prepare \
               release:perform \
