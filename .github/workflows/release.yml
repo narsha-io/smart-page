@@ -27,7 +27,16 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Publish package
-        run: ./mvnw --batch-mode clean deploy -DskipTests=true -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }}
+        run: |
+          ./mvnw -B -U \
+              -DskipTests=true 
+              -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }}
+              -Pci-cd \
+              release:prepare \
+              release:perform \
+              javadoc:jar \
+              source:jar \
+              deploy
         env:
           java-version: '17'
           distribution: 'temurin'
