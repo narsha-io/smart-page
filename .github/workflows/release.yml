@@ -28,7 +28,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Publish package
         run: ./mvnw --batch-mode clean deploy -DskipTests=true
-        with:
+        env:
           java-version: '17'
           distribution: 'temurin'
           server-id: oss.sonatype.org
