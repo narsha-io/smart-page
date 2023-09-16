@@ -27,11 +27,14 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Import GPG Key
+        id: import_gpg
         uses: crazy-max/ghaction-import-gpg@v6
         with:
           gpg_private_key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
           fingerprint: 1CCA611EA01B4559CB97C6BDD8AF86AE6EC75A8D
+          git-user-signingkey: true
+          git-commit-gpgsign: true
       - name: Publish package
         run: |
           ./mvnw -B -U \
