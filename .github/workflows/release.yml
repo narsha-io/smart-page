@@ -14,42 +14,23 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           server-id: oss.sonatype.org
-          server-username: ${{ secrets.OSSRH_USERNAME }}
-          server-password: ${{ secrets.OSSRH_TOKEN }}
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          gpg-passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-      - name: Set projects Maven version to GitHub Action GUI set version
-        run: mvn versions:set "-DnewVersion=${{ github.event.inputs.releaseversion }}"
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Import GPG Key
-        id: import_gpg
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-          passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-          fingerprint: 1CCA611EA01B4559CB97C6BDD8AF86AE6EC75A8D
-          git_user_signingkey: true
-          git_commit_gpgsign: true
+          gpg-passphrase: GPG_PASSPHRASE
+      #- name: Import GPG Key
+      #  id: import_gpg
+      #  uses: crazy-max/ghaction-import-gpg@v6
+      #  with:
+      #    gpg_private_key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+      #    git_user_signingkey: true
+      #    git_commit_gpgsign: true
+      - name: echo
+        run: cat ~/.m2/settings.xml
       - name: Publish package
-        run: |
-          ./mvnw -B -U \
-              -DskipTests=true \ 
-              -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} \
-              -Pci-cd \
-              release:prepare \
-              release:perform \
-              javadoc:jar \
-              source:jar \
-              deploy
+        id: publish_package
+        run: MAVEN_OPTS=-Dorg.slf4j.simpleLogger.defaultLogLevel=trace mvn -B -U -P ci-cd -DskipTests=true -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} -Denv.MAVEN_USERNAME=${{ secrets.OSS_SONATYPE_USERNAME }} -Denv.MAVEN_PASSWORD=${{ secrets.OSS_SONATYPE_PASSWORD }} deploy
         env:
-          java-version: '17'
-          distribution: 'temurin'
-          server-id: oss.sonatype.org
-          server-username: ${{ secrets.OSSRH_USERNAME }}
-          server-password: ${{ secrets.OSSRH_TOKEN }}
-          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          gpg-passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+          MAVEN_USERNAME: ${{ secrets.OSS_SONATYPE_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSS_SONATYPE_PASSWORD }}
+          GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
