@@ -33,8 +33,10 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/narsha-io/smart-page</url>
-        <connection>scm:git:https://github.com/narsha-io/smart-page.git</connection>
+        <connection>scm:git:${project.scm.url}</connection>
+        <developerConnection>scm:git:${project.scm.url}</developerConnection>
+        <url>git@github.com:narsha-io/smart-page.git</url>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
