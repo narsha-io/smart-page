@@ -18,18 +18,11 @@ jobs:
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           gpg-passphrase: GPG_PASSPHRASE
-      #- name: Import GPG Key
-      #  id: import_gpg
-      #  uses: crazy-max/ghaction-import-gpg@v6
-      #  with:
-      #    gpg_private_key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-      #    git_user_signingkey: true
-      #    git_commit_gpgsign: true
       - name: echo
         run: cat ~/.m2/settings.xml
       - name: Publish package
         id: publish_package
-        run: MAVEN_OPTS=-Dorg.slf4j.simpleLogger.defaultLogLevel=trace mvn -B -U -P ci-cd -DskipTests=true -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} -Denv.MAVEN_USERNAME=${{ secrets.OSS_SONATYPE_USERNAME }} -Denv.MAVEN_PASSWORD=${{ secrets.OSS_SONATYPE_PASSWORD }} deploy
+        run: mvn -B -U -P ci-cd -DskipTests=true deploy
         env:
           MAVEN_USERNAME: ${{ secrets.OSS_SONATYPE_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSS_SONATYPE_PASSWORD }}
