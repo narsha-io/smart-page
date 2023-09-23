@@ -31,10 +31,9 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:${project.scm.url}</connection>
-        <developerConnection>scm:git:${project.scm.url}</developerConnection>
-        <url>https://github.com/narsha-io/smart-page.git</url>
-        <tag>smart-page-1.0.1</tag>
+        <connection>scm:git:git://github.com/narsha-io/smart-page.git</connection>
+        <developerConnection>scm:git:git://github.com/narsha-io/smart-page.git</developerConnection>
+        <url>https://github.com/narsha-io/smart-page</url>
     </scm>
 
     <distributionManagement>
