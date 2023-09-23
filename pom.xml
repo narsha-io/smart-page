@@ -4,7 +4,7 @@
 
     <groupId>io.github.narsha-io</groupId>
     <artifactId>smart-page</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
         <module>smart-page-core</module>
@@ -34,7 +34,7 @@
         <connection>scm:git:${project.scm.url}</connection>
         <developerConnection>scm:git:${project.scm.url}</developerConnection>
         <url>https://github.com/narsha-io/smart-page.git</url>
-        <tag>smart-page-1.0.0</tag>
+        <tag>smart-page-1.0.1</tag>
     </scm>
 
     <distributionManagement>
