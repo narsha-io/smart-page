@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
+/** Example application */
 @SpringBootApplication
 @Import({
   JdbcFilterConfiguration.class,
@@ -15,6 +16,11 @@ import org.springframework.context.annotation.Import;
 })
 public class SmartPageSpringDataExampleApplication {
 
+  /**
+   * Application entry point
+   *
+   * @param args program argument
+   */
   public static void main(String[] args) {
     SpringApplication.run(SmartPageSpringDataExampleApplication.class, args);
   }

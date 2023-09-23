@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/** Register PaginatedFilteredQueryResolver into Spring argumentResolver */
 @Configuration
 @RequiredArgsConstructor
 public class SmartPageResolverWebConfiguration implements WebMvcConfigurer {

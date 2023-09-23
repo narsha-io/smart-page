@@ -22,6 +22,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.mvc.method.annotation.PathVariableMapMethodArgumentResolver;
 
+/** PaginatedFilteredQueryResolver which convert a http request into PaginatedFilteredQuery */
 @RequiredArgsConstructor
 public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentResolver {
 

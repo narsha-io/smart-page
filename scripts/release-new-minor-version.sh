@@ -1,1 +1,1 @@
-mvn --batch-mode release:clean release:prepare release:perform -Darguments="-Dmaven.test.skipTests=true -Dmaven.test.skip=true"
+mvn --batch-mode release:clean release:prepare release:perform

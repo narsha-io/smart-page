@@ -1,5 +1,6 @@
 package io.narsha.smartpage.core.filters;
 
+/** Equals filter factory */
 public class EqualsFilterFactory implements FilterFactory {
 
   @Override

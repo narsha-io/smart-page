@@ -28,7 +28,7 @@ public class MongoFilterConfiguration
   /**
    * RowMapper that automatically map the query result into the targeted DTO
    *
-   * @return
+   * @return rowMapper
    */
   @Bean
   public RowMapper rowMapper() {

@@ -1,5 +1,6 @@
 package io.narsha.smartpage.core.filters;
 
+/** A factory which create a new instance of contains filter */
 public class ContainsFilterFactory implements FilterFactory {
 
   @Override

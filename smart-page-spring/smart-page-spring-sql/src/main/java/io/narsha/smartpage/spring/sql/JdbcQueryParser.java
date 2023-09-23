@@ -11,6 +11,11 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Use to generate a sql query from a PaginatedFilteredQuery
+ *
+ * @param <T> type of the target DTO
+ */
 @RequiredArgsConstructor
 public class JdbcQueryParser<T> {
 
@@ -19,6 +24,7 @@ public class JdbcQueryParser<T> {
   private final PaginatedFilteredQuery<T> queryFilter;
   private final JdbcFilterRegistrationService jdbcFilterRegistrationService;
 
+  /** Build sql + count query */
   public void init() {
     buildQuery();
     buildCountQuery();
@@ -41,10 +47,20 @@ public class JdbcQueryParser<T> {
     }
   }
 
+  /**
+   * Get the full sql query
+   *
+   * @return the sql data query
+   */
   public String getQuery() {
     return this.query.toString() + this.offsetQuery.toString();
   }
 
+  /**
+   * Get the count query
+   *
+   * @return the count query
+   */
   public String getCountQuery() {
     return this.countQuery.toString();
   }

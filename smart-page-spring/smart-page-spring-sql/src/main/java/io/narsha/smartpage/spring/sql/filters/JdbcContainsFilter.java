@@ -3,6 +3,7 @@ package io.narsha.smartpage.spring.sql.filters;
 import io.narsha.smartpage.core.filters.ContainsFilter;
 import io.narsha.smartpage.core.filters.FilterParser;
 
+/** JDBC filter for contains operation */
 public class JdbcContainsFilter implements JdbcFilter<String> {
 
   @Override

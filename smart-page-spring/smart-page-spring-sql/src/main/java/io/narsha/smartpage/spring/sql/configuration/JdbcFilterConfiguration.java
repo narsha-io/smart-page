@@ -10,15 +10,31 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+/** Spring jdbc filter configuration */
 @Configuration
 public class JdbcFilterConfiguration
     extends AbstractFilterConfiguration<JdbcFilter, JdbcFilterRegistrationService> {
 
+  /**
+   * Auto-register all JdbcFilter implementations
+   *
+   * @return the populated jdbcFilterRegistrationService with all JdbcFilter in the same package as
+   *     JdbcFilter
+   * @throws Exception if reflection Exception
+   */
   @Bean
   public JdbcFilterRegistrationService jdbcFilterRegistrationService() throws Exception {
     return super.init(JdbcFilter.class);
   }
 
+  /**
+   * Init a JdbcQueryExecutor that will be in charge of execute the final SQL query
+   *
+   * @param namedParameterJdbcTemplate execute the final sql query
+   * @param jdbcFilterRegistrationService will generate sql clause from DTO
+   * @param rowMapper will convert the sql result as DTO
+   * @return JdbcQueryExecutor
+   */
   @Bean
   public JdbcQueryExecutor jdbcQueryExecutor(
       NamedParameterJdbcTemplate namedParameterJdbcTemplate,
@@ -28,6 +44,11 @@ public class JdbcFilterConfiguration
         namedParameterJdbcTemplate, jdbcFilterRegistrationService, rowMapper);
   }
 
+  /**
+   * RowMapper that automatically map the query result into the targeted DTO
+   *
+   * @return rowMapper
+   */
   @Bean
   public RowMapper rowMapper() {
     return new RowMapper(new ObjectMapper());

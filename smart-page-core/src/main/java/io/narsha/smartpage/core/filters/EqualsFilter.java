@@ -3,11 +3,22 @@ package io.narsha.smartpage.core.filters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 
+/**
+ * class which provide some method to parse String array into a targetClass in order to apply an
+ * Equals operation
+ *
+ * @param <T> the target property class
+ */
 @Getter
 public class EqualsFilter<T> extends FilterParser<T, Object> {
 
   private Object value;
 
+  /**
+   * Basic constructor
+   *
+   * @param targetClass the class of the targeted property
+   */
   public EqualsFilter(Class<T> targetClass) {
     super(targetClass);
   }

@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+/** In charge of the sql query execution */
 @RequiredArgsConstructor
 public class JdbcQueryExecutor implements QueryExecutor {
 
