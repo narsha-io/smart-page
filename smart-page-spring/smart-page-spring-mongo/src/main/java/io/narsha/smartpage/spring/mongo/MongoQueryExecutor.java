@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 
+/** Class that will execute the mongo query following the declared filters */
 @RequiredArgsConstructor
 public class MongoQueryExecutor implements QueryExecutor {
 

@@ -4,6 +4,7 @@ import io.narsha.smartpage.core.filters.EqualsFilter;
 import io.narsha.smartpage.core.filters.FilterParser;
 import org.springframework.data.mongodb.core.query.Criteria;
 
+/** Mongo implementation of equals operation */
 public class MongoEqualsFilter implements MongoFilter<Object> {
   @Override
   public Class<? extends FilterParser> getParserType() {

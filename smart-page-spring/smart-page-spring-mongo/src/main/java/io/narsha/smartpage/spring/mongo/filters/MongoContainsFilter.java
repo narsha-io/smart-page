@@ -5,6 +5,7 @@ import io.narsha.smartpage.core.filters.FilterParser;
 import java.util.regex.Pattern;
 import org.springframework.data.mongodb.core.query.Criteria;
 
+/** Mongo implementation of contains operation */
 public class MongoContainsFilter implements MongoFilter<String> {
   @Override
   public Class<? extends FilterParser> getParserType() {

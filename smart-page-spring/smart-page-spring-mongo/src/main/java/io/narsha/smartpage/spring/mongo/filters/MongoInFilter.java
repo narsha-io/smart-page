@@ -5,6 +5,7 @@ import io.narsha.smartpage.core.filters.InFilter;
 import java.util.Set;
 import org.springframework.data.mongodb.core.query.Criteria;
 
+/** Mongo implementation of in operation */
 public class MongoInFilter implements MongoFilter<Set<Object>> {
   @Override
   public Class<? extends FilterParser> getParserType() {
