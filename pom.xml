@@ -8,6 +8,7 @@
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>smart-page main pom.xml</description>
+    <url>https://github.com/narsha-io/smart-page</url>
 
     <modules>
         <module>smart-page-core</module>
