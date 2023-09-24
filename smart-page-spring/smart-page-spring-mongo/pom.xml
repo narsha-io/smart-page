@@ -10,6 +10,7 @@
 
     <artifactId>smart-page-spring-mongo</artifactId>
     <name>${project.artifactId}</name>
+    <description>smart-page spring implementation for mongo database</description>
 
     <dependencies>
         <dependency>

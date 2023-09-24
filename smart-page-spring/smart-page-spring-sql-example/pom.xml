@@ -10,6 +10,7 @@
 
     <artifactId>smart-page-spring-sql-example</artifactId>
     <name>${project.artifactId}</name>
+    <description>smart-page spring implementation for sql database</description>
 
     <dependencies>
         <dependency>

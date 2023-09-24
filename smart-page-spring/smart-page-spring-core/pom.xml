@@ -10,6 +10,7 @@
 
     <artifactId>smart-page-spring-core</artifactId>
     <name>${project.artifactId}</name>
+    <description>smart-page spring abstract bean registration</description>
 
     <dependencies>
         <dependency>

@@ -10,6 +10,7 @@
 
     <artifactId>smart-page-spring-test</artifactId>
     <name>${project.artifactId}</name>
+    <description>smart-page spring test used by all spring projects</description>
 
     <dependencies>
         <dependency>

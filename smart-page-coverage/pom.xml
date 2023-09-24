@@ -10,6 +10,7 @@
 
     <artifactId>smart-page-coverage</artifactId>
     <name>${project.artifactId}</name>
+    <description>project used to aggregate junit coverage</description>
 
     <dependencies>
         <dependency>
