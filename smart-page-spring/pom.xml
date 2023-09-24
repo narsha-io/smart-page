@@ -9,6 +9,8 @@
     </parent>
 
     <artifactId>smart-page-spring</artifactId>
+    <name>${project.artifactId}</name>
+
     <packaging>pom</packaging>
 
     <properties>

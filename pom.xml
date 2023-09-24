@@ -6,6 +6,8 @@
     <artifactId>smart-page</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
+
     <modules>
         <module>smart-page-core</module>
         <module>smart-page-spring</module>
