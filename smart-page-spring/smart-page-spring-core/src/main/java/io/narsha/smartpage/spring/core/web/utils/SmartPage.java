@@ -16,6 +16,14 @@ public class SmartPage {
   // TODO manage multi executor depend on the annotation choice
   private final QueryExecutor executor;
 
+  /**
+   * generate a spring response entity which contains the response body and some http header RFC988
+   * more information https://datatracker.ietf.org/doc/html/rfc5988#page-6
+   *
+   * @param query the query to execute
+   * @return the http response entity
+   * @param <T> targeted DTO type
+   */
   public <T> ResponseEntity<List<T>> asResponseEntity(PaginatedFilteredQuery<T> query) {
     var result = executor.execute(query);
     if (CollectionUtils.isEmpty(result.data())) {
