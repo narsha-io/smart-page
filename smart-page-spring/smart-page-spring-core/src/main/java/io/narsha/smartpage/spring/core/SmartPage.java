@@ -1,7 +1,7 @@
-package io.narsha.smartpage.spring.core.web.utils;
+package io.narsha.smartpage.spring.core;
 
-import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.QueryExecutor;
+import io.narsha.smartpage.core.SmartPageQuery;
 import io.narsha.smartpage.core.SmartPageResult;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class SmartPage {
    * @return the http response entity
    * @param <T> targeted DTO type
    */
-  public <T> ResponseEntity<List<T>> asResponseEntity(PaginatedFilteredQuery<T> query) {
+  public <T> ResponseEntity<List<T>> asResponseEntity(SmartPageQuery<T> query) {
     var result = executor.execute(query);
     if (CollectionUtils.isEmpty(result.data())) {
       return ResponseEntity.noContent().build();

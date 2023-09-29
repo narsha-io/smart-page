@@ -13,7 +13,7 @@ import java.util.Map;
  * @param size used for pagination
  * @param <T> The DTO type
  */
-public record PaginatedFilteredQuery<T>(
+public record SmartPageQuery<T>(
     Class<T> targetClass,
     Map<String, FilterParser<?, ?>> filters,
     Map<String, String> orders,

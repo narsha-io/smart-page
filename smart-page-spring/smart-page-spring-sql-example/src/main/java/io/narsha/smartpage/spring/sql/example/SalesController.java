@@ -1,7 +1,7 @@
 package io.narsha.smartpage.spring.sql.example;
 
-import io.narsha.smartpage.core.PaginatedFilteredQuery;
-import io.narsha.smartpage.spring.core.web.utils.SmartPage;
+import io.narsha.smartpage.core.SmartPageQuery;
+import io.narsha.smartpage.spring.core.SmartPage;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ public class SalesController {
    * @return filtered data
    */
   @GetMapping
-  public ResponseEntity<List<Sales>> sales(PaginatedFilteredQuery<Sales> query) {
+  public ResponseEntity<List<Sales>> sales(SmartPageQuery<Sales> query) {
     return smartPage.asResponseEntity(query);
   }
 }

@@ -2,7 +2,7 @@ package io.narsha.smartpage.spring.core.web;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.narsha.smartpage.core.PaginatedFilteredQuery;
+import io.narsha.smartpage.core.SmartPageQuery;
 import io.narsha.smartpage.core.filters.EqualsFilter;
 import io.narsha.smartpage.spring.core.configuration.SmartPageResolverWebConfiguration;
 import io.narsha.smartpage.spring.test.SmartPageSpringTestApplication;
@@ -35,7 +35,7 @@ class ResolverTest {
 
   @Autowired private TestRestTemplate restTemplate;
 
-  @Autowired private AtomicReference<PaginatedFilteredQuery<Person>> reference;
+  @Autowired private AtomicReference<SmartPageQuery<Person>> reference;
 
   @Test
   void noFilterNoPage() {
@@ -124,12 +124,11 @@ class ResolverTest {
         "http://localhost:" + port + "/test" + (param == null ? "" : param), String.class);
   }
 
-  private void assertPageAndTarget(PaginatedFilteredQuery<Person> query) {
+  private void assertPageAndTarget(SmartPageQuery<Person> query) {
     this.assertPageAndTarget(query, 0, 20);
   }
 
-  private void assertPageAndTarget(
-      PaginatedFilteredQuery<Person> query, Integer page, Integer size) {
+  private void assertPageAndTarget(SmartPageQuery<Person> query, Integer page, Integer size) {
     assertThat(query.page()).isEqualTo(page);
     assertThat(query.size()).isEqualTo(size);
     assertThat(query.targetClass()).isEqualTo(Person.class);

@@ -1,8 +1,8 @@
 package io.narsha.smartpage.spring.sql;
 
-import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.RowMapper;
+import io.narsha.smartpage.core.SmartPageQuery;
 import io.narsha.smartpage.core.SmartPageResult;
 import io.narsha.smartpage.core.utils.ResolverUtils;
 import io.narsha.smartpage.spring.sql.filters.JdbcFilterRegistrationService;
@@ -25,7 +25,7 @@ public class JdbcQueryExecutor implements QueryExecutor {
   private final RowMapper rowMapper;
 
   @Override
-  public <T> SmartPageResult<T> execute(PaginatedFilteredQuery<T> paginatedFilteredQuery) {
+  public <T> SmartPageResult<T> execute(SmartPageQuery<T> paginatedFilteredQuery) {
 
     final var jdbcQueryParser =
         new JdbcQueryParser<>(paginatedFilteredQuery, jdbcFilterRegistrationService);
@@ -64,7 +64,7 @@ public class JdbcQueryExecutor implements QueryExecutor {
   }
 
   private <T> List<T> extractResultSet(
-      PaginatedFilteredQuery<T> paginatedFilteredQuery, RowMapper rowMapper, ResultSet rs)
+      SmartPageQuery<T> paginatedFilteredQuery, RowMapper rowMapper, ResultSet rs)
       throws SQLException {
     final var queryDefinition = getQueryDefinition(rs);
 

@@ -1,7 +1,7 @@
 package io.narsha.smartpage.spring.sql;
 
-import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.QueryExecutor;
+import io.narsha.smartpage.core.SmartPageQuery;
 import io.narsha.smartpage.core.utils.ResolverUtils;
 import io.narsha.smartpage.spring.sql.filters.JdbcFilterRegistrationService;
 import java.io.BufferedReader;
@@ -21,7 +21,7 @@ public class JdbcQueryParser<T> {
 
   private StringBuilder query = new StringBuilder();
   private StringBuilder countQuery = new StringBuilder();
-  private final PaginatedFilteredQuery<T> queryFilter;
+  private final SmartPageQuery<T> queryFilter;
   private final JdbcFilterRegistrationService jdbcFilterRegistrationService;
 
   /** Build sql + count query */

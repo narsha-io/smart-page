@@ -11,5 +11,5 @@ public interface QueryExecutor {
    * @return the query data
    * @param <T> type of the DTO data
    */
-  <T> SmartPageResult<T> execute(PaginatedFilteredQuery<T> paginatedFilteredQuery);
+  <T> SmartPageResult<T> execute(SmartPageQuery<T> paginatedFilteredQuery);
 }

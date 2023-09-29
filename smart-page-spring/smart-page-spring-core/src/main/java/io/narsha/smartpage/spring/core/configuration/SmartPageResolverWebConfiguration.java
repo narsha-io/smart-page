@@ -1,6 +1,6 @@
 package io.narsha.smartpage.spring.core.configuration;
 
-import io.narsha.smartpage.spring.core.web.PaginatedFilteredQueryResolver;
+import io.narsha.smartpage.spring.core.web.SmartPageQueryResolver;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -12,10 +12,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class SmartPageResolverWebConfiguration implements WebMvcConfigurer {
 
-  private final PaginatedFilteredQueryResolver paginatedFilteredQueryResolver;
+  private final SmartPageQueryResolver smartPageQueryResolver;
 
   @Override
   public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-    argumentResolvers.add(paginatedFilteredQueryResolver);
+    argumentResolvers.add(smartPageQueryResolver);
   }
 }

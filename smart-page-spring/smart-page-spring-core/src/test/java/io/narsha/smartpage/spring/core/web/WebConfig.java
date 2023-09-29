@@ -1,7 +1,7 @@
 package io.narsha.smartpage.spring.core.web;
 
-import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.QueryExecutor;
+import io.narsha.smartpage.core.SmartPageQuery;
 import io.narsha.smartpage.core.SmartPageResult;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +27,7 @@ public class WebConfig {
   public QueryExecutor queryExecutor() {
     return new QueryExecutor() {
       @Override
-      public <T> SmartPageResult<T> execute(PaginatedFilteredQuery<T> paginatedFilteredQuery) {
+      public <T> SmartPageResult<T> execute(SmartPageQuery<T> paginatedFilteredQuery) {
         return null;
       }
     };

@@ -1,7 +1,7 @@
 package io.narsha.smartpage.spring.core.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.narsha.smartpage.core.PaginatedFilteredQuery;
+import io.narsha.smartpage.core.SmartPageQuery;
 import io.narsha.smartpage.core.filters.EqualsFilter;
 import io.narsha.smartpage.core.filters.FilterFactoryRegistrationService;
 import io.narsha.smartpage.core.filters.FilterParser;
@@ -24,7 +24,7 @@ import org.springframework.web.servlet.mvc.method.annotation.PathVariableMapMeth
 
 /** PaginatedFilteredQueryResolver which convert a http request into PaginatedFilteredQuery */
 @RequiredArgsConstructor
-public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentResolver {
+public class SmartPageQueryResolver implements HandlerMethodArgumentResolver {
 
   private final ObjectMapper objectMapper;
   private final PageableHandlerMethodArgumentResolver pageableHandlerMethodArgumentResolver;
@@ -34,7 +34,7 @@ public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentReso
 
   @Override
   public boolean supportsParameter(MethodParameter parameter) {
-    return parameter.getParameterType().equals(PaginatedFilteredQuery.class);
+    return parameter.getParameterType().equals(SmartPageQuery.class);
   }
 
   @Override
@@ -59,7 +59,7 @@ public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentReso
             parameter, mavContainer, webRequest, binderFactory);
 
     final var paginatedFilteredQuery =
-        new PaginatedFilteredQuery<>(
+        new SmartPageQuery<>(
             targetClass,
             new HashMap<>(),
             new HashMap<>(),

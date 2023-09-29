@@ -5,8 +5,8 @@ import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.configuration.AbstractFilterConfiguration;
 import io.narsha.smartpage.core.filters.FilterFactory;
 import io.narsha.smartpage.core.filters.FilterFactoryRegistrationService;
-import io.narsha.smartpage.spring.core.web.PaginatedFilteredQueryResolver;
-import io.narsha.smartpage.spring.core.web.utils.SmartPage;
+import io.narsha.smartpage.spring.core.SmartPage;
+import io.narsha.smartpage.spring.core.web.SmartPageQueryResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
@@ -41,11 +41,11 @@ public class FilterFactoryConfiguration
    *     PaginatedFilteredQuery
    */
   @Bean
-  public PaginatedFilteredQueryResolver paginatedFilteredQueryResolver(
+  public SmartPageQueryResolver paginatedFilteredQueryResolver(
       ObjectMapper objectMapper,
       PageableHandlerMethodArgumentResolver pageableHandlerMethodArgumentResolver,
       FilterFactoryRegistrationService filterFactoryRegistrationService) {
-    return new PaginatedFilteredQueryResolver(
+    return new SmartPageQueryResolver(
         objectMapper, pageableHandlerMethodArgumentResolver, filterFactoryRegistrationService);
   }
 

@@ -1,8 +1,8 @@
 package io.narsha.smartpage.spring.mongo;
 
-import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.RowMapper;
+import io.narsha.smartpage.core.SmartPageQuery;
 import io.narsha.smartpage.core.SmartPageResult;
 import io.narsha.smartpage.core.utils.ResolverUtils;
 import io.narsha.smartpage.spring.mongo.filters.MongoFilterRegistrationService;
@@ -24,7 +24,7 @@ public class MongoQueryExecutor implements QueryExecutor {
   private final RowMapper rowMapper;
 
   @Override
-  public <T> SmartPageResult<T> execute(PaginatedFilteredQuery<T> paginatedFilteredQuery) {
+  public <T> SmartPageResult<T> execute(SmartPageQuery<T> paginatedFilteredQuery) {
 
     var pageable = PageRequest.of(paginatedFilteredQuery.page(), paginatedFilteredQuery.size());
 
