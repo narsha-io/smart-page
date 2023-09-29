@@ -60,7 +60,7 @@ public class JdbcQueryExecutor implements QueryExecutor {
               return rs.getInt(1);
             });
 
-    return new SmartPageResult(data, count);
+    return new SmartPageResult<>(data, count);
   }
 
   private <T> List<T> extractResultSet(

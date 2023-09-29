@@ -66,9 +66,9 @@ public class MongoQueryExecutor implements QueryExecutor {
         filtered.stream()
             .map(map -> (T) convert(paginatedFilteredQuery.targetClass(), map, rowMapper))
             .toList();
-    int count = Long.valueOf(mongoTemplate.count(query.skip(-1).limit(-1), collection)).intValue();
+    int count = Math.toIntExact(mongoTemplate.count(query.skip(-1).limit(-1), collection));
 
-    return new SmartPageResult(res, count);
+    return new SmartPageResult<>(res, count);
   }
 
   private <T> T convert(Class<T> targetClass, Map<Object, Object> map, RowMapper rowMapper) {
