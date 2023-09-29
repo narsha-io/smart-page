@@ -24,6 +24,6 @@ public class SalesController {
    */
   @GetMapping
   public List<Sales> sales(PaginatedFilteredQuery<Sales> query) {
-    return executor.execute(query).getKey();
+    return executor.execute(query).result();
   }
 }

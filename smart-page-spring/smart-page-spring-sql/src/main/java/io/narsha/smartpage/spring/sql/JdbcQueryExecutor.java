@@ -3,6 +3,7 @@ package io.narsha.smartpage.spring.sql;
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.RowMapper;
+import io.narsha.smartpage.core.SmartPageResult;
 import io.narsha.smartpage.core.utils.ResolverUtils;
 import io.narsha.smartpage.spring.sql.filters.JdbcFilterRegistrationService;
 import java.sql.ResultSet;
@@ -13,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 /** In charge of the sql query execution */
@@ -25,7 +25,7 @@ public class JdbcQueryExecutor implements QueryExecutor {
   private final RowMapper rowMapper;
 
   @Override
-  public <T> Pair<List<T>, Long> execute(PaginatedFilteredQuery<T> paginatedFilteredQuery) {
+  public <T> SmartPageResult<T> execute(PaginatedFilteredQuery<T> paginatedFilteredQuery) {
 
     final var jdbcQueryParser =
         new JdbcQueryParser<>(paginatedFilteredQuery, jdbcFilterRegistrationService);
@@ -60,7 +60,7 @@ public class JdbcQueryExecutor implements QueryExecutor {
               return rs.getLong(1);
             });
 
-    return Pair.of(data, count);
+    return new SmartPageResult(data, count);
   }
 
   private <T> List<T> extractResultSet(

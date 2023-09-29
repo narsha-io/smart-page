@@ -1,8 +1,5 @@
 package io.narsha.smartpage.core;
 
-import java.util.List;
-import org.apache.commons.lang3.tuple.Pair;
-
 /** Interface that give a query result for a paginatedfilterQuery */
 public interface QueryExecutor {
 
@@ -14,5 +11,5 @@ public interface QueryExecutor {
    * @return the query result
    * @param <T> type of the DTO result
    */
-  <T> Pair<List<T>, Long> execute(PaginatedFilteredQuery<T> paginatedFilteredQuery);
+  <T> SmartPageResult<T> execute(PaginatedFilteredQuery<T> paginatedFilteredQuery);
 }

@@ -3,13 +3,12 @@ package io.narsha.smartpage.spring.mongo;
 import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.RowMapper;
+import io.narsha.smartpage.core.SmartPageResult;
 import io.narsha.smartpage.core.utils.ResolverUtils;
 import io.narsha.smartpage.spring.mongo.filters.MongoFilterRegistrationService;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -25,7 +24,7 @@ public class MongoQueryExecutor implements QueryExecutor {
   private final RowMapper rowMapper;
 
   @Override
-  public <T> Pair<List<T>, Long> execute(PaginatedFilteredQuery<T> paginatedFilteredQuery) {
+  public <T> SmartPageResult<T> execute(PaginatedFilteredQuery<T> paginatedFilteredQuery) {
 
     var pageable = PageRequest.of(paginatedFilteredQuery.page(), paginatedFilteredQuery.size());
 
@@ -69,7 +68,7 @@ public class MongoQueryExecutor implements QueryExecutor {
             .toList();
     long count = mongoTemplate.count(query.skip(-1).limit(-1), collection);
 
-    return Pair.of(res, count);
+    return new SmartPageResult(res, count);
   }
 
   private <T> T convert(Class<T> targetClass, Map<Object, Object> map, RowMapper rowMapper) {

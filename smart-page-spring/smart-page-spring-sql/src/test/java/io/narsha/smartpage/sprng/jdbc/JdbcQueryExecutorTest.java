@@ -14,10 +14,8 @@ import io.narsha.smartpage.spring.test.SmartPageSpringTestApplication;
 import io.narsha.smartpage.spring.test.model.Person;
 import io.narsha.smartpage.spring.test.validator.PersonValidator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -43,14 +41,14 @@ class JdbcQueryExecutorTest {
   @MethodSource("simplePaginatedTest")
   void mappingTest(
       Integer page, Integer size, Integer exceptedPageSize, Integer exceptedTotalElement) {
-    final Pair<List<Person>, Long> res =
+    final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
             .execute(
                 new PaginatedFilteredQuery<>(
                     Person.class, new HashMap<>(), new HashMap<>(), page, size));
-    assertThat(res.getKey()).hasSize(exceptedPageSize);
-    assertThat(res.getValue()).isEqualTo(Long.valueOf(exceptedTotalElement));
-    PersonValidator.validate(res.getKey());
+    assertThat(res.result()).hasSize(exceptedPageSize);
+    assertThat(res.totalResult()).isEqualTo(Long.valueOf(exceptedTotalElement));
+    PersonValidator.validate(res.result());
   }
 
   private static Stream<Arguments> simplePaginatedTest() {
@@ -64,13 +62,13 @@ class JdbcQueryExecutorTest {
         new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 2);
     query.orders().put("first_name", "asc");
 
-    final Pair<List<Person>, Long> res =
+    final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
             .execute(query);
-    assertThat(res.getKey()).hasSize(2);
-    assertThat(res.getValue()).isEqualTo(5L);
-    PersonValidator.containsIds(res.getKey(), Set.of(1L, 5L));
-    PersonValidator.validate(res.getKey());
+    assertThat(res.result()).hasSize(2);
+    assertThat(res.totalResult()).isEqualTo(5L);
+    PersonValidator.containsIds(res.result(), Set.of(1L, 5L));
+    PersonValidator.validate(res.result());
   }
 
   @Test
@@ -80,13 +78,13 @@ class JdbcQueryExecutorTest {
         new PaginatedFilteredQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 1, 2);
     query.orders().put("first_name", "asc");
 
-    final Pair<List<Person>, Long> res =
+    final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
             .execute(query);
-    assertThat(res.getKey()).hasSize(2);
-    assertThat(res.getValue()).isEqualTo(5L);
-    PersonValidator.containsIds(res.getKey(), Set.of(4L, 2L));
-    PersonValidator.validate(res.getKey());
+    assertThat(res.result()).hasSize(2);
+    assertThat(res.totalResult()).isEqualTo(5L);
+    PersonValidator.containsIds(res.result(), Set.of(4L, 2L));
+    PersonValidator.validate(res.result());
   }
 
   @Test
@@ -98,13 +96,13 @@ class JdbcQueryExecutorTest {
     filter.parse(new ObjectMapper(), new String[] {"Perceval"});
     query.filters().put("first_name", filter);
 
-    final Pair<List<Person>, Long> res =
+    final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
             .execute(query);
-    assertThat(res.getKey()).hasSize(1);
-    assertThat(res.getValue()).isEqualTo(1L);
-    PersonValidator.containsIds(res.getKey(), Set.of(3L));
-    PersonValidator.validate(res.getKey());
+    assertThat(res.result()).hasSize(1);
+    assertThat(res.totalResult()).isEqualTo(1L);
+    PersonValidator.containsIds(res.result(), Set.of(3L));
+    PersonValidator.validate(res.result());
   }
 
   @Test
@@ -116,13 +114,13 @@ class JdbcQueryExecutorTest {
     filter.parse(new ObjectMapper(), new String[] {"2"});
     query.filters().put("id", filter);
 
-    final Pair<List<Person>, Long> res =
+    final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
             .execute(query);
-    assertThat(res.getKey()).hasSize(1);
-    assertThat(res.getValue()).isEqualTo(1L);
-    PersonValidator.containsIds(res.getKey(), Set.of(2L));
-    PersonValidator.validate(res.getKey());
+    assertThat(res.result()).hasSize(1);
+    assertThat(res.totalResult()).isEqualTo(1L);
+    PersonValidator.containsIds(res.result(), Set.of(2L));
+    PersonValidator.validate(res.result());
   }
 
   @Test
@@ -134,13 +132,13 @@ class JdbcQueryExecutorTest {
     filter.parse(new ObjectMapper(), new String[] {"2", "3"});
     query.filters().put("id", filter);
 
-    final Pair<List<Person>, Long> res =
+    final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
             .execute(query);
-    assertThat(res.getKey()).hasSize(2);
-    assertThat(res.getValue()).isEqualTo(2L);
-    PersonValidator.containsIds(res.getKey(), Set.of(2L, 3L));
-    PersonValidator.validate(res.getKey());
+    assertThat(res.result()).hasSize(2);
+    assertThat(res.totalResult()).isEqualTo(2L);
+    PersonValidator.containsIds(res.result(), Set.of(2L, 3L));
+    PersonValidator.validate(res.result());
   }
 
   @Test
@@ -152,13 +150,13 @@ class JdbcQueryExecutorTest {
     filter.parse(new ObjectMapper(), new String[] {"Perceval", "Leodagan"});
     query.filters().put("first_name", filter);
 
-    final Pair<List<Person>, Long> res =
+    final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
             .execute(query);
-    assertThat(res.getKey()).hasSize(2);
-    assertThat(res.getValue()).isEqualTo(2L);
-    PersonValidator.containsIds(res.getKey(), Set.of(2L, 3L));
-    PersonValidator.validate(res.getKey());
+    assertThat(res.result()).hasSize(2);
+    assertThat(res.totalResult()).isEqualTo(2L);
+    PersonValidator.containsIds(res.result(), Set.of(2L, 3L));
+    PersonValidator.validate(res.result());
   }
 
   @Test
@@ -170,12 +168,12 @@ class JdbcQueryExecutorTest {
     filter.parse(new ObjectMapper(), new String[] {"Ka"});
     query.filters().put("first_name", filter);
 
-    final Pair<List<Person>, Long> res =
+    final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
             .execute(query);
-    assertThat(res.getKey()).hasSize(2);
-    assertThat(res.getValue()).isEqualTo(2L);
-    PersonValidator.containsIds(res.getKey(), Set.of(4L, 5L));
-    PersonValidator.validate(res.getKey());
+    assertThat(res.result()).hasSize(2);
+    assertThat(res.totalResult()).isEqualTo(2L);
+    PersonValidator.containsIds(res.result(), Set.of(4L, 5L));
+    PersonValidator.validate(res.result());
   }
 }
