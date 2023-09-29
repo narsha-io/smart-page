@@ -57,7 +57,7 @@ public class SalesControllerTest {
   }
 
   @Test
-  void paginatedData() throws Exception {
+  void paginatedDataFirstPage() throws Exception {
     this.mockMvc
         .perform(get("/api/sales?page=0&size=2"))
         .andDo(print())
@@ -81,7 +81,10 @@ public class SalesControllerTest {
                                                   }]
                                                 """,
                     true));
+  }
 
+  @Test
+  void paginatedDataSecondPage() throws Exception {
     this.mockMvc
         .perform(get("/api/sales?page=1&size=2"))
         .andDo(print())
@@ -108,7 +111,7 @@ public class SalesControllerTest {
   }
 
   @Test
-  void testSort() throws Exception {
+  void testSortAsc() throws Exception {
     this.mockMvc
         .perform(get("/api/sales?sort=itemId,asc"))
         .andDo(print())
@@ -144,7 +147,10 @@ public class SalesControllerTest {
                                                   }]
                                                 """,
                     true));
+  }
 
+  @Test
+  void testSortDesc() throws Exception {
     this.mockMvc
         .perform(get("/api/sales?sort=storeId,desc"))
         .andDo(print())
@@ -184,7 +190,47 @@ public class SalesControllerTest {
   }
 
   @Test
-  void testFilter() throws Exception {
+  void testSortWithRename() throws Exception {
+    this.mockMvc
+        .perform(get("/api/sales?sort=quantity,desc"))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(
+            content()
+                .json(
+                    """
+                                                [{
+                                                "itemId":1,
+                                                "itemName":"T-SHIRT",
+                                                "storeId":1,
+                                                "storeName":"PARIS",
+                                                "quantity":2
+                                                },{
+                                                "itemId":1,
+                                                "itemName":"T-SHIRT",
+                                                "storeId":2,
+                                                "storeName":"SEOUL",
+                                                "quantity":1
+                                               },{
+                                               "itemId":1,
+                                               "itemName":"T-SHIRT",
+                                               "storeId":3,
+                                               "storeName":"BEIJING",
+                                               "quantity":1
+                                               },{
+                                               "itemId":3,
+                                               "itemName":"CAP",
+                                               "storeId":2,
+                                               "storeName":"SEOUL",
+                                               "quantity":1
+                                               }
+                                                ]
+                                                """,
+                    true));
+  }
+
+  @Test
+  void testFilterWithRename() throws Exception {
     this.mockMvc
         .perform(get("/api/sales?quantity=2"))
         .andDo(print())
@@ -193,13 +239,13 @@ public class SalesControllerTest {
             content()
                 .json(
                     """
-                        [{
-                            "itemId":1,
-                            "itemName":"T-SHIRT",
-                            "storeId":1,
-                            "storeName":"PARIS",
-                            "quantity":2
-                          }
-                          ]"""));
+                                                [{
+                                                    "itemId":1,
+                                                    "itemName":"T-SHIRT",
+                                                    "storeId":1,
+                                                    "storeName":"PARIS",
+                                                    "quantity":2
+                                                  }
+                                                  ]"""));
   }
 }
