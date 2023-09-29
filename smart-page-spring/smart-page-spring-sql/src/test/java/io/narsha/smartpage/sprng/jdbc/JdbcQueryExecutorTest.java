@@ -46,9 +46,9 @@ class JdbcQueryExecutorTest {
             .execute(
                 new PaginatedFilteredQuery<>(
                     Person.class, new HashMap<>(), new HashMap<>(), page, size));
-    assertThat(res.result()).hasSize(exceptedPageSize);
-    assertThat(res.totalResult()).isEqualTo(Long.valueOf(exceptedTotalElement));
-    PersonValidator.validate(res.result());
+    assertThat(res.data()).hasSize(exceptedPageSize);
+    assertThat(res.total()).isEqualTo(exceptedTotalElement);
+    PersonValidator.validate(res.data());
   }
 
   private static Stream<Arguments> simplePaginatedTest() {
@@ -65,10 +65,10 @@ class JdbcQueryExecutorTest {
     final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
             .execute(query);
-    assertThat(res.result()).hasSize(2);
-    assertThat(res.totalResult()).isEqualTo(5L);
-    PersonValidator.containsIds(res.result(), Set.of(1L, 5L));
-    PersonValidator.validate(res.result());
+    assertThat(res.data()).hasSize(2);
+    assertThat(res.total()).isEqualTo(5);
+    PersonValidator.containsIds(res.data(), Set.of(1L, 5L));
+    PersonValidator.validate(res.data());
   }
 
   @Test
@@ -81,10 +81,10 @@ class JdbcQueryExecutorTest {
     final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
             .execute(query);
-    assertThat(res.result()).hasSize(2);
-    assertThat(res.totalResult()).isEqualTo(5L);
-    PersonValidator.containsIds(res.result(), Set.of(4L, 2L));
-    PersonValidator.validate(res.result());
+    assertThat(res.data()).hasSize(2);
+    assertThat(res.total()).isEqualTo(5);
+    PersonValidator.containsIds(res.data(), Set.of(4L, 2L));
+    PersonValidator.validate(res.data());
   }
 
   @Test
@@ -99,10 +99,10 @@ class JdbcQueryExecutorTest {
     final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
             .execute(query);
-    assertThat(res.result()).hasSize(1);
-    assertThat(res.totalResult()).isEqualTo(1L);
-    PersonValidator.containsIds(res.result(), Set.of(3L));
-    PersonValidator.validate(res.result());
+    assertThat(res.data()).hasSize(1);
+    assertThat(res.total()).isEqualTo(1);
+    PersonValidator.containsIds(res.data(), Set.of(3L));
+    PersonValidator.validate(res.data());
   }
 
   @Test
@@ -117,10 +117,10 @@ class JdbcQueryExecutorTest {
     final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
             .execute(query);
-    assertThat(res.result()).hasSize(1);
-    assertThat(res.totalResult()).isEqualTo(1L);
-    PersonValidator.containsIds(res.result(), Set.of(2L));
-    PersonValidator.validate(res.result());
+    assertThat(res.data()).hasSize(1);
+    assertThat(res.total()).isEqualTo(1);
+    PersonValidator.containsIds(res.data(), Set.of(2L));
+    PersonValidator.validate(res.data());
   }
 
   @Test
@@ -135,10 +135,10 @@ class JdbcQueryExecutorTest {
     final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
             .execute(query);
-    assertThat(res.result()).hasSize(2);
-    assertThat(res.totalResult()).isEqualTo(2L);
-    PersonValidator.containsIds(res.result(), Set.of(2L, 3L));
-    PersonValidator.validate(res.result());
+    assertThat(res.data()).hasSize(2);
+    assertThat(res.total()).isEqualTo(2);
+    PersonValidator.containsIds(res.data(), Set.of(2L, 3L));
+    PersonValidator.validate(res.data());
   }
 
   @Test
@@ -153,10 +153,10 @@ class JdbcQueryExecutorTest {
     final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
             .execute(query);
-    assertThat(res.result()).hasSize(2);
-    assertThat(res.totalResult()).isEqualTo(2L);
-    PersonValidator.containsIds(res.result(), Set.of(2L, 3L));
-    PersonValidator.validate(res.result());
+    assertThat(res.data()).hasSize(2);
+    assertThat(res.total()).isEqualTo(2);
+    PersonValidator.containsIds(res.data(), Set.of(2L, 3L));
+    PersonValidator.validate(res.data());
   }
 
   @Test
@@ -171,9 +171,9 @@ class JdbcQueryExecutorTest {
     final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
             .execute(query);
-    assertThat(res.result()).hasSize(2);
-    assertThat(res.totalResult()).isEqualTo(2L);
-    PersonValidator.containsIds(res.result(), Set.of(4L, 5L));
-    PersonValidator.validate(res.result());
+    assertThat(res.data()).hasSize(2);
+    assertThat(res.total()).isEqualTo(2);
+    PersonValidator.containsIds(res.data(), Set.of(4L, 5L));
+    PersonValidator.validate(res.data());
   }
 }

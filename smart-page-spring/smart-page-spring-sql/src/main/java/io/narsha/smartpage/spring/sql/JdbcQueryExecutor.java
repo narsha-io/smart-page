@@ -43,7 +43,7 @@ public class JdbcQueryExecutor implements QueryExecutor {
                             .map(t -> t.getParsedValue(v.getValue().getValue()))
                             .orElse(v.getValue().getValue())));
 
-    List<T> data =
+    final var data =
         this.jdbcTemplate.query(
             jdbcQueryParser.getQuery(),
             params,
@@ -51,13 +51,13 @@ public class JdbcQueryExecutor implements QueryExecutor {
               return extractResultSet(paginatedFilteredQuery, rowMapper, rs);
             });
 
-    Long count =
+    final var count =
         this.jdbcTemplate.query(
             jdbcQueryParser.getCountQuery(),
             params,
             rs -> {
               rs.next();
-              return rs.getLong(1);
+              return rs.getInt(1);
             });
 
     return new SmartPageResult(data, count);

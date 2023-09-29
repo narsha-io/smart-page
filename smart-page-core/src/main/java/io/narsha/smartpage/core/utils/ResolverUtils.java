@@ -6,7 +6,7 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-/** Utils class used to get some information used for query result mapping */
+/** Utils class used to get some information used for query data mapping */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ResolverUtils {
 
