@@ -27,32 +27,32 @@ public class SalesControllerTest {
             content()
                 .json(
                     """
-                        [{
-                            "itemId":1,
-                            "itemName":"T-SHIRT",
-                            "storeId":1,
-                            "storeName":"PARIS",
-                            "quantity":2
-                          },{
-                            "itemId":1,
-                            "itemName":"T-SHIRT",
-                            "storeId":2,
-                            "storeName":"SEOUL",
-                            "quantity":1
-                          },{
-                            "itemId":1,
-                            "itemName":"T-SHIRT",
-                            "storeId":3,
-                            "storeName":"BEIJING",
-                            "quantity":1
-                          },{
-                            "itemId":3,
-                            "itemName":"CAP",
-                            "storeId":2,
-                            "storeName":"SEOUL",
-                            "quantity":1
-                          }]
-                        """,
+                                                [{
+                                                    "itemId":1,
+                                                    "itemName":"T-SHIRT",
+                                                    "storeId":1,
+                                                    "storeName":"PARIS",
+                                                    "quantity":2
+                                                  },{
+                                                    "itemId":1,
+                                                    "itemName":"T-SHIRT",
+                                                    "storeId":2,
+                                                    "storeName":"SEOUL",
+                                                    "quantity":1
+                                                  },{
+                                                    "itemId":1,
+                                                    "itemName":"T-SHIRT",
+                                                    "storeId":3,
+                                                    "storeName":"BEIJING",
+                                                    "quantity":1
+                                                  },{
+                                                    "itemId":3,
+                                                    "itemName":"CAP",
+                                                    "storeId":2,
+                                                    "storeName":"SEOUL",
+                                                    "quantity":1
+                                                  }]
+                                                """,
                     true));
   }
 
@@ -66,20 +66,20 @@ public class SalesControllerTest {
             content()
                 .json(
                     """
-                        [{
-                            "itemId":1,
-                            "itemName":"T-SHIRT",
-                            "storeId":1,
-                            "storeName":"PARIS",
-                            "quantity":2
-                          },{
-                            "itemId":1,
-                            "itemName":"T-SHIRT",
-                            "storeId":2,
-                            "storeName":"SEOUL",
-                            "quantity":1
-                          }]
-                        """,
+                                                [{
+                                                    "itemId":1,
+                                                    "itemName":"T-SHIRT",
+                                                    "storeId":1,
+                                                    "storeName":"PARIS",
+                                                    "quantity":2
+                                                  },{
+                                                    "itemId":1,
+                                                    "itemName":"T-SHIRT",
+                                                    "storeId":2,
+                                                    "storeName":"SEOUL",
+                                                    "quantity":1
+                                                  }]
+                                                """,
                     true));
 
     this.mockMvc
@@ -90,20 +90,20 @@ public class SalesControllerTest {
             content()
                 .json(
                     """
-                        [{
-                            "itemId":1,
-                            "itemName":"T-SHIRT",
-                            "storeId":3,
-                            "storeName":"BEIJING",
-                            "quantity":1
-                          },{
-                            "itemId":3,
-                            "itemName":"CAP",
-                            "storeId":2,
-                            "storeName":"SEOUL",
-                            "quantity":1
-                          }]
-                        """,
+                                                [{
+                                                    "itemId":1,
+                                                    "itemName":"T-SHIRT",
+                                                    "storeId":3,
+                                                    "storeName":"BEIJING",
+                                                    "quantity":1
+                                                  },{
+                                                    "itemId":3,
+                                                    "itemName":"CAP",
+                                                    "storeId":2,
+                                                    "storeName":"SEOUL",
+                                                    "quantity":1
+                                                  }]
+                                                """,
                     true));
   }
 
@@ -117,32 +117,32 @@ public class SalesControllerTest {
             content()
                 .json(
                     """
-                        [{
-                            "itemId":1,
-                            "itemName":"T-SHIRT",
-                            "storeId":1,
-                            "storeName":"PARIS",
-                            "quantity":2
-                          },{
-                            "itemId":1,
-                            "itemName":"T-SHIRT",
-                            "storeId":2,
-                            "storeName":"SEOUL",
-                            "quantity":1
-                          },{
-                            "itemId":1,
-                            "itemName":"T-SHIRT",
-                            "storeId":3,
-                            "storeName":"BEIJING",
-                            "quantity":1
-                          },{
-                            "itemId":3,
-                            "itemName":"CAP",
-                            "storeId":2,
-                            "storeName":"SEOUL",
-                            "quantity":1
-                          }]
-                        """,
+                                                [{
+                                                    "itemId":1,
+                                                    "itemName":"T-SHIRT",
+                                                    "storeId":1,
+                                                    "storeName":"PARIS",
+                                                    "quantity":2
+                                                  },{
+                                                    "itemId":1,
+                                                    "itemName":"T-SHIRT",
+                                                    "storeId":2,
+                                                    "storeName":"SEOUL",
+                                                    "quantity":1
+                                                  },{
+                                                    "itemId":1,
+                                                    "itemName":"T-SHIRT",
+                                                    "storeId":3,
+                                                    "storeName":"BEIJING",
+                                                    "quantity":1
+                                                  },{
+                                                    "itemId":3,
+                                                    "itemName":"CAP",
+                                                    "storeId":2,
+                                                    "storeName":"SEOUL",
+                                                    "quantity":1
+                                                  }]
+                                                """,
                     true));
 
     this.mockMvc
@@ -153,33 +153,53 @@ public class SalesControllerTest {
             content()
                 .json(
                     """
+                                                [{
+                                                    "itemId":1,
+                                                    "itemName":"T-SHIRT",
+                                                    "storeId":3,
+                                                    "storeName":"BEIJING",
+                                                    "quantity":1
+                                                 },{
+                                                    "itemId":1,
+                                                    "itemName":"T-SHIRT",
+                                                    "storeId":2,
+                                                    "storeName":"SEOUL",
+                                                    "quantity":1
+                                                  },{
+                                                    "itemId":3,
+                                                    "itemName":"CAP",
+                                                    "storeId":2,
+                                                    "storeName":"SEOUL",
+                                                    "quantity":1
+                                                  },{
+                                                    "itemId":1,
+                                                    "itemName":"T-SHIRT",
+                                                    "storeId":1,
+                                                    "storeName":"PARIS",
+                                                    "quantity":2
+                                                  }
+                                                ]
+                                                """,
+                    true));
+  }
+
+  @Test
+  void testFilter() throws Exception {
+    this.mockMvc
+        .perform(get("/api/sales?quantity=2"))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(
+            content()
+                .json(
+                    """
                         [{
-                            "itemId":1,
-                            "itemName":"T-SHIRT",
-                            "storeId":3,
-                            "storeName":"BEIJING",
-                            "quantity":1
-                         },{
-                            "itemId":1,
-                            "itemName":"T-SHIRT",
-                            "storeId":2,
-                            "storeName":"SEOUL",
-                            "quantity":1
-                          },{
-                            "itemId":3,
-                            "itemName":"CAP",
-                            "storeId":2,
-                            "storeName":"SEOUL",
-                            "quantity":1
-                          },{
                             "itemId":1,
                             "itemName":"T-SHIRT",
                             "storeId":1,
                             "storeName":"PARIS",
                             "quantity":2
                           }
-                        ]
-                        """,
-                    true));
+                          ]"""));
   }
 }

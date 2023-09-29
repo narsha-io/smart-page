@@ -115,7 +115,10 @@ public class PaginatedFilteredQueryResolver implements HandlerMethodArgumentReso
               type -> {
                 var parser = parsers.getOrDefault(entry.getKey(), new EqualsFilter<>(type));
                 parser.parse(objectMapper, entry.getValue());
-                res.put(entry.getKey(), parser);
+                var targetName =
+                    ResolverUtils.getQueryProperty(targetClass, entry.getKey())
+                        .orElse(entry.getKey());
+                res.put(targetName, parser);
               });
     }
 

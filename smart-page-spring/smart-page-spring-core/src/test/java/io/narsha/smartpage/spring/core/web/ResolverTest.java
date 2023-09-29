@@ -86,8 +86,8 @@ class ResolverTest {
     assertThat(filter).isInstanceOf(EqualsFilter.class);
     assertThat(filter.getValue()).isEqualTo(1L);
 
-    assertThat(query.filters()).containsKey("firstName");
-    filter = query.filters().get("firstName");
+    assertThat(query.filters()).containsKey("first_name");
+    filter = query.filters().get("first_name");
     assertThat(filter).isInstanceOf(EqualsFilter.class);
     assertThat(filter.getValue()).isEqualTo("toto");
   }
