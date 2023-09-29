@@ -1,29 +1,35 @@
-name: Publish package to the Maven Central Repository
+name: Release
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
+
 jobs:
-  publish:
+  release:
     runs-on: ubuntu-latest
+
     steps:
-      - run: echo "Will start a Maven Central upload with version ${{ github.event.inputs.releaseversion }}"
       - uses: actions/checkout@v3
-      - name: Set up Maven Central Repository
-        uses: actions/setup-java@v3
+
+      - name: Build and Test
+        uses: qcastel/github-actions-maven-cmd@master
         with:
-          java-version: '17'
-          distribution: 'temurin'
-          server-id: oss.sonatype.org
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
-          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          gpg-passphrase: GPG_PASSPHRASE
-      - name: echo
-        run: cat ~/.m2/settings.xml
-      - name: Publish package
-        id: publish_package
-        run: mvn -B -U -P ci-cd -DskipTests=true deploy
+          maven-args: "clean install -Ddockerfile.skip -DdockerCompose.skip -Djib.skip"
+
+      - name: Release
+        uses: qcastel/github-actions-maven-release@master
         env:
+          JAVA_HOME: /usr/lib/jvm/java-17-openjdk/
+          GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
           MAVEN_USERNAME: ${{ secrets.OSS_SONATYPE_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSS_SONATYPE_PASSWORD }}
-          GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+        with:
+          git-release-bot-name: "bot-idhub"
+          git-release-bot-email: "bot@idhub.io"
+
+          release-branch-name: "main"
+          maven-args: "-Dmaven.javadoc.skip=true -DskipTests -DskipITs -Dmaven.deploy.skip=true"
+          maven-servers: '[{"id": "oss.sonatype.org", "username": "MAVEN_USERNAME", "password": "MAVEN_PASSWORD"}]'
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+          gpg-enabled: true
+          gpg-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          gpg-passphrase: GPG_PASSPHRASE
