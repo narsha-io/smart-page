@@ -24,6 +24,7 @@
         <module>smart-page-spring-sql</module>
         <module>smart-page-spring-sql-example</module>
         <module>smart-page-spring-mongo</module>
+        <module>smart-page-spring-mongo-example</module>
     </modules>
 
     <dependencyManagement>
