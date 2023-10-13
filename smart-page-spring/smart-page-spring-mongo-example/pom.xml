@@ -11,6 +11,8 @@
     </parent>
 
     <artifactId>smart-page-spring-mongo-example</artifactId>
+    <name>${project.artifactId}</name>
+    <description>smart-page-spring-mongo-example and tests</description>
 
 
     <dependencies>
