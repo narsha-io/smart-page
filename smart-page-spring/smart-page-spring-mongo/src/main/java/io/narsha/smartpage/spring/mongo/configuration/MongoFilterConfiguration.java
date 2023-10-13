@@ -37,6 +37,14 @@ public class MongoFilterConfiguration
     return new RowMapper(new ObjectMapper());
   }
 
+  /**
+   * Configure a mongoQueryExecutor in order to execute mongo query
+   *
+   * @param mongoTemplate mongo template in charge of the communication with mongo instance
+   * @param mongoFilterRegistrationService auto registered mongo filters service
+   * @param rowMapper conversion mapper
+   * @return mongoQueryExecutor
+   */
   @Bean
   public MongoQueryExecutor mongoQueryExecutor(
       MongoTemplate mongoTemplate,
