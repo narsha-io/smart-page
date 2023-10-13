@@ -1,6 +1,6 @@
 package io.narsha.smartpage.spring.mongo.example;
 
-import io.narsha.smarpage.spring.test.GenericSpringControllerTest;
+import io.narsha.smarpage.spring.test.AbstractSmartPageWebSpringTest;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +16,7 @@ import org.testcontainers.utility.DockerImageName;
 
 @SpringBootTest(classes = SmartPageSpringDataExampleApplication.class)
 @ContextConfiguration(initializers = SalesControllerTest.Initializer.class)
-public class SalesControllerTest extends GenericSpringControllerTest {
+public class SalesControllerTest extends AbstractSmartPageWebSpringTest {
 
   @Autowired private MongoTemplate mongoTemplate;
 
