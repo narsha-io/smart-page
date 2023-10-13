@@ -11,7 +11,7 @@ public class HeaderUtils {
 
   public static final String LINK_HEADER = "Link";
   public static final String X_TOTAL_COUNT = "X-Total-Count";
-  private static final Pattern PAGE_PATTERN = Pattern.compile("(&|\\?)page=\\d+");
+  private static final Pattern PAGE_PATTERN = Pattern.compile("[&?]page=\\d+");
 
   public static <T> String generateHeader(
       String baseUrl, Integer page, Integer size, SmartPageResult<T> result) {

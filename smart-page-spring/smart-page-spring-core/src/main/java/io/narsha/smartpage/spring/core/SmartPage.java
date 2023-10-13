@@ -48,11 +48,4 @@ public class SmartPage {
     headers.set(X_TOTAL_COUNT, String.valueOf(result.total()));
     return headers;
   }
-
-  private String buildURI(Integer page) {
-    return ServletUriComponentsBuilder.fromCurrentRequest()
-        .replaceQueryParam("page", page)
-        .build()
-        .toUriString();
-  }
 }
