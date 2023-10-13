@@ -1,5 +1,7 @@
 package io.narsha.smartpage.spring.core;
 
+import static io.narsha.smartpage.core.utils.HeaderUtils.X_TOTAL_COUNT;
+
 import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.SmartPageQuery;
 import io.narsha.smartpage.core.SmartPageResult;
@@ -43,7 +45,7 @@ public class SmartPage {
         HttpHeaders.LINK,
         HeaderUtils.generateHeader(
             ServletUriComponentsBuilder.fromCurrentRequest().toUriString(), page, size, result));
-    headers.set("X-Total-Count", String.valueOf(result.total()));
+    headers.set(X_TOTAL_COUNT, String.valueOf(result.total()));
     return headers;
   }
 

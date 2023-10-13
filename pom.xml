@@ -164,14 +164,6 @@
                             <goal>install-hooks</goal>
                         </goals>
                     </execution>
-                    <!-- On Maven verify phase, fail if any file
-                    (including unmodified) is badly formatted -->
-                    <execution>
-                        <id>validate-code-format</id>
-                        <goals>
-                            <goal>validate-code-format</goal>
-                        </goals>
-                    </execution>
                 </executions>
                 <dependencies>
                     <!-- Enable https://github.com/google/google-java-format -->

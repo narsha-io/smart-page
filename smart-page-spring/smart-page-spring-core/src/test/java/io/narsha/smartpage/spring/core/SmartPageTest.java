@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.SmartPageQuery;
 import io.narsha.smartpage.core.SmartPageResult;
+import io.narsha.smartpage.core.utils.HeaderUtils;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,7 +53,13 @@ public class SmartPageTest {
     assertThat(res).isNotNull();
     assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(res.getBody()).isEqualTo(data);
-    assertThat(res.getHeaders()).isEmpty();
+    assertThat(res.getHeaders()).isNotEmpty();
+
+    assertThat(res.getHeaders().get(HeaderUtils.LINK_HEADER))
+        .isEqualTo(
+            List.of(
+                "<http://localhost?page=0>; rel=\"prev\",<http://localhost?page=0>; rel=\"first\","));
+    assertThat(res.getHeaders().get(HeaderUtils.X_TOTAL_COUNT)).isEqualTo(List.of("10"));
   }
 
   @Test
@@ -65,7 +72,11 @@ public class SmartPageTest {
     assertThat(res).isNotNull();
     assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(res.getBody()).isEqualTo(data);
-    assertThat(res.getHeaders()).isEmpty();
+    assertThat(res.getHeaders().get(HeaderUtils.LINK_HEADER))
+        .isEqualTo(
+            List.of(
+                "<http://localhost?page=1>; rel=\"next\",<http://localhost?page=1>; rel=\"prev\",<http://localhost?page=0>; rel=\"first\","));
+    assertThat(res.getHeaders().get(HeaderUtils.X_TOTAL_COUNT)).isEqualTo(List.of("10"));
   }
 
   @Test
@@ -78,6 +89,10 @@ public class SmartPageTest {
     assertThat(res).isNotNull();
     assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(res.getBody()).isEqualTo(data);
-    assertThat(res.getHeaders()).isEmpty();
+    assertThat(res.getHeaders().get(HeaderUtils.LINK_HEADER))
+        .isEqualTo(
+            List.of(
+                "<http://localhost?page=1>; rel=\"prev\",<http://localhost?page=0>; rel=\"first\","));
+    assertThat(res.getHeaders().get(HeaderUtils.X_TOTAL_COUNT)).isEqualTo(List.of("10"));
   }
 }
