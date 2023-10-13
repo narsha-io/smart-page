@@ -3,6 +3,7 @@ package io.narsha.smartpage.spring.mongo.example;
 import io.narsha.smarpage.spring.test.AbstractSmartPageWebSpringTest;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,53 +30,28 @@ public class SalesControllerTest extends AbstractSmartPageWebSpringTest {
     }
     init = true;
     final String collectionName = "sales_collection";
-    mongoTemplate.insert(
-        new HashMap(
-            Map.of(
-                "itemId",
-                1L,
-                "itemName",
-                "T-SHIRT",
-                "storeId",
-                1L,
-                "storeName",
-                "PARIS",
-                "qty",
-                2L)),
-        collectionName);
-    mongoTemplate.insert(
-        new HashMap(
-            Map.of(
-                "itemId",
-                1L,
-                "itemName",
-                "T-SHIRT",
-                "storeId",
-                2L,
-                "storeName",
-                "SEOUL",
-                "qty",
-                1L)),
-        collectionName);
-    mongoTemplate.insert(
-        new HashMap(
-            Map.of(
-                "itemId",
-                1L,
-                "itemName",
-                "T-SHIRT",
-                "storeId",
-                3L,
-                "storeName",
-                "BEIJING",
-                "qty",
-                1L)),
-        collectionName);
-    mongoTemplate.insert(
-        new HashMap(
-            Map.of(
-                "itemId", 3L, "itemName", "CAP", "storeId", 2L, "storeName", "SEOUL", "qty", 1L)),
-        collectionName);
+    Stream.of(
+            new Object[] {1L, "T-SHIRT", 1L, "PARIS", 2L},
+            new Object[] {1L, "T-SHIRT", 2L, "SEOUL", 1L},
+            new Object[] {1L, "T-SHIRT", 3L, "BEIJING", 1L},
+            new Object[] {3L, "CAP", 2L, "SEOUL", 1L})
+        .forEach(
+            tab -> {
+              mongoTemplate.insert(
+                  new HashMap<>(
+                      Map.of(
+                          "itemId",
+                          tab[0],
+                          "itemName",
+                          tab[1],
+                          "storeId",
+                          tab[2],
+                          "storeName",
+                          tab[3],
+                          "qty",
+                          tab[4])),
+                  collectionName);
+            });
   }
 
   public static class Initializer
