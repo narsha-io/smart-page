@@ -3,8 +3,10 @@ package io.narsha.smartpage.spring.mongo.example;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import io.narsha.smartpage.core.utils.HeaderUtils;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -95,6 +97,12 @@ public class SalesControllerTest {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(
+            header()
+                .string(
+                    HeaderUtils.LINK_HEADER,
+                    "<http://localhost/api/sales?page=0>; rel=\"prev\",<http://localhost/api/sales?page=0>; rel=\"first\","))
+        .andExpect(header().string(HeaderUtils.X_TOTAL_COUNT, "4"))
+        .andExpect(
             content()
                 .json(
                     """
@@ -134,6 +142,12 @@ public class SalesControllerTest {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(
+            header()
+                .string(
+                    HeaderUtils.LINK_HEADER,
+                    "<http://localhost/api/sales?page=1&size=2>; rel=\"next\",<http://localhost/api/sales?page=1&size=2>; rel=\"prev\",<http://localhost/api/sales?page=0&size=2>; rel=\"first\","))
+        .andExpect(header().string(HeaderUtils.X_TOTAL_COUNT, "4"))
+        .andExpect(
             content()
                 .json(
                     """
@@ -161,6 +175,12 @@ public class SalesControllerTest {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(
+            header()
+                .string(
+                    HeaderUtils.LINK_HEADER,
+                    "<http://localhost/api/sales?page=1&size=2>; rel=\"prev\",<http://localhost/api/sales?page=0&size=2>; rel=\"first\","))
+        .andExpect(header().string(HeaderUtils.X_TOTAL_COUNT, "4"))
+        .andExpect(
             content()
                 .json(
                     """
@@ -187,6 +207,12 @@ public class SalesControllerTest {
         .perform(get("/api/sales?sort=itemId,asc"))
         .andDo(print())
         .andExpect(status().isOk())
+        .andExpect(
+            header()
+                .string(
+                    HeaderUtils.LINK_HEADER,
+                    "<http://localhost/api/sales?sort=itemId,asc&page=0>; rel=\"prev\",<http://localhost/api/sales?sort=itemId,asc&page=0>; rel=\"first\","))
+        .andExpect(header().string(HeaderUtils.X_TOTAL_COUNT, "4"))
         .andExpect(
             content()
                 .json(
@@ -226,6 +252,12 @@ public class SalesControllerTest {
         .perform(get("/api/sales?sort=storeId,desc"))
         .andDo(print())
         .andExpect(status().isOk())
+        .andExpect(
+            header()
+                .string(
+                    HeaderUtils.LINK_HEADER,
+                    "<http://localhost/api/sales?sort=storeId,desc&page=0>; rel=\"prev\",<http://localhost/api/sales?sort=storeId,desc&page=0>; rel=\"first\","))
+        .andExpect(header().string(HeaderUtils.X_TOTAL_COUNT, "4"))
         .andExpect(
             content()
                 .json(
@@ -267,6 +299,12 @@ public class SalesControllerTest {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(
+            header()
+                .string(
+                    HeaderUtils.LINK_HEADER,
+                    "<http://localhost/api/sales?sort=quantity,desc&page=0>; rel=\"prev\",<http://localhost/api/sales?sort=quantity,desc&page=0>; rel=\"first\","))
+        .andExpect(header().string(HeaderUtils.X_TOTAL_COUNT, "4"))
+        .andExpect(
             content()
                 .json(
                     """
@@ -306,6 +344,12 @@ public class SalesControllerTest {
         .perform(get("/api/sales?quantity=2"))
         .andDo(print())
         .andExpect(status().isOk())
+        .andExpect(
+            header()
+                .string(
+                    HeaderUtils.LINK_HEADER,
+                    "<http://localhost/api/sales?quantity=2&page=0>; rel=\"prev\",<http://localhost/api/sales?quantity=2&page=0>; rel=\"first\","))
+        .andExpect(header().string(HeaderUtils.X_TOTAL_COUNT, "1"))
         .andExpect(
             content()
                 .json(

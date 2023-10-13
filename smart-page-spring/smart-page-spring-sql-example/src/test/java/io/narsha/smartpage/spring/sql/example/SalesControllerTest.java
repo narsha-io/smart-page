@@ -3,8 +3,10 @@ package io.narsha.smartpage.spring.sql.example;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import io.narsha.smartpage.core.utils.HeaderUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,35 +26,41 @@ public class SalesControllerTest {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(
+            header()
+                .string(
+                    HeaderUtils.LINK_HEADER,
+                    "<http://localhost/api/sales?page=0>; rel=\"prev\",<http://localhost/api/sales?page=0>; rel=\"first\","))
+        .andExpect(header().string(HeaderUtils.X_TOTAL_COUNT, "4"))
+        .andExpect(
             content()
                 .json(
                     """
-                                                [{
-                                                    "itemId":1,
-                                                    "itemName":"T-SHIRT",
-                                                    "storeId":1,
-                                                    "storeName":"PARIS",
-                                                    "quantity":2
-                                                  },{
-                                                    "itemId":1,
-                                                    "itemName":"T-SHIRT",
-                                                    "storeId":2,
-                                                    "storeName":"SEOUL",
-                                                    "quantity":1
-                                                  },{
-                                                    "itemId":1,
-                                                    "itemName":"T-SHIRT",
-                                                    "storeId":3,
-                                                    "storeName":"BEIJING",
-                                                    "quantity":1
-                                                  },{
-                                                    "itemId":3,
-                                                    "itemName":"CAP",
-                                                    "storeId":2,
-                                                    "storeName":"SEOUL",
-                                                    "quantity":1
-                                                  }]
-                                                """,
+                                            [{
+                                                "itemId":1,
+                                                "itemName":"T-SHIRT",
+                                                "storeId":1,
+                                                "storeName":"PARIS",
+                                                "quantity":2
+                                              },{
+                                                "itemId":1,
+                                                "itemName":"T-SHIRT",
+                                                "storeId":2,
+                                                "storeName":"SEOUL",
+                                                "quantity":1
+                                              },{
+                                                "itemId":1,
+                                                "itemName":"T-SHIRT",
+                                                "storeId":3,
+                                                "storeName":"BEIJING",
+                                                "quantity":1
+                                              },{
+                                                "itemId":3,
+                                                "itemName":"CAP",
+                                                "storeId":2,
+                                                "storeName":"SEOUL",
+                                                "quantity":1
+                                              }]
+                                            """,
                     true));
   }
 
@@ -63,23 +71,29 @@ public class SalesControllerTest {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(
+            header()
+                .string(
+                    HeaderUtils.LINK_HEADER,
+                    "<http://localhost/api/sales?page=1&size=2>; rel=\"next\",<http://localhost/api/sales?page=1&size=2>; rel=\"prev\",<http://localhost/api/sales?page=0&size=2>; rel=\"first\","))
+        .andExpect(header().string(HeaderUtils.X_TOTAL_COUNT, "4"))
+        .andExpect(
             content()
                 .json(
                     """
-                                                [{
-                                                    "itemId":1,
-                                                    "itemName":"T-SHIRT",
-                                                    "storeId":1,
-                                                    "storeName":"PARIS",
-                                                    "quantity":2
-                                                  },{
-                                                    "itemId":1,
-                                                    "itemName":"T-SHIRT",
-                                                    "storeId":2,
-                                                    "storeName":"SEOUL",
-                                                    "quantity":1
-                                                  }]
-                                                """,
+                                            [{
+                                                "itemId":1,
+                                                "itemName":"T-SHIRT",
+                                                "storeId":1,
+                                                "storeName":"PARIS",
+                                                "quantity":2
+                                              },{
+                                                "itemId":1,
+                                                "itemName":"T-SHIRT",
+                                                "storeId":2,
+                                                "storeName":"SEOUL",
+                                                "quantity":1
+                                              }]
+                                            """,
                     true));
   }
 
@@ -90,23 +104,29 @@ public class SalesControllerTest {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(
+            header()
+                .string(
+                    HeaderUtils.LINK_HEADER,
+                    "<http://localhost/api/sales?page=1&size=2>; rel=\"prev\",<http://localhost/api/sales?page=0&size=2>; rel=\"first\","))
+        .andExpect(header().string(HeaderUtils.X_TOTAL_COUNT, "4"))
+        .andExpect(
             content()
                 .json(
                     """
-                                                [{
-                                                    "itemId":1,
-                                                    "itemName":"T-SHIRT",
-                                                    "storeId":3,
-                                                    "storeName":"BEIJING",
-                                                    "quantity":1
-                                                  },{
-                                                    "itemId":3,
-                                                    "itemName":"CAP",
-                                                    "storeId":2,
-                                                    "storeName":"SEOUL",
-                                                    "quantity":1
-                                                  }]
-                                                """,
+                                            [{
+                                                "itemId":1,
+                                                "itemName":"T-SHIRT",
+                                                "storeId":3,
+                                                "storeName":"BEIJING",
+                                                "quantity":1
+                                              },{
+                                                "itemId":3,
+                                                "itemName":"CAP",
+                                                "storeId":2,
+                                                "storeName":"SEOUL",
+                                                "quantity":1
+                                              }]
+                                            """,
                     true));
   }
 
@@ -117,35 +137,41 @@ public class SalesControllerTest {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(
+            header()
+                .string(
+                    HeaderUtils.LINK_HEADER,
+                    "<http://localhost/api/sales?sort=itemId,asc&page=0>; rel=\"prev\",<http://localhost/api/sales?sort=itemId,asc&page=0>; rel=\"first\","))
+        .andExpect(header().string(HeaderUtils.X_TOTAL_COUNT, "4"))
+        .andExpect(
             content()
                 .json(
                     """
-                                                [{
-                                                    "itemId":1,
-                                                    "itemName":"T-SHIRT",
-                                                    "storeId":1,
-                                                    "storeName":"PARIS",
-                                                    "quantity":2
-                                                  },{
-                                                    "itemId":1,
-                                                    "itemName":"T-SHIRT",
-                                                    "storeId":2,
-                                                    "storeName":"SEOUL",
-                                                    "quantity":1
-                                                  },{
-                                                    "itemId":1,
-                                                    "itemName":"T-SHIRT",
-                                                    "storeId":3,
-                                                    "storeName":"BEIJING",
-                                                    "quantity":1
-                                                  },{
-                                                    "itemId":3,
-                                                    "itemName":"CAP",
-                                                    "storeId":2,
-                                                    "storeName":"SEOUL",
-                                                    "quantity":1
-                                                  }]
-                                                """,
+                                            [{
+                                                "itemId":1,
+                                                "itemName":"T-SHIRT",
+                                                "storeId":1,
+                                                "storeName":"PARIS",
+                                                "quantity":2
+                                              },{
+                                                "itemId":1,
+                                                "itemName":"T-SHIRT",
+                                                "storeId":2,
+                                                "storeName":"SEOUL",
+                                                "quantity":1
+                                              },{
+                                                "itemId":1,
+                                                "itemName":"T-SHIRT",
+                                                "storeId":3,
+                                                "storeName":"BEIJING",
+                                                "quantity":1
+                                              },{
+                                                "itemId":3,
+                                                "itemName":"CAP",
+                                                "storeId":2,
+                                                "storeName":"SEOUL",
+                                                "quantity":1
+                                              }]
+                                            """,
                     true));
   }
 
@@ -156,36 +182,42 @@ public class SalesControllerTest {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(
+            header()
+                .string(
+                    HeaderUtils.LINK_HEADER,
+                    "<http://localhost/api/sales?sort=storeId,desc&page=0>; rel=\"prev\",<http://localhost/api/sales?sort=storeId,desc&page=0>; rel=\"first\","))
+        .andExpect(header().string(HeaderUtils.X_TOTAL_COUNT, "4"))
+        .andExpect(
             content()
                 .json(
                     """
-                                                [{
-                                                    "itemId":1,
-                                                    "itemName":"T-SHIRT",
-                                                    "storeId":3,
-                                                    "storeName":"BEIJING",
-                                                    "quantity":1
-                                                 },{
-                                                    "itemId":1,
-                                                    "itemName":"T-SHIRT",
-                                                    "storeId":2,
-                                                    "storeName":"SEOUL",
-                                                    "quantity":1
-                                                  },{
-                                                    "itemId":3,
-                                                    "itemName":"CAP",
-                                                    "storeId":2,
-                                                    "storeName":"SEOUL",
-                                                    "quantity":1
-                                                  },{
-                                                    "itemId":1,
-                                                    "itemName":"T-SHIRT",
-                                                    "storeId":1,
-                                                    "storeName":"PARIS",
-                                                    "quantity":2
-                                                  }
-                                                ]
-                                                """,
+                                            [{
+                                                "itemId":1,
+                                                "itemName":"T-SHIRT",
+                                                "storeId":3,
+                                                "storeName":"BEIJING",
+                                                "quantity":1
+                                             },{
+                                                "itemId":1,
+                                                "itemName":"T-SHIRT",
+                                                "storeId":2,
+                                                "storeName":"SEOUL",
+                                                "quantity":1
+                                              },{
+                                                "itemId":3,
+                                                "itemName":"CAP",
+                                                "storeId":2,
+                                                "storeName":"SEOUL",
+                                                "quantity":1
+                                              },{
+                                                "itemId":1,
+                                                "itemName":"T-SHIRT",
+                                                "storeId":1,
+                                                "storeName":"PARIS",
+                                                "quantity":2
+                                              }
+                                            ]
+                                            """,
                     true));
   }
 
@@ -196,36 +228,42 @@ public class SalesControllerTest {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(
+            header()
+                .string(
+                    HeaderUtils.LINK_HEADER,
+                    "<http://localhost/api/sales?sort=quantity,desc&page=0>; rel=\"prev\",<http://localhost/api/sales?sort=quantity,desc&page=0>; rel=\"first\","))
+        .andExpect(header().string(HeaderUtils.X_TOTAL_COUNT, "4"))
+        .andExpect(
             content()
                 .json(
                     """
-                                                [{
-                                                "itemId":1,
-                                                "itemName":"T-SHIRT",
-                                                "storeId":1,
-                                                "storeName":"PARIS",
-                                                "quantity":2
-                                                },{
-                                                "itemId":1,
-                                                "itemName":"T-SHIRT",
-                                                "storeId":2,
-                                                "storeName":"SEOUL",
-                                                "quantity":1
-                                               },{
-                                               "itemId":1,
-                                               "itemName":"T-SHIRT",
-                                               "storeId":3,
-                                               "storeName":"BEIJING",
-                                               "quantity":1
-                                               },{
-                                               "itemId":3,
-                                               "itemName":"CAP",
-                                               "storeId":2,
-                                               "storeName":"SEOUL",
-                                               "quantity":1
-                                               }
-                                                ]
-                                                """,
+                                             [{
+                                             "itemId":1,
+                                             "itemName":"T-SHIRT",
+                                             "storeId":1,
+                                             "storeName":"PARIS",
+                                             "quantity":2
+                                             },{
+                                             "itemId":1,
+                                             "itemName":"T-SHIRT",
+                                             "storeId":2,
+                                             "storeName":"SEOUL",
+                                             "quantity":1
+                                            },{
+                                            "itemId":1,
+                                            "itemName":"T-SHIRT",
+                                            "storeId":3,
+                                            "storeName":"BEIJING",
+                                            "quantity":1
+                                            },{
+                                            "itemId":3,
+                                            "itemName":"CAP",
+                                            "storeId":2,
+                                            "storeName":"SEOUL",
+                                            "quantity":1
+                                            }
+                                             ]
+                                             """,
                     true));
   }
 
@@ -236,16 +274,22 @@ public class SalesControllerTest {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(
+            header()
+                .string(
+                    HeaderUtils.LINK_HEADER,
+                    "<http://localhost/api/sales?quantity=2&page=0>; rel=\"prev\",<http://localhost/api/sales?quantity=2&page=0>; rel=\"first\","))
+        .andExpect(header().string(HeaderUtils.X_TOTAL_COUNT, "1"))
+        .andExpect(
             content()
                 .json(
                     """
-                                                [{
-                                                    "itemId":1,
-                                                    "itemName":"T-SHIRT",
-                                                    "storeId":1,
-                                                    "storeName":"PARIS",
-                                                    "quantity":2
-                                                  }
-                                                  ]"""));
+                                            [{
+                                                "itemId":1,
+                                                "itemName":"T-SHIRT",
+                                                "storeId":1,
+                                                "storeName":"PARIS",
+                                                "quantity":2
+                                              }
+                                              ]"""));
   }
 }
