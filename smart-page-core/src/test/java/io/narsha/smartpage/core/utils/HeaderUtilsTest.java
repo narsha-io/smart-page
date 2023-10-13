@@ -3,7 +3,7 @@ package io.narsha.smartpage.core.utils;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class HeaderUtilsTest {
+class HeaderUtilsTest {
 
   @Test
   void testPageAtBeginning() {
