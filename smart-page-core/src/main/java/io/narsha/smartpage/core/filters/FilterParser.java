@@ -33,7 +33,7 @@ public abstract class FilterParser<T, R> {
   public abstract void parse(ObjectMapper objectMapper, String[] value);
 
   /**
-   * Get the final result
+   * Get the final data
    *
    * @return the parsed value
    */

@@ -15,6 +15,7 @@
         <module>smart-page-core</module>
         <module>smart-page-spring</module>
         <module>smart-page-coverage</module>
+        <module>smart-page-test</module>
     </modules>
 
     <developers>
@@ -162,14 +163,6 @@
                         <id>install-formatter-hook</id>
                         <goals>
                             <goal>install-hooks</goal>
-                        </goals>
-                    </execution>
-                    <!-- On Maven verify phase, fail if any file
-                    (including unmodified) is badly formatted -->
-                    <execution>
-                        <id>validate-code-format</id>
-                        <goals>
-                            <goal>validate-code-format</goal>
                         </goals>
                     </execution>
                 </executions>

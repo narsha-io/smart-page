@@ -11,6 +11,8 @@
     </parent>
 
     <artifactId>smart-page-spring-mongo-example</artifactId>
+    <name>${project.artifactId}</name>
+    <description>smart-page-spring-mongo-example and tests</description>
 
 
     <dependencies>
@@ -40,6 +42,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.narsha-io</groupId>
+            <artifactId>smart-page-spring-test</artifactId>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 

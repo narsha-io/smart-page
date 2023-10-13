@@ -32,7 +32,7 @@ public class JdbcFilterConfiguration
    *
    * @param namedParameterJdbcTemplate execute the final sql query
    * @param jdbcFilterRegistrationService will generate sql clause from DTO
-   * @param rowMapper will convert the sql result as DTO
+   * @param rowMapper will convert the sql data as DTO
    * @return JdbcQueryExecutor
    */
   @Bean
@@ -45,7 +45,7 @@ public class JdbcFilterConfiguration
   }
 
   /**
-   * RowMapper that automatically map the query result into the targeted DTO
+   * RowMapper that automatically map the query data into the targeted DTO
    *
    * @return rowMapper
    */

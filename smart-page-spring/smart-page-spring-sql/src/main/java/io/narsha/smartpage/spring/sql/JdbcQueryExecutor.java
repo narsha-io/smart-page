@@ -1,8 +1,9 @@
 package io.narsha.smartpage.spring.sql;
 
-import io.narsha.smartpage.core.PaginatedFilteredQuery;
 import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.RowMapper;
+import io.narsha.smartpage.core.SmartPageQuery;
+import io.narsha.smartpage.core.SmartPageResult;
 import io.narsha.smartpage.core.utils.ResolverUtils;
 import io.narsha.smartpage.spring.sql.filters.JdbcFilterRegistrationService;
 import java.sql.ResultSet;
@@ -13,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 /** In charge of the sql query execution */
@@ -25,7 +25,7 @@ public class JdbcQueryExecutor implements QueryExecutor {
   private final RowMapper rowMapper;
 
   @Override
-  public <T> Pair<List<T>, Long> execute(PaginatedFilteredQuery<T> paginatedFilteredQuery) {
+  public <T> SmartPageResult<T> execute(SmartPageQuery<T> paginatedFilteredQuery) {
 
     final var jdbcQueryParser =
         new JdbcQueryParser<>(paginatedFilteredQuery, jdbcFilterRegistrationService);
@@ -43,7 +43,7 @@ public class JdbcQueryExecutor implements QueryExecutor {
                             .map(t -> t.getParsedValue(v.getValue().getValue()))
                             .orElse(v.getValue().getValue())));
 
-    List<T> data =
+    final var data =
         this.jdbcTemplate.query(
             jdbcQueryParser.getQuery(),
             params,
@@ -51,20 +51,20 @@ public class JdbcQueryExecutor implements QueryExecutor {
               return extractResultSet(paginatedFilteredQuery, rowMapper, rs);
             });
 
-    Long count =
+    final var count =
         this.jdbcTemplate.query(
             jdbcQueryParser.getCountQuery(),
             params,
             rs -> {
               rs.next();
-              return rs.getLong(1);
+              return rs.getInt(1);
             });
 
-    return Pair.of(data, count);
+    return new SmartPageResult<>(data, count);
   }
 
   private <T> List<T> extractResultSet(
-      PaginatedFilteredQuery<T> paginatedFilteredQuery, RowMapper rowMapper, ResultSet rs)
+      SmartPageQuery<T> paginatedFilteredQuery, RowMapper rowMapper, ResultSet rs)
       throws SQLException {
     final var queryDefinition = getQueryDefinition(rs);
 

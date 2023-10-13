@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 
-/** Class used to map a result from the datasource query into a java DTO */
+/** Class used to map a data from the datasource query into a java DTO */
 public class RowMapper {
 
   /** Jackson objectMapper used to convert property */
@@ -21,11 +21,11 @@ public class RowMapper {
   }
 
   /**
-   * Convert a query result as a Map into a DTO
+   * Convert a query data as a Map into a DTO
    *
-   * @param map query result as Map
+   * @param map query data as Map
    * @param targetClass DTO class which represent the targeted Map
-   * @return an instance of DTO filled with query result
+   * @return an instance of DTO filled with query data
    * @param <R> DTO type
    */
   public <R> R convert(Map<String, Object> map, Class<R> targetClass) {
