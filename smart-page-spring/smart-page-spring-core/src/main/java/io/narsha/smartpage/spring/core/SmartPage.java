@@ -3,6 +3,7 @@ package io.narsha.smartpage.spring.core;
 import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.SmartPageQuery;
 import io.narsha.smartpage.core.SmartPageResult;
+import io.narsha.smartpage.core.utils.HeaderUtils;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -37,23 +38,11 @@ public class SmartPage {
   private <T> HttpHeaders generatePaginationHeaders(
       Integer page, Integer size, SmartPageResult<T> result) {
     final var headers = new HttpHeaders();
-    final var link = new StringBuilder();
-    if (page + 1 < result.total() / size) { // check here
-      link.append("<").append(buildURI(page + 1)).append(">; rel=\"next\",");
-    }
-    if (page > 1) {
-      link.append("<").append(buildURI(page - 1)).append(">; rel=\"prev\",");
-    }
 
-    var lastPage = 0;
-    if (result.total() / size > 0) {
-      lastPage = (result.total() / size) - 1;
-    }
-
-    link.append("<").append(buildURI(lastPage)).append(">; rel=\"prev\",");
-    link.append("<").append(buildURI(0)).append(">; rel=\"first\",");
-
-    headers.set(HttpHeaders.LINK, link.toString());
+    headers.set(
+        HttpHeaders.LINK,
+        HeaderUtils.generateHeader(
+            ServletUriComponentsBuilder.fromCurrentRequest().toUriString(), page, size, result));
     headers.set("X-Total-Count", String.valueOf(result.total()));
     return headers;
   }
