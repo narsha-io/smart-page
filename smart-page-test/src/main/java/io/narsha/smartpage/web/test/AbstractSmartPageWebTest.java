@@ -1,8 +1,11 @@
 package io.narsha.smartpage.web.test;
 
 import java.util.stream.Stream;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.junit.jupiter.params.provider.Arguments;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class AbstractSmartPageWebTest {
 
   protected static Stream<Arguments> webSource() {

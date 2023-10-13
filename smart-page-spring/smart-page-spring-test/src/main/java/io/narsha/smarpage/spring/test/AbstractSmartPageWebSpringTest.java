@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import io.narsha.smartpage.core.utils.HeaderUtils;
 import io.narsha.smartpage.web.test.AbstractSmartPageWebTest;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class AbstractSmartPageWebSpringTest extends AbstractSmartPageWebTest {
 
   @Autowired private MockMvc mockMvc;
