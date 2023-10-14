@@ -37,6 +37,14 @@ public class MongoFilterConfiguration
     return new RowMapper(new ObjectMapper());
   }
 
+  /**
+   * Init a MongoQueryExecutor that will be in charge of execute the final mongo query
+   *
+   * @param mongoTemplate mongo client
+   * @param mongoFilterRegistrationService will generate mongo query from DTO
+   * @param rowMapper will convert the mongo result as DTO
+   * @return MongoQueryExecutor
+   */
   @Bean
   public MongoQueryExecutor mongoQueryExecutor(
       MongoTemplate mongoTemplate,
