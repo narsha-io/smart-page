@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+/** Smart Page entrypoint */
 @RequiredArgsConstructor
 public class SmartPage {
 

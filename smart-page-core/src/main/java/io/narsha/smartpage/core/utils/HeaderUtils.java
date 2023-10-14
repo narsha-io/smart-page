@@ -14,14 +14,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HeaderUtils {
 
+  /** Http header Link */
   public static final String LINK_HEADER = "Link";
+
+  /** Http header X total count */
   public static final String X_TOTAL_COUNT = "X-Total-Count";
+
   private static final Pattern PAGE_PATTERN = Pattern.compile("[&?]page=\\d+");
 
   /**
    * Generate link part header
    *
-   * @param baseUrl example http://localhost:8080/index?page=XX&size=YY&.....
+   * @param baseUrl current sql query
    * @param page the target page
    * @param size the page size
    * @param result the query result used to determined how many pages exist

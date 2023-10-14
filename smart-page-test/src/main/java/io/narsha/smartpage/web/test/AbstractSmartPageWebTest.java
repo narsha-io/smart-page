@@ -5,9 +5,15 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.junit.jupiter.params.provider.Arguments;
 
+/** Global multi stack test class */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class AbstractSmartPageWebTest {
 
+  /**
+   * Global multi stack test source method
+   *
+   * @return result
+   */
   protected static Stream<Arguments> webSource() {
     return Stream.of(
         Arguments.of(
