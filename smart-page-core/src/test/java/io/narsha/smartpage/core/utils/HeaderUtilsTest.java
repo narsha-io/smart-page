@@ -49,7 +49,7 @@ class HeaderUtilsTest {
     if (value == null) {
       Assertions.assertThat(opt).isEmpty();
     } else {
-      Assertions.assertThat(opt.get()).isEqualTo(value);
+      Assertions.assertThat(opt).contains(value);
     }
   }
 
@@ -60,7 +60,7 @@ class HeaderUtilsTest {
     if (value == null) {
       Assertions.assertThat(opt).isEmpty();
     } else {
-      Assertions.assertThat(opt.get()).isEqualTo(value);
+      Assertions.assertThat(opt).contains(value);
     }
   }
 
@@ -78,7 +78,7 @@ class HeaderUtilsTest {
     if (maxPage == null) {
       Assertions.assertThat(opt).isEmpty();
     } else {
-      Assertions.assertThat(opt.get()).isEqualTo(maxPage);
+      Assertions.assertThat(opt).contains(maxPage);
     }
   }
 
@@ -89,7 +89,7 @@ class HeaderUtilsTest {
     if (maxPage == null) {
       Assertions.assertThat(opt).isEmpty();
     } else {
-      Assertions.assertThat(opt.get()).isEqualTo(maxPage);
+      Assertions.assertThat(opt).contains(maxPage);
     }
   }
 

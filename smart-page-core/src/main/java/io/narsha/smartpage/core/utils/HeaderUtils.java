@@ -114,7 +114,8 @@ public class HeaderUtils {
   }
 
   static Integer maxPage(Integer pageSize, Integer totalElement) {
-    var res = (1.0 * totalElement / pageSize);
-    return Double.valueOf(res % 1 == 0 ? res : res + 1).intValue() - 1;
+    final var total = (1.0 * totalElement / pageSize);
+    final double res = total % 1 == 0 ? total - 1 : total;
+    return (int) res;
   }
 }
