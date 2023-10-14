@@ -7,7 +7,11 @@ import io.narsha.smartpage.core.RowMapper;
 import io.narsha.smartpage.core.SmartPageQuery;
 import io.narsha.smartpage.core.filters.ContainsFilter;
 import io.narsha.smartpage.core.filters.EqualsFilter;
+import io.narsha.smartpage.core.filters.GreaterThanFilter;
+import io.narsha.smartpage.core.filters.GreaterThanOrEqualsFilter;
 import io.narsha.smartpage.core.filters.InFilter;
+import io.narsha.smartpage.core.filters.LessThanFilter;
+import io.narsha.smartpage.core.filters.LessThanOrEqualsFilter;
 import io.narsha.smartpage.spring.sql.JdbcQueryExecutor;
 import io.narsha.smartpage.spring.sql.filters.JdbcFilterRegistrationService;
 import io.narsha.smartpage.spring.test.SmartPageSpringTestApplication;
@@ -166,6 +170,74 @@ class JdbcQueryExecutorTest {
     assertThat(res.data()).hasSize(2);
     assertThat(res.total()).isEqualTo(2);
     PersonValidator.containsIds(res.data(), Set.of(4L, 5L));
+    PersonValidator.validate(res.data());
+  }
+
+  @Test
+  @Order(11)
+  void paginationTestGreaterThanFilter() {
+    final var query = new SmartPageQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 10);
+    var filter = new GreaterThanFilter<>(String.class);
+    filter.parse(new ObjectMapper(), new String[] {"Karadoc"});
+    query.filters().put("first_name", filter);
+
+    final var res =
+        new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
+            .execute(query);
+    assertThat(res.data()).hasSize(2);
+    assertThat(res.total()).isEqualTo(2);
+    PersonValidator.containsIds(res.data(), Set.of(2L, 3L));
+    PersonValidator.validate(res.data());
+  }
+
+  @Test
+  @Order(12)
+  void paginationTestGreaterThanOrEqualsFilter() {
+    final var query = new SmartPageQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 10);
+    var filter = new GreaterThanOrEqualsFilter<>(String.class);
+    filter.parse(new ObjectMapper(), new String[] {"Karadoc"});
+    query.filters().put("first_name", filter);
+
+    final var res =
+        new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
+            .execute(query);
+    assertThat(res.data()).hasSize(3);
+    assertThat(res.total()).isEqualTo(3);
+    PersonValidator.containsIds(res.data(), Set.of(2L, 3L, 4L));
+    PersonValidator.validate(res.data());
+  }
+
+  @Test
+  @Order(13)
+  void paginationTestLessThanFilter() {
+    final var query = new SmartPageQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 10);
+    var filter = new LessThanFilter<>(String.class);
+    filter.parse(new ObjectMapper(), new String[] {"Karadoc"});
+    query.filters().put("first_name", filter);
+
+    final var res =
+        new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
+            .execute(query);
+    assertThat(res.data()).hasSize(2);
+    assertThat(res.total()).isEqualTo(2);
+    PersonValidator.containsIds(res.data(), Set.of(1L, 5L));
+    PersonValidator.validate(res.data());
+  }
+
+  @Test
+  @Order(14)
+  void paginationTestLessThanOrEqualsFilter() {
+    final var query = new SmartPageQuery<>(Person.class, new HashMap<>(), new HashMap<>(), 0, 10);
+    var filter = new LessThanOrEqualsFilter<>(String.class);
+    filter.parse(new ObjectMapper(), new String[] {"Karadoc"});
+    query.filters().put("first_name", filter);
+
+    final var res =
+        new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
+            .execute(query);
+    assertThat(res.data()).hasSize(3);
+    assertThat(res.total()).isEqualTo(3);
+    PersonValidator.containsIds(res.data(), Set.of(1L, 4L, 5L));
     PersonValidator.validate(res.data());
   }
 }

@@ -1,6 +1,7 @@
 package io.narsha.smartpage.core.utils;
 
 import io.narsha.smartpage.core.SmartPageResult;
+import java.util.Optional;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 import lombok.AccessLevel;
@@ -13,38 +14,50 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HeaderUtils {
 
+  /** Http header Link */
   public static final String LINK_HEADER = "Link";
+
+  /** Http header X total count */
   public static final String X_TOTAL_COUNT = "X-Total-Count";
+
   private static final Pattern PAGE_PATTERN = Pattern.compile("[&?]page=\\d+");
 
   /**
    * Generate link part header
    *
-   * @param baseUrl example http://localhost:8080/index?page=XX&size=YY&.....
+   * @param baseUrl current sql query
    * @param page the target page
    * @param size the page size
    * @param result the query result used to determined how many pages exist
-   * @return the Link part
    * @param <T> DTO type
+   * @return the Link part
    */
   public static <T> String generateHeader(
       String baseUrl, Integer page, Integer size, SmartPageResult<T> result) {
     final var link = new StringBuilder();
-    if (page + 1 < result.total() / size) { // check here
-      link.append("<").append(buildURI(baseUrl, page + 1)).append(">; rel=\"next\",");
-    }
-    if (page > 1) {
-      link.append("<").append(buildURI(baseUrl, page - 1)).append(">; rel=\"prev\",");
-    }
 
-    var lastPage = 0;
-    if (result.total() / size > 0) {
-      lastPage = (result.total() / size) - 1;
-    }
+    firstPage(page).ifPresent(value -> generateLink(link, baseUrl, "first", value));
+    previousPage(page).ifPresent(value -> generateLink(link, baseUrl, "prev", value));
+    nextPage(page, size, result.total())
+        .ifPresent(value -> generateLink(link, baseUrl, "next", value));
+    lastPage(page, size, result.total())
+        .ifPresent(value -> generateLink(link, baseUrl, "last", value));
 
-    link.append("<").append(buildURI(baseUrl, lastPage)).append(">; rel=\"prev\",");
-    link.append("<").append(buildURI(baseUrl, 0)).append(">; rel=\"first\",");
-    return link.toString();
+    var res = link.toString().trim();
+    if (res.endsWith(",")) {
+      res = res.substring(0, res.lastIndexOf(","));
+    }
+    return res;
+  }
+
+  private static void generateLink(
+      StringBuilder builder, String baseUrl, String name, Integer page) {
+    builder
+        .append("<")
+        .append(buildURI(baseUrl, page))
+        .append(">; rel=\"")
+        .append(name)
+        .append("\",");
   }
 
   /**
@@ -76,9 +89,33 @@ public class HeaderUtils {
 
     var res = builder.toString();
 
-    if (!PAGE_PATTERN.matcher(res).find()) {
+    if (!PAGE_PATTERN.matcher(res).find() && !page.equals(0)) {
       res += (res.contains("?") ? "&" : "?") + "page=" + page;
     }
     return res;
+  }
+
+  static Optional<Integer> firstPage(Integer currentPage) {
+    return Optional.ofNullable(currentPage >= 1 ? 0 : null);
+  }
+
+  static Optional<Integer> lastPage(Integer currentPage, Integer pageSize, Integer totalElement) {
+    final var lastPage = maxPage(pageSize, totalElement);
+    return Optional.ofNullable(lastPage.equals(currentPage) ? null : lastPage);
+  }
+
+  static Optional<Integer> nextPage(Integer currentPage, Integer pageSize, Integer totalElement) {
+    return Optional.ofNullable(
+        maxPage(pageSize, totalElement).equals(currentPage) ? null : currentPage + 1);
+  }
+
+  static Optional<Integer> previousPage(Integer currentPage) {
+    return Optional.ofNullable(currentPage > 0 ? currentPage - 1 : null);
+  }
+
+  static Integer maxPage(Integer pageSize, Integer totalElement) {
+    final var total = (1.0 * totalElement / pageSize);
+    final double res = total % 1 == 0 ? total - 1 : total;
+    return (int) res;
   }
 }

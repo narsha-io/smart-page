@@ -55,10 +55,7 @@ class SmartPageTest {
     assertThat(res.getBody()).isEqualTo(data);
     assertThat(res.getHeaders()).isNotEmpty();
 
-    assertThat(res.getHeaders().get(HeaderUtils.LINK_HEADER))
-        .isEqualTo(
-            List.of(
-                "<http://localhost?page=0>; rel=\"prev\",<http://localhost?page=0>; rel=\"first\","));
+    assertThat(res.getHeaders().get(HeaderUtils.LINK_HEADER)).isNull();
     assertThat(res.getHeaders().get(HeaderUtils.X_TOTAL_COUNT)).isEqualTo(List.of("10"));
   }
 
@@ -75,7 +72,7 @@ class SmartPageTest {
     assertThat(res.getHeaders().get(HeaderUtils.LINK_HEADER))
         .isEqualTo(
             List.of(
-                "<http://localhost?page=1>; rel=\"next\",<http://localhost?page=1>; rel=\"prev\",<http://localhost?page=0>; rel=\"first\","));
+                "<http://localhost?page=1>; rel=\"next\",<http://localhost?page=1>; rel=\"last\""));
     assertThat(res.getHeaders().get(HeaderUtils.X_TOTAL_COUNT)).isEqualTo(List.of("10"));
   }
 
@@ -90,9 +87,7 @@ class SmartPageTest {
     assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(res.getBody()).isEqualTo(data);
     assertThat(res.getHeaders().get(HeaderUtils.LINK_HEADER))
-        .isEqualTo(
-            List.of(
-                "<http://localhost?page=1>; rel=\"prev\",<http://localhost?page=0>; rel=\"first\","));
+        .isEqualTo(List.of("<http://localhost>; rel=\"first\",<http://localhost>; rel=\"prev\""));
     assertThat(res.getHeaders().get(HeaderUtils.X_TOTAL_COUNT)).isEqualTo(List.of("10"));
   }
 }
