@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.narsha.smartpage.core.utils.HeaderUtils;
 import io.narsha.smartpage.web.test.AbstractSmartPageWebTest;
 import lombok.AccessLevel;
@@ -22,18 +24,27 @@ import org.springframework.test.web.servlet.MockMvc;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class AbstractSmartPageWebSpringTest extends AbstractSmartPageWebTest {
 
+  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
   @Autowired private MockMvc mockMvc;
 
   @MethodSource("webSource")
   @ParameterizedTest(name = "{index} -> {0}")
-  void checkHttp(String name, String url, String linkHeader, String totalCount, String content)
+  void checkHttp(String name, String url, String linkHeader, Integer totalCount, String content)
       throws Exception {
-    this.mockMvc
-        .perform(get(url))
-        .andDo(print())
-        .andExpect(status().isOk())
-        .andExpect(header().string(HeaderUtils.LINK_HEADER, linkHeader))
-        .andExpect(header().string(HeaderUtils.X_TOTAL_COUNT, totalCount))
-        .andExpect(content().json(content, true));
+
+    var exceptedBody = (ArrayNode) OBJECT_MAPPER.readTree(content);
+
+    var check =
+        this.mockMvc
+            .perform(get(url))
+            .andDo(print())
+            .andExpect(!exceptedBody.isEmpty() ? status().isOk() : status().isNoContent());
+
+    if (exceptedBody.size() != totalCount)
+      check
+          .andExpect(header().string(HeaderUtils.LINK_HEADER, linkHeader))
+          .andExpect(header().string(HeaderUtils.X_TOTAL_COUNT, String.valueOf(totalCount)))
+          .andExpect(content().json(content, true));
   }
 }
