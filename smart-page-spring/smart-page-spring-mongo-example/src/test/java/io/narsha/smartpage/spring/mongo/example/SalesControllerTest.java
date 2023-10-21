@@ -1,6 +1,6 @@
 package io.narsha.smartpage.spring.mongo.example;
 
-import io.narsha.smarpage.spring.test.AbstractSmartPageWebSpringTest;
+import io.narsha.smartpage.spring.test.AbstractSmartPageWebSpringTest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;

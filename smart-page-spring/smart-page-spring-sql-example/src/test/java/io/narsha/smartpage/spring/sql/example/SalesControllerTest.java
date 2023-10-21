@@ -1,6 +1,6 @@
 package io.narsha.smartpage.spring.sql.example;
 
-import io.narsha.smarpage.spring.test.AbstractSmartPageWebSpringTest;
+import io.narsha.smartpage.spring.test.AbstractSmartPageWebSpringTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 

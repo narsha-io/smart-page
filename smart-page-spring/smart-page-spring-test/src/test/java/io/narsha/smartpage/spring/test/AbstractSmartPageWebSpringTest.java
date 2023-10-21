@@ -1,4 +1,4 @@
-package io.narsha.smarpage.spring.test;
+package io.narsha.smartpage.spring.test;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

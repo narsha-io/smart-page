@@ -1,4 +1,4 @@
-package io.narsha.smartpage.sprng.jdbc;
+package io.narsha.smartpage.spring.jdbc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
