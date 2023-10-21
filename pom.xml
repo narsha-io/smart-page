@@ -189,7 +189,9 @@
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
+                                <phase>verify</phase>
                                 <goals>
+                                    <goal>aggregate</goal>
                                     <goal>jar</goal>
                                 </goals>
                             </execution>
@@ -202,7 +204,9 @@
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
+                                <phase>verify</phase>
                                 <goals>
+                                    <goal>javadoc</goal>
                                     <goal>jar</goal>
                                 </goals>
                             </execution>
