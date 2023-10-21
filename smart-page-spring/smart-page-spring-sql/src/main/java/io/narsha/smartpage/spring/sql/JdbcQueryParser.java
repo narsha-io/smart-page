@@ -96,7 +96,9 @@ public class JdbcQueryParser<T> {
   }
 
   private String getBaseQuery() {
-    final var reference = ResolverUtils.getDataTableValue(this.queryFilter.targetClass());
+    final var reference =
+        ResolverUtils.getDataTableValue(
+            this.queryFilter.targetClass(), SqlDataTable.class, SqlDataTable::query);
     return getSQLFileContent(reference);
   }
 

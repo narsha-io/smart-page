@@ -58,7 +58,9 @@ public class MongoQueryExecutor implements QueryExecutor {
                       });
             });
 
-    final var collection = ResolverUtils.getDataTableValue(paginatedFilteredQuery.targetClass());
+    final var collection =
+        ResolverUtils.getDataTableValue(
+            paginatedFilteredQuery.targetClass(), MongoDataTable.class, MongoDataTable::collection);
 
     final var filtered = mongoTemplate.find(query, Map.class, collection);
 
