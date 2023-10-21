@@ -1,8 +1,9 @@
 package io.narsha.smartpage.core.utils;
 
-import io.narsha.smartpage.core.annotations.DataTable;
 import io.narsha.smartpage.core.annotations.DataTableIgnore;
+import java.lang.annotation.Annotation;
 import java.util.Optional;
+import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -65,7 +66,8 @@ public class ResolverUtils {
    * @param targetClass DTO class
    * @return the DataTable.value value
    */
-  public static String getDataTableValue(Class<?> targetClass) {
-    return AnnotationUtils.getClassAnnotationValue(targetClass, DataTable.class, DataTable::value);
+  public static <T, A extends Annotation> T getDataTableValue(
+      Class<?> targetClass, Class<A> annotation, Function<A, T> supplier) {
+    return AnnotationUtils.getClassAnnotationValue(targetClass, annotation, supplier);
   }
 }

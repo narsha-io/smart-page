@@ -1,4 +1,4 @@
-package io.narsha.smartpage.core.annotations;
+package io.narsha.smartpage.spring.sql;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,12 +8,12 @@ import java.lang.annotation.Target;
 /** Use this interface on the java class you want to use as a smart-page data */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DataTable {
+public @interface SqlDataTable {
 
   /**
-   * Information to provide to smart-page sql query mongo collection
+   * sql query to execute
    *
-   * @return your configuration
+   * @return sql query
    */
-  String value();
+  String query();
 }

@@ -1,14 +1,14 @@
 package io.narsha.smartpage.spring.mongo.example;
 
-import io.narsha.smartpage.core.annotations.DataTable;
 import io.narsha.smartpage.core.annotations.DataTableProperty;
+import io.narsha.smartpage.spring.mongo.MongoDataTable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /** DTO that will be used by smart-page to apply filter and return data */
-@DataTable("sales_collection")
+@MongoDataTable(collection = "sales_collection")
 @Getter
 @Setter
 @NoArgsConstructor

@@ -4,13 +4,16 @@ import io.narsha.smartpage.core.annotations.DataTableProperty;
 import io.narsha.smartpage.core.exceptions.InternalException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.reflections.ReflectionUtils;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Slf4j
 class AnnotationUtils {
 
   public static <R, A extends Annotation> R getClassAnnotationValue(
@@ -19,6 +22,7 @@ class AnnotationUtils {
       final var annotation = objectClass.getAnnotation(annotationClass);
       return function.apply(annotation);
     } catch (Exception e) {
+      log.error("Error while parsing the current object : " + e.getMessage(), e);
       throw new InternalException();
     }
   }
@@ -26,9 +30,9 @@ class AnnotationUtils {
   public static <R, A extends Annotation> Optional<R> getFieldAnnotationValue(
       Class<?> objectClass, String fieldName, Class<A> annotationClass, Function<A, R> function) {
     try {
-      final var field = objectClass.getDeclaredField(fieldName);
-      final var annotation = field.getAnnotation(annotationClass);
-      return Optional.ofNullable(function.apply(annotation));
+      return io.narsha.smartpage.core.utils.ReflectionUtils.getDeclaredField(objectClass, fieldName)
+          .map(field -> field.getAnnotation(annotationClass))
+          .map(function);
     } catch (Exception e) {
       return Optional.empty();
     }
@@ -44,7 +48,7 @@ class AnnotationUtils {
   }
 
   static Optional<String> getJavaProperty(Class<?> objectClass, String queryProperty) {
-    return Stream.of(objectClass.getDeclaredFields())
+    return ReflectionUtils.getAllFields(objectClass).stream()
         .map(Field::getName)
         .filter(javaProperty -> isValidProperty(objectClass, javaProperty, queryProperty))
         .findFirst();
@@ -69,8 +73,10 @@ class AnnotationUtils {
 
   public static boolean isFieldExists(Class<?> objectClass, String fieldName) {
     try {
-      objectClass.getDeclaredField(fieldName);
-      return true;
+      return io.narsha.smartpage.core.utils.ReflectionUtils.getDeclaredFields(objectClass).stream()
+          .map(Field::getName)
+          .map(String::toUpperCase)
+          .anyMatch(e -> Objects.equals(e, fieldName.toUpperCase()));
     } catch (Exception e) {
       return false;
     }

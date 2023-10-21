@@ -3,10 +3,13 @@ package io.narsha.smartpage.core.utils;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import io.narsha.smartpage.core.annotations.DataTable;
 import io.narsha.smartpage.core.annotations.DataTableIgnore;
 import io.narsha.smartpage.core.annotations.DataTableProperty;
 import io.narsha.smartpage.core.exceptions.InternalException;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
@@ -15,8 +18,9 @@ class AnnotationUtilsTest {
   @Test
   void getClassAnnotationValue() {
     var res =
-        AnnotationUtils.getClassAnnotationValue(Person.class, DataTable.class, DataTable::value);
-    assertThat(res).isEqualTo("select 1");
+        AnnotationUtils.getClassAnnotationValue(
+            Person.class, TestDataTable.class, TestDataTable::field);
+    assertThat(res).isEqualTo("hello");
   }
 
   @Test
@@ -88,7 +92,7 @@ class AnnotationUtilsTest {
     assertThat(res).isEmpty();
   }
 
-  @DataTable(value = "select 1")
+  @TestDataTable(field = "hello")
   private static class Person {
 
     private Long id;
@@ -97,5 +101,12 @@ class AnnotationUtilsTest {
     private String firstName;
 
     @DataTableIgnore private String role;
+  }
+
+  @Target(ElementType.TYPE)
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface TestDataTable {
+
+    String field();
   }
 }
