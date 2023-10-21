@@ -63,7 +63,12 @@ public class ResolverUtils {
   /**
    * return the value of DataTable annotation value property
    *
+   * @param <A> annotation class
+   * @param <T> method type returned by the function "supplier"
    * @param targetClass DTO class
+   * @param annotation the annotation class
+   * @param supplier method in order to return the value of a specific method into your annotation
+   *     class
    * @return the DataTable.value value
    */
   public static <T, A extends Annotation> T getDataTableValue(
