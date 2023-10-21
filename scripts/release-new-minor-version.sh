@@ -2,4 +2,4 @@
 
 CURRENT_FOLDER="$(dirname "$0")"
 
-./mvnw -f $CURRENT_FOLDER/../pom.xml --batch-mode release:clean release:prepare release:perform
+./mvnw -f $CURRENT_FOLDER/../pom.xml -Prelease --batch-mode #release:clean release:prepare release:perform
