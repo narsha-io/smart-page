@@ -10,7 +10,6 @@ import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.reflections.ReflectionUtils;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
@@ -30,7 +29,7 @@ class AnnotationUtils {
   public static <R, A extends Annotation> Optional<R> getFieldAnnotationValue(
       Class<?> objectClass, String fieldName, Class<A> annotationClass, Function<A, R> function) {
     try {
-      return io.narsha.smartpage.core.utils.ReflectionUtils.getDeclaredField(objectClass, fieldName)
+      return ReflectionUtils.getDeclaredField(objectClass, fieldName)
           .map(field -> field.getAnnotation(annotationClass))
           .map(function);
     } catch (Exception e) {
@@ -48,7 +47,7 @@ class AnnotationUtils {
   }
 
   static Optional<String> getJavaProperty(Class<?> objectClass, String queryProperty) {
-    return ReflectionUtils.getAllFields(objectClass).stream()
+    return ReflectionUtils.getDeclaredFields(objectClass).stream()
         .map(Field::getName)
         .filter(javaProperty -> isValidProperty(objectClass, javaProperty, queryProperty))
         .findFirst();
