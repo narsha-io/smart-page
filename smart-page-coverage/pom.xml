@@ -20,6 +20,11 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>smart-page-spring-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>smart-page-spring-mongo</artifactId>
             <version>${project.version}</version>
         </dependency>
