@@ -1,7 +1,6 @@
-package io.narsha.smartpage.spring.core.filters;
+package io.narsha.smartpage.core.filters;
 
 import io.narsha.smartpage.core.AbstractRegistrationService;
-import io.narsha.smartpage.core.filters.FilterParser;
 import java.util.Objects;
 import java.util.Optional;
 

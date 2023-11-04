@@ -1,6 +1,6 @@
 package io.narsha.smartpage.spring.mongo.filters;
 
-import io.narsha.smartpage.spring.core.filters.Filter;
+import io.narsha.smartpage.core.filters.Filter;
 import org.springframework.data.mongodb.core.query.Criteria;
 
 /**

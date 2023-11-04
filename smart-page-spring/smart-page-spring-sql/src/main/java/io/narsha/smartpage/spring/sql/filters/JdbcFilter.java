@@ -1,6 +1,6 @@
 package io.narsha.smartpage.spring.sql.filters;
 
-import io.narsha.smartpage.spring.core.filters.Filter;
+import io.narsha.smartpage.core.filters.Filter;
 
 /**
  * JDBC Filter interface

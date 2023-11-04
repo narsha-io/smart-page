@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,7 +41,9 @@ public abstract class AbstractSmartPageWebSpringTest extends AbstractSmartPageWe
         this.mockMvc
             .perform(get(url))
             .andDo(print())
-            .andExpect(!exceptedBody.isEmpty() ? status().isOk() : status().isNoContent());
+            .andExpect(!exceptedBody.isEmpty() ? status().isOk() : status().isNoContent())
+            .andExpect(
+                !exceptedBody.isEmpty() ? content().json(content) : jsonPath("$").doesNotExist());
 
     if (exceptedBody.size() != totalCount)
       check

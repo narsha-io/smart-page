@@ -223,11 +223,11 @@ public abstract class AbstractSmartPageWebTest {
                                 [{"itemId":1,"itemName":"T-SHIRT","storeId":2,"storeName":"SEOUL","quantity":1},{"itemId":1,"itemName":"T-SHIRT","storeId":3,"storeName":"BEIJING","quantity":1},{"itemId":3,"itemName":"CAP","storeId":2,"storeName":"SEOUL","quantity":1}]"""),
         Arguments.of(
             "testFilterWithLessThanOrEqualsFilterType",
-            "/api/sales?quantity=2&filter=quantity,lte",
-            "<http://localhost/api/sales?quantity=2&filter=quantity,lte&page=0>; rel=\"first\",<http://localhost/api/sales?quantity=2&filter=quantity,lte&page=0>; rel=\"last\",",
-            4,
+            "/api/sales?quantity=1&filter=quantity,lte",
+            "<http://localhost/api/sales?quantity=1&filter=quantity,lte&page=0>; rel=\"first\",<http://localhost/api/sales?quantity=1&filter=quantity,lte&page=0>; rel=\"last\",",
+            3,
             """
-                                [{"itemId":1,"itemName":"T-SHIRT","storeId":1,"storeName":"PARIS","quantity":2},{"itemId":1,"itemName":"T-SHIRT","storeId":2,"storeName":"SEOUL","quantity":1},{"itemId":1,"itemName":"T-SHIRT","storeId":3,"storeName":"BEIJING","quantity":1},{"itemId":3,"itemName":"CAP","storeId":2,"storeName":"SEOUL","quantity":1}]
+                                [{"itemId":1,"itemName":"T-SHIRT","storeId":2,"storeName":"SEOUL","quantity":1},{"itemId":1,"itemName":"T-SHIRT","storeId":3,"storeName":"BEIJING","quantity":1},{"itemId":3,"itemName":"CAP","storeId":2,"storeName":"SEOUL","quantity":1}]
                                                            """),
         Arguments.of(
             "testFilterWithGreaterThanFilterType",

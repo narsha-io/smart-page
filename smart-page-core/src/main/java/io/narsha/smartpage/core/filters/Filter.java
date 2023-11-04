@@ -1,6 +1,4 @@
-package io.narsha.smartpage.spring.core.filters;
-
-import io.narsha.smartpage.core.filters.FilterParser;
+package io.narsha.smartpage.core.filters;
 
 /**
  * Filter interface

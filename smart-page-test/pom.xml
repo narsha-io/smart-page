@@ -23,6 +23,15 @@
             <artifactId>junit-jupiter-params</artifactId>
             <version>5.10.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.narsha-io</groupId>
+            <artifactId>smart-page-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 
