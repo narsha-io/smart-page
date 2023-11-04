@@ -55,13 +55,7 @@
                     <fileSets>
                         <fileSet>
                             <directory>${project.basedir}/..</directory>
-                            <include>smart-page-core/target/jacoco.exec</include>
-                            <include>smart-page-spring/smart-page-spring-core/target/jacoco.exec</include>
-                            <include>smart-page-spring/smart-page-spring-mongo-example/target/jacoco.exec</include>
-                            <include>smart-page-spring/smart-page-spring-mongo/target/jacoco.exec</include>
-                            <include>smart-page-spring/smart-page-spring-sql-example/target/jacoco.exec</include>
-                            <include>smart-page-spring/smart-page-spring-sql/target/jacoco.exec</include>
-                            <include>smart-page-spring/smart-page-spring-test/target/jacoco.exec</include>
+                            <include>**/target/jacoco.exec</include>
                         </fileSet>
                     </fileSets>
                 </configuration>
