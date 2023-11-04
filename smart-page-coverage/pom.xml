@@ -51,12 +51,31 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
+                <configuration>
+                    <fileSets>
+                        <fileSet>
+                            <directory>${project.basedir}/..</directory>
+                            <include>smart-page-core/target/jacoco.exec</include>
+                            <include>smart-page-spring/smart-page-spring-core/target/jacoco.exec</include>
+                            <include>smart-page-spring/smart-page-spring-mongo-example/target/jacoco.exec</include>
+                            <include>smart-page-spring/smart-page-spring-mongo/target/jacoco.exec</include>
+                            <include>smart-page-spring/smart-page-spring-sql-example/target/jacoco.exec</include>
+                            <include>smart-page-spring/smart-page-spring-sql/target/jacoco.exec</include>
+                            <include>smart-page-spring/smart-page-spring-test/target/jacoco.exec</include>
+                        </fileSet>
+                    </fileSets>
+                </configuration>
                 <executions>
                     <execution>
                         <id>jacoco-site-aggregate</id>
                         <phase>verify</phase>
                         <goals>
                             <goal>report-aggregate</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <goals>
+                            <goal>merge</goal>
                         </goals>
                     </execution>
                 </executions>
