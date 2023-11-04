@@ -9,6 +9,7 @@ import io.narsha.smartpage.spring.mongo.filters.MongoFilterRegistrationService;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -16,6 +17,7 @@ import org.springframework.data.mongodb.core.query.Query;
 
 /** Class that will execute the mongo query following the declared filters */
 @RequiredArgsConstructor
+@Slf4j
 public class MongoQueryExecutor implements QueryExecutor {
 
   private final MongoTemplate mongoTemplate;
@@ -48,13 +50,18 @@ public class MongoQueryExecutor implements QueryExecutor {
 
               this.mongoFilterRegistrationService
                   .get(v.getValue().getClass())
-                  .ifPresent(
+                  .ifPresentOrElse(
                       action -> {
                         final var parser = v.getValue();
                         final var value = parser.getValue();
                         var parsedValue = action.getParsedValue(value);
                         var criteria = action.getMongoCriteria(key, parsedValue);
                         query.addCriteria(criteria);
+                      },
+                      () -> {
+                        log.warn(
+                            "Cannot find any filter implementation for action {}",
+                            v.getValue().getClass().getSimpleName());
                       });
             });
 
