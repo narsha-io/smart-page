@@ -58,11 +58,10 @@ public class MongoQueryExecutor implements QueryExecutor {
                         var criteria = action.getMongoCriteria(key, parsedValue);
                         query.addCriteria(criteria);
                       },
-                      () -> {
-                        log.warn(
-                            "Cannot find any filter implementation for action {}",
-                            v.getValue().getClass().getSimpleName());
-                      });
+                      () ->
+                          log.warn(
+                              "Cannot find any filter implementation for action {}",
+                              v.getValue().getClass().getSimpleName()));
             });
 
     final var collection =

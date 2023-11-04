@@ -19,7 +19,7 @@ public abstract class AllFiltersImplementationsTest {
   private final Set<Class<?>> parsers;
   private final Class<? extends Filter> filterClass;
 
-  public AllFiltersImplementationsTest(Class<? extends Filter> filterClass) {
+  protected AllFiltersImplementationsTest(Class<? extends Filter> filterClass) {
     final var reflections = new Reflections(FilterFactory.class.getPackageName());
     this.parsers = reflections.get(Scanners.SubTypes.of(FilterParser.class).asClass());
     log.info(
