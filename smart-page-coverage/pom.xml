@@ -70,7 +70,6 @@
                                 <resource>
                                     <directory>${maven.multiModuleProjectDirectory}</directory>
                                     <filtering>false</filtering>
-
                                 </resource>
                             </resources>
                         </configuration>
