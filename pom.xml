@@ -61,7 +61,7 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-        <sonar.jacoco.reportPath>${project.basedir}/smart-page-coverage/target/jacoco.exec</sonar.jacoco.reportPath>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/smart-page-coverage/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <git-code-format-maven-plugin.version>4.2</git-code-format-maven-plugin.version>
         <jacoco.version>0.8.10</jacoco.version>
         <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
@@ -152,6 +152,12 @@
                             <goal>report-aggregate</goal>
                         </goals>
                         <phase>verify</phase>
+                    </execution>
+                    <execution>
+                        <id>report-integration</id>
+                        <goals>
+                            <goal>report-integration</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
