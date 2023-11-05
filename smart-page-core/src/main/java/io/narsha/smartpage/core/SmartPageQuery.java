@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public record SmartPageQuery<T>(
     Class<T> targetClass,
-    Map<String, ?> filters,
+    Map<String, Object> filters,
     Map<String, String> orders,
     Integer page,
     Integer size) {}

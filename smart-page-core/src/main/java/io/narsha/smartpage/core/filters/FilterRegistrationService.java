@@ -5,8 +5,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** Filter registration Service */
-public abstract class AbstractFilterRegistrationService<T extends Filter>
-    extends AbstractRegistrationService<T> {
+public class FilterRegistrationService extends AbstractRegistrationService<Filter> {
 
   /**
    * Get a new instance of a filter
@@ -14,7 +13,7 @@ public abstract class AbstractFilterRegistrationService<T extends Filter>
    * @param alias filter alias
    * @return instance of filter if found otherwise empty
    */
-  public Optional<T> get(String alias) {
+  public Optional<Filter> get(String alias) {
     return super.registeredService.stream()
         .filter(filter -> Objects.equals(filter.getFilterAlias(), alias))
         .findFirst();

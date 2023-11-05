@@ -2,15 +2,16 @@ package io.narsha.smartpage.spring.core.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.narsha.smartpage.core.SmartPageQuery;
-import io.narsha.smartpage.core.filters.EqualsFilter;
-import io.narsha.smartpage.core.filters.FilterFactoryRegistrationService;
-import io.narsha.smartpage.core.filters.FilterParser;
+import io.narsha.smartpage.core.exceptions.InternalException;
+import io.narsha.smartpage.core.filters.Filter;
+import io.narsha.smartpage.core.filters.FilterRegistrationService;
 import io.narsha.smartpage.core.utils.ReflectionUtils;
 import io.narsha.smartpage.core.utils.ResolverUtils;
 import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.core.MethodParameter;
@@ -28,7 +29,7 @@ public class SmartPageQueryResolver implements HandlerMethodArgumentResolver {
 
   private final ObjectMapper objectMapper;
   private final PageableHandlerMethodArgumentResolver pageableHandlerMethodArgumentResolver;
-  private final FilterFactoryRegistrationService filterFactoryRegistrationService;
+  private final FilterRegistrationService filterRegistrationService;
   private PathVariableMapMethodArgumentResolver pathVariableMapMethodArgumentResolver =
       new PathVariableMapMethodArgumentResolver();
 
@@ -52,7 +53,7 @@ public class SmartPageQueryResolver implements HandlerMethodArgumentResolver {
     final var parameters = new HashMap<>(webRequest.getParameterMap());
     addPathVariableIntoFilterMap(parameter, mavContainer, webRequest, binderFactory, parameters);
 
-    final var filtersParser = getFiltersParser(parameters, targetClass);
+    final var filtersParser = getFiltersValue(parameters, targetClass);
 
     final var pageable =
         pageableHandlerMethodArgumentResolver.resolveArgument(
@@ -100,48 +101,97 @@ public class SmartPageQueryResolver implements HandlerMethodArgumentResolver {
         .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
   }
 
-  private Map<String, FilterParser<?, ?>> getFiltersParser(
+  private Map<String, Object> getFiltersValue(
       Map<String, String[]> parameters, Class<?> targetClass) {
-    final var res = new HashMap<String, FilterParser<?, ?>>();
 
+    final var filters = new HashMap<String, Filter>();
+    final var equalsFilter =
+        filterRegistrationService.get("equals").orElseThrow(InternalException::new);
+
+    parameters.entrySet().stream()
+        .filter(e -> e.getKey().equals("filter"))
+        .map(Map.Entry::getValue)
+        .flatMap(Stream::of)
+        .forEach(
+            filter -> {
+              var split = filter.split(",");
+              var smartPageFilter =
+                  filterRegistrationService.get(split[1]).orElseThrow(InternalException::new);
+
+              if (ResolverUtils.getQueryProperty(targetClass, split[0]).isEmpty()) {
+                throw new InternalException();
+              }
+              filters.put(split[0], smartPageFilter);
+            });
+
+    final var res = new HashMap<String, Object>();
+
+    for (var entry : parameters.entrySet()) {
+      var javaProperty = entry.getKey();
+      if (ResolverUtils.isIgnoredField(targetClass, javaProperty)) {
+        continue;
+      }
+      ReflectionUtils.getFieldClass(targetClass, javaProperty)
+          .ifPresent(
+              type -> {
+                final var filter = filters.getOrDefault(javaProperty, equalsFilter);
+                final var value =
+                    filter.getParsedValue(objectMapper, type, parameters.get(javaProperty));
+
+                var targetName =
+                    ResolverUtils.getQueryProperty(targetClass, javaProperty).orElse(javaProperty);
+                res.put(targetName, value);
+              });
+    }
+    /*
     var parsers = getParser(targetClass, parameters.getOrDefault("filter", new String[0]));
 
     for (var entry : parameters.entrySet()) {
-      if (ResolverUtils.isIgnoredField(targetClass, entry.getKey())) {
-        continue;
-      }
-      ReflectionUtils.getFieldClass(targetClass, entry.getKey())
-          .ifPresent(
-              type -> {
-                var parser = parsers.getOrDefault(entry.getKey(), new EqualsFilter<>(type));
-                parser.parse(objectMapper, entry.getValue());
-                var targetName =
-                    ResolverUtils.getQueryProperty(targetClass, entry.getKey())
-                        .orElse(entry.getKey());
-                res.put(targetName, parser);
-              });
+        if (ResolverUtils.isIgnoredField(targetClass, entry.getKey())) {
+            continue;
+        }
+        ReflectionUtils.getFieldClass(targetClass, entry.getKey())
+                .ifPresent(
+                        type -> {
+                            var parser = parsers.getOrDefault(entry.getKey(), new EqualsFilter());
+                            parser.parse(objectMapper, entry.getValue());
+                            var targetName =
+                                    ResolverUtils.getQueryProperty(targetClass, entry.getKey())
+                                            .orElse(entry.getKey());
+                            res.put(targetName, parser);
+                        });
     }
+
+     */
 
     return res;
   }
 
-  private Map<String, FilterParser<?, ?>> getParser(Class<?> targetClass, String... filters) {
-    final var propertyParser = new HashMap<String, FilterParser<?, ?>>();
+  private Map<String, Filter> getFilters(Class<?> targetClass, String... filters) {
+    final var propertyParser = new HashMap<String, Object>();
 
+    /*
     for (var filter : filters) {
-      var split = filter.split(",");
+        var split = filter.split(",");
 
-      var javaProperty = split[0];
-      var filterType = split[1];
-      ReflectionUtils.getFieldClass(targetClass, javaProperty)
-          .flatMap(type -> this.filterFactoryRegistrationService.get(type, filterType))
-          .ifPresentOrElse(
-              parser -> propertyParser.put(javaProperty, parser),
-              () -> {
-                throw new IllegalArgumentException();
-              });
+        var javaProperty = split[0];
+        var filterType = split[1];
+
+        //TODO manage opt
+        var filterParser = this.filterRegistrationService.get(filterType).get();
+        ReflectionUtils.getFieldClass(targetClass, javaProperty)
+                .filter(type -> filterParser.)
+                .ifPresentOrElse(
+                        parser -> propertyParser.put(javaProperty, parser),
+                        () -> {
+                            throw new IllegalArgumentException();
+                        });
     }
 
+
+
     return propertyParser;
+     */
+    return null;
   }
 }
