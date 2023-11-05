@@ -4,23 +4,19 @@ import io.narsha.smartpage.core.AbstractRegistrationService;
 import java.util.Objects;
 import java.util.Optional;
 
-/**
- * Filter registration Service
- *
- * @param <T> Filter type
- */
-public class AbstractFilterRegistrationService<T extends Filter>
+/** Filter registration Service */
+public abstract class AbstractFilterRegistrationService<T extends Filter>
     extends AbstractRegistrationService<T> {
 
   /**
    * Get a new instance of a filter
    *
-   * @param filterParserType Filter type
+   * @param alias filter alias
    * @return instance of filter if found otherwise empty
    */
-  public Optional<T> get(Class<? extends FilterParser> filterParserType) {
+  public Optional<T> get(String alias) {
     return super.registeredService.stream()
-        .filter(filter -> Objects.equals(filter.getParserType(), filterParserType))
+        .filter(filter -> Objects.equals(filter.getFilterAlias(), alias))
         .findFirst();
   }
 }

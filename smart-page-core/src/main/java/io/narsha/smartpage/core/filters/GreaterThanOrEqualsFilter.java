@@ -1,34 +1,22 @@
 package io.narsha.smartpage.core.filters;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
+import java.time.temporal.Temporal;
+import java.util.Date;
+import java.util.Set;
 
 /**
  * class which provide some method to parse String array into a targetClass in order to apply an
- * Greater than or equals operation
- *
- * @param <T> the target property class
+ * Greater than operation
  */
-@Getter
-public class GreaterThanOrEqualsFilter<T> extends FilterParser<T, Object> {
+public class GreaterThanOrEqualsFilter extends Filter {
 
-  private Object value;
-
-  /**
-   * Basic constructor
-   *
-   * @param targetClass the class of the targeted property
-   */
-  public GreaterThanOrEqualsFilter(Class<T> targetClass) {
-    super(targetClass);
+  @Override
+  public String getFilterAlias() {
+    return "gte";
   }
 
   @Override
-  public void parse(ObjectMapper objectMapper, String[] value) {
-    if (value.length > 1) {
-      throw new IllegalArgumentException(); // TODO custom exception cannot manage more than one
-      // element if not string
-    }
-    this.value = objectMapper.convertValue(value[0], targetClass);
+  protected Set<Class<?>> getSupportedInputClasses() {
+    return Set.of(String.class, Number.class, Date.class, Temporal.class);
   }
 }

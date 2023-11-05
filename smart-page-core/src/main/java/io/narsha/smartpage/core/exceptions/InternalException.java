@@ -4,6 +4,12 @@ package io.narsha.smartpage.core.exceptions;
 @Deprecated
 public class InternalException extends RuntimeException {
 
+  public InternalException() {}
+
+  public InternalException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
   @Override
   public String getMessage() {
     return "Cannot parse the current object";

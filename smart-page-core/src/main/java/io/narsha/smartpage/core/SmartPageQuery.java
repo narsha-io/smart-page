@@ -1,6 +1,5 @@
 package io.narsha.smartpage.core;
 
-import io.narsha.smartpage.core.filters.FilterParser;
 import java.util.Map;
 
 /**
@@ -15,7 +14,7 @@ import java.util.Map;
  */
 public record SmartPageQuery<T>(
     Class<T> targetClass,
-    Map<String, FilterParser<?, ?>> filters,
+    Map<String, ?> filters,
     Map<String, String> orders,
     Integer page,
     Integer size) {}
