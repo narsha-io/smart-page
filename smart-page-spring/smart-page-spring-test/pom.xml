@@ -12,6 +12,10 @@
     <name>${project.artifactId}</name>
     <description>smart-page spring test used by all spring projects</description>
 
+    <properties>
+        <sonar.skip>true</sonar.skip>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
