@@ -70,9 +70,7 @@
                                 <resource>
                                     <directory>${maven.multiModuleProjectDirectory}</directory>
                                     <filtering>false</filtering>
-                                    <excludes>
-                                        <include>io/narsha/smartpage/**/**.*</include>
-                                    </excludes>
+
                                 </resource>
                             </resources>
                         </configuration>
