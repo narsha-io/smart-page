@@ -12,6 +12,10 @@
     <name>${project.artifactId}</name>
     <description>smart-page generic tests</description>
 
+    <properties>
+        <sonar.skip>true</sonar.skip>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
