@@ -27,11 +27,11 @@ public class FilterFactoryConfiguration {
    *     PaginatedFilteredQuery
    */
   @Bean
-  public SmartPageQueryResolver paginatedFilteredQueryResolver(
+  public SmartPageQueryResolver<?> paginatedFilteredQueryResolver(
       ObjectMapper objectMapper,
       PageableHandlerMethodArgumentResolver pageableHandlerMethodArgumentResolver,
-      FilterRegistrationService filterFactoryRegistrationService) {
-    return new SmartPageQueryResolver(
+      FilterRegistrationService<?> filterFactoryRegistrationService) {
+    return new SmartPageQueryResolver<>(
         objectMapper, pageableHandlerMethodArgumentResolver, filterFactoryRegistrationService);
   }
 

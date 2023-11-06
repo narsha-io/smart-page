@@ -104,7 +104,7 @@ public class SmartPageQueryResolver<T extends Filter> implements HandlerMethodAr
         .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
   }
 
-  private Set<? extends PropertyFilter> getFiltersValue(
+  private Set<PropertyFilter> getFiltersValue(
       Map<String, String[]> parameters, Class<?> targetClass) {
 
     final var filters = new HashMap<String, Filter>();

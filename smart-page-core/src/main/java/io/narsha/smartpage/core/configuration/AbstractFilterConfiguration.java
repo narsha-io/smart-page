@@ -1,6 +1,7 @@
 package io.narsha.smartpage.core.configuration;
 
 import io.narsha.smartpage.core.AbstractRegistrationService;
+import io.narsha.smartpage.core.exceptions.InternalException;
 import java.lang.reflect.ParameterizedType;
 import java.util.Set;
 import org.reflections.Reflections;
@@ -38,8 +39,10 @@ public abstract class AbstractFilterConfiguration<E, T extends AbstractRegistrat
 
     if (type instanceof Class clazz) {
       persistentClass = clazz;
+    } else if (type instanceof ParameterizedType parameterizedType) {
+      persistentClass = (Class<T>) parameterizedType.getRawType();
     } else {
-      persistentClass = (Class<T>) ((ParameterizedType) type).getRawType();
+      throw new InternalException();
     }
 
     var registrationService = persistentClass.getConstructor().newInstance();
