@@ -8,7 +8,7 @@ import java.util.Set;
  * class which provide some method to parse String array into a targetClass in order to apply an
  * Greater than operation
  */
-public class LessThanFilter extends Filter {
+public class LessThanFilter implements Filter {
 
   @Override
   public String getFilterAlias() {
@@ -16,7 +16,7 @@ public class LessThanFilter extends Filter {
   }
 
   @Override
-  protected Set<Class<?>> getSupportedInputClasses() {
+  public Set<Class<?>> getSupportedInputClasses() {
     return Set.of(String.class, Number.class, Date.class, Temporal.class);
   }
 }

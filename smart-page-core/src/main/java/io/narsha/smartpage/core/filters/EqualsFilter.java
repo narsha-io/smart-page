@@ -2,7 +2,7 @@ package io.narsha.smartpage.core.filters;
 
 import java.util.Set;
 
-public class EqualsFilter extends Filter {
+public class EqualsFilter implements Filter {
   @Override
   public String getFilterAlias() {
     return "equals";

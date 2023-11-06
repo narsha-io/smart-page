@@ -2,6 +2,7 @@ package io.narsha.smartpage.spring.sql;
 
 import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.SmartPageQuery;
+import io.narsha.smartpage.core.exceptions.InternalException;
 import io.narsha.smartpage.core.utils.ResolverUtils;
 import io.narsha.smartpage.spring.sql.filters.JdbcFilterRegistrationService;
 import java.io.BufferedReader;
@@ -83,14 +84,15 @@ public class JdbcQueryParser<T> {
     this.queryFilter
         .filters()
         .forEach(
-            (prop, parser) ->
-                this.jdbcFilterRegistrationService
-                    .get(parser.getClass())
-                    .ifPresentOrElse(
-                        sql -> filterBuilder.append(" AND ").append(sql.getSQLFragment(prop)),
-                        () -> {
-                          throw new IllegalArgumentException();
-                        }));
+            propertyFilter -> {
+              var filter =
+                  jdbcFilterRegistrationService
+                      .get(propertyFilter.operation())
+                      .orElseThrow(InternalException::new);
+              filterBuilder
+                  .append(" AND ")
+                  .append(filter.getSQLFragment(propertyFilter.dataSourceProperty()));
+            });
 
     return filterBuilder.toString();
   }

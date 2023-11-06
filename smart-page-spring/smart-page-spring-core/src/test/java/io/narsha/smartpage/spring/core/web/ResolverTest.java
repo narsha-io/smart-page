@@ -80,13 +80,17 @@ class ResolverTest {
     assertThat(query.orders()).isEmpty();
 
     assertThat(query.filters()).hasSize(2);
-    assertThat(query.filters()).containsKey("id");
-    var filter = query.filters().get("id");
-    assertThat(filter).isEqualTo(1L);
 
-    assertThat(query.filters()).containsKey("first_name");
-    filter = query.filters().get("first_name");
-    assertThat(filter).isEqualTo("toto");
+    var opt =
+        query.filters().stream().filter(e -> e.dataSourceProperty().equals("id")).findFirst().get();
+    assertThat(opt.value()).isEqualTo(1L);
+
+    opt =
+        query.filters().stream()
+            .filter(e -> e.dataSourceProperty().equals("first_name"))
+            .findFirst()
+            .get();
+    assertThat(opt.value()).isEqualTo("toto");
   }
 
   @Test
@@ -98,9 +102,9 @@ class ResolverTest {
     assertThat(query.orders()).isEmpty();
 
     assertThat(query.filters()).hasSize(1);
-    assertThat(query.filters()).containsKey("id");
-    var filter = query.filters().get("id");
-    assertThat(filter).isEqualTo(1L);
+    var opt =
+        query.filters().stream().filter(e -> e.dataSourceProperty().equals("id")).findFirst().get();
+    assertThat(opt.value()).isEqualTo(1L);
   }
 
   @Test

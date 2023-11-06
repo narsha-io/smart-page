@@ -4,9 +4,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import io.narsha.smartpage.core.filters.Filter;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.function.Failable;
 import org.junit.jupiter.api.Test;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
@@ -34,18 +32,7 @@ public abstract class AllFiltersImplementationsTest {
     log.info(
         "{} filters found {}", filters.size(), filters.stream().map(Class::getSimpleName).toList());
 
-    var parserType =
-        filters.stream()
-            .map(
-                Failable.asFunction(
-                    e -> {
-                      var constructor = e.getConstructor();
-                      return (Filter) constructor.newInstance();
-                    }))
-            .map(Filter::getFilterAlias)
-            .collect(Collectors.toSet());
-
-    this.parsers.removeIf(parserType::contains);
+    filters.forEach(clazz -> this.parsers.removeIf(parser -> parser.isAssignableFrom(clazz)));
 
     if (!this.parsers.isEmpty()) {
       fail(String.format("Cannot find filter implementation for parser : %s", this.parsers));

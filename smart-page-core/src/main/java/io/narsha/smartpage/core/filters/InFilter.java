@@ -6,7 +6,7 @@ import java.util.Set;
  * class which provide some method to parse String array into a targetClass in order to apply an
  * Greater than operation
  */
-public class InFilter extends Filter {
+public class InFilter implements Filter {
 
   @Override
   public String getFilterAlias() {
@@ -14,7 +14,7 @@ public class InFilter extends Filter {
   }
 
   @Override
-  protected Set<Class<?>> getSupportedInputClasses() {
+  public Set<Class<?>> getSupportedInputClasses() {
     return Set.of(Object.class);
   }
 }

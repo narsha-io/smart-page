@@ -7,19 +7,19 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 
-public class ContainsFilter extends Filter {
+public class ContainsFilter implements Filter {
   @Override
   public String getFilterAlias() {
     return "contains";
   }
 
   @Override
-  protected Set<Class<?>> getSupportedInputClasses() {
+  public Set<Class<?>> getSupportedInputClasses() {
     return Set.of(String.class);
   }
 
   @Override
-  protected <T> T parse(ObjectMapper objectMapper, Class<T> targetClass, String[] values) {
+  public <T> T parse(ObjectMapper objectMapper, Class<T> targetClass, String[] values) {
     var parsed =
         Stream.of(values)
             .filter(Objects::nonNull)
@@ -30,7 +30,7 @@ public class ContainsFilter extends Filter {
   }
 
   @Override
-  protected boolean isMultiValueSupported() {
+  public boolean isMultiValueSupported() {
     return true;
   }
 }

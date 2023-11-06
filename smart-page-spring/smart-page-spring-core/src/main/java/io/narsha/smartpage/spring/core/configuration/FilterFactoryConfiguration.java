@@ -2,8 +2,6 @@ package io.narsha.smartpage.spring.core.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.narsha.smartpage.core.QueryExecutor;
-import io.narsha.smartpage.core.configuration.AbstractFilterConfiguration;
-import io.narsha.smartpage.core.filters.Filter;
 import io.narsha.smartpage.core.filters.FilterRegistrationService;
 import io.narsha.smartpage.spring.core.SmartPage;
 import io.narsha.smartpage.spring.core.web.SmartPageQueryResolver;
@@ -16,19 +14,7 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
  * PaginatedFilteredQueryResolver bean
  */
 @Configuration
-public class FilterFactoryConfiguration
-    extends AbstractFilterConfiguration<Filter, FilterRegistrationService> {
-
-  /**
-   * Register an initiated FilterFactoryRegistrationService with internal declared Filter
-   *
-   * @return FilterFactoryRegistrationService bean
-   * @throws Exception init reflection exception
-   */
-  @Bean
-  public FilterRegistrationService filterRegistrationService() throws Exception {
-    return super.init(Filter.class);
-  }
+public class FilterFactoryConfiguration {
 
   /**
    * Register a PaginatedFilteredQueryResolver which convert a http request into

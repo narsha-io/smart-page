@@ -4,13 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.narsha.smartpage.core.exceptions.InternalException;
 import java.util.Set;
 
-public abstract class Filter {
+public interface Filter {
 
-  public abstract String getFilterAlias();
+  String getFilterAlias();
 
-  protected abstract Set<Class<?>> getSupportedInputClasses();
+  Set<Class<?>> getSupportedInputClasses();
 
-  public <T> T getParsedValue(ObjectMapper objectMapper, Class<T> targetClass, String[] values) {
+  default <T> T getParsedValue(ObjectMapper objectMapper, Class<T> targetClass, String[] values) {
     final var match =
         getSupportedInputClasses().stream().anyMatch(clazz -> clazz.isAssignableFrom(targetClass));
 
@@ -29,11 +29,11 @@ public abstract class Filter {
     }
   }
 
-  protected <T> T parse(ObjectMapper objectMapper, Class<T> targetClass, String[] values) {
+  default <T> T parse(ObjectMapper objectMapper, Class<T> targetClass, String[] values) {
     return objectMapper.convertValue(values[0], targetClass);
   }
 
-  protected boolean isMultiValueSupported() {
+  default boolean isMultiValueSupported() {
     return false;
   }
 }

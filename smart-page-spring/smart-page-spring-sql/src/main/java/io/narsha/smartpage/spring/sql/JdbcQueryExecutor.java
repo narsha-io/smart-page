@@ -33,15 +33,8 @@ public class JdbcQueryExecutor implements QueryExecutor {
     jdbcQueryParser.init();
 
     final var params =
-        paginatedFilteredQuery.filters().entrySet().stream()
-            .collect(
-                Collectors.toMap(
-                    Map.Entry::getKey,
-                    v ->
-                        jdbcFilterRegistrationService
-                            .get(v.getValue().getClass())
-                            .map(t -> t.getParsedValue(v.getValue().getValue()))
-                            .orElse(v.getValue().getValue())));
+        paginatedFilteredQuery.filters().stream()
+            .collect(Collectors.toMap(e -> e.dataSourceProperty(), e -> e.value()));
 
     final var data =
         this.jdbcTemplate.query(

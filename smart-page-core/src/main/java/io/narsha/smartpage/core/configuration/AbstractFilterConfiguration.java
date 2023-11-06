@@ -32,8 +32,15 @@ public abstract class AbstractFilterConfiguration<E, T extends AbstractRegistrat
       abstractFilterConfiguration = ((Class) abstractFilterConfiguration).getGenericSuperclass();
     }
 
-    Class<T> persistentClass =
-        (Class<T>) ((ParameterizedType) abstractFilterConfiguration).getActualTypeArguments()[1];
+    var type = ((ParameterizedType) abstractFilterConfiguration).getActualTypeArguments()[1];
+
+    Class<T> persistentClass;
+
+    if (type instanceof Class clazz) {
+      persistentClass = clazz;
+    } else {
+      persistentClass = (Class<T>) ((ParameterizedType) type).getRawType();
+    }
 
     var registrationService = persistentClass.getConstructor().newInstance();
     var internalFilters = findInternals(targetClass);
