@@ -1,19 +1,14 @@
 package io.narsha.smartpage.spring.mongo.filters;
 
 import io.narsha.smartpage.core.filters.ContainsFilter;
-import io.narsha.smartpage.core.filters.FilterParser;
 import java.util.regex.Pattern;
 import org.springframework.data.mongodb.core.query.Criteria;
 
 /** Mongo implementation of contains operation */
-public class MongoContainsFilter implements MongoFilter<String> {
-  @Override
-  public Class<? extends FilterParser> getParserType() {
-    return ContainsFilter.class;
-  }
+public class MongoContainsFilter extends ContainsFilter implements MongoFilter {
 
   @Override
-  public Criteria getMongoCriteria(String property, String value) {
+  public Criteria getMongoCriteria(String property, Object value) {
     return Criteria.where(property).regex(Pattern.compile(".*(" + value + ").*"));
   }
 }
