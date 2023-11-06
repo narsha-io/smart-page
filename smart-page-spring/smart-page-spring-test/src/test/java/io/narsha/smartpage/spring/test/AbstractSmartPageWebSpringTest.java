@@ -1,11 +1,11 @@
 package io.narsha.smartpage.spring.test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -37,18 +37,18 @@ public abstract class AbstractSmartPageWebSpringTest extends AbstractSmartPageWe
 
     var exceptedBody = (ArrayNode) OBJECT_MAPPER.readTree(content);
 
-    var check =
-        this.mockMvc
-            .perform(get(url))
-            .andDo(print())
-            .andExpect(!exceptedBody.isEmpty() ? status().isOk() : status().isNoContent())
-            .andExpect(
-                !exceptedBody.isEmpty() ? content().json(content) : jsonPath("$").doesNotExist());
+    var result = this.mockMvc.perform(get(url)).andDo(print()).andReturn();
 
-    if (exceptedBody.size() != totalCount)
-      check
-          .andExpect(header().string(HeaderUtils.LINK_HEADER, linkHeader))
-          .andExpect(header().string(HeaderUtils.X_TOTAL_COUNT, String.valueOf(totalCount)))
-          .andExpect(content().json(content, true));
+    assertEquals(result.getResponse().getStatus(), exceptedBody.isEmpty() ? 204 : 200);
+    var body = new ObjectMapper().readTree(result.getResponse().getContentAsByteArray());
+    assertTrue(exceptedBody.isEmpty() ? body.isEmpty() : exceptedBody.equals(body));
+    assertEquals(result.getResponse().getHeader(HeaderUtils.X_TOTAL_COUNT), totalCount.toString());
+
+    if (exceptedBody.size() != totalCount) {
+      assertEquals(result.getResponse().getHeader(HeaderUtils.LINK_HEADER), linkHeader);
+    } else {
+      assertFalse(result.getResponse().containsHeader(HeaderUtils.LINK_HEADER));
+      assertTrue(linkHeader == null);
+    }
   }
 }
