@@ -251,6 +251,14 @@ public abstract class AbstractSmartPageWebTest {
             3,
             """
                                 [{"itemId":1,"itemName":"T-SHIRT","storeId":1,"storeName":"PARIS","quantity":2},{"itemId":1,"itemName":"T-SHIRT","storeId":2,"storeName":"SEOUL","quantity":1},{"itemId":1,"itemName":"T-SHIRT","storeId":3,"storeName":"BEIJING","quantity":1}]
-                                                             """));
+                                                             """),
+        Arguments.of(
+            "testFilterWithContainsFilterType",
+            "/api/sales?itemId=1,2&filter=itemId,in",
+            null,
+            3,
+            """
+                                        [{"itemId":1,"itemName":"T-SHIRT","storeId":1,"storeName":"PARIS","quantity":2},{"itemId":1,"itemName":"T-SHIRT","storeId":2,"storeName":"SEOUL","quantity":1},{"itemId":1,"itemName":"T-SHIRT","storeId":3,"storeName":"BEIJING","quantity":1}]
+                                                                     """));
   }
 }
