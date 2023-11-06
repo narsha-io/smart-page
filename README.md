@@ -1,4 +1,5 @@
-# smart-page
+<img width="1176" alt="smart-page" src="https://github.com/narsha-io/smart-page/assets/95120893/24c506b6-75db-44dd-b6af-c3bb2c14f3c6">
+
 
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=narsha-io_smart-page&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=narsha-io_smart-page)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=narsha-io_smart-page&metric=coverage)](https://sonarcloud.io/summary/new_code?id=narsha-io_smart-page)
