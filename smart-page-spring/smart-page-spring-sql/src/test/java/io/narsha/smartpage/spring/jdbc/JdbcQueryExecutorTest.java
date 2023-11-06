@@ -2,16 +2,9 @@ package io.narsha.smartpage.spring.jdbc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import io.narsha.smartpage.core.PropertyFilter;
 import io.narsha.smartpage.core.RowMapper;
 import io.narsha.smartpage.core.SmartPageQuery;
-import io.narsha.smartpage.core.filters.ContainsFilter;
-import io.narsha.smartpage.core.filters.EqualsFilter;
-import io.narsha.smartpage.core.filters.GreaterThanFilter;
-import io.narsha.smartpage.core.filters.GreaterThanOrEqualsFilter;
-import io.narsha.smartpage.core.filters.InFilter;
-import io.narsha.smartpage.core.filters.LessThanFilter;
-import io.narsha.smartpage.core.filters.LessThanOrEqualsFilter;
 import io.narsha.smartpage.spring.sql.JdbcQueryExecutor;
 import io.narsha.smartpage.spring.sql.SqlDataTable;
 import io.narsha.smartpage.spring.sql.filters.JdbcFilterRegistrationService;
@@ -19,6 +12,7 @@ import io.narsha.smartpage.spring.test.SmartPageSpringTestApplication;
 import io.narsha.smartpage.spring.test.model.Person;
 import io.narsha.smartpage.spring.test.validator.PersonValidator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.MethodOrderer;
@@ -32,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-@SpringBootTest(classes = SmartPageSpringTestApplication.class)
+@SpringBootTest(classes = {SmartPageSpringTestApplication.class, JdbcConfiguration.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JdbcQueryExecutorTest {
 
@@ -50,7 +44,7 @@ class JdbcQueryExecutorTest {
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
             .execute(
                 new SmartPageQuery<>(
-                    JdbcPerson.class, new HashMap<>(), new HashMap<>(), page, size));
+                    JdbcPerson.class, new HashSet<>(), new HashMap<>(), page, size));
     assertThat(res.data()).hasSize(exceptedPageSize);
     assertThat(res.total()).isEqualTo(exceptedTotalElement);
     PersonValidator.validate(res.data());
@@ -64,7 +58,7 @@ class JdbcQueryExecutorTest {
   @Order(4)
   void paginationTestSortedPage0() {
     final var query =
-        new SmartPageQuery<>(JdbcPerson.class, new HashMap<>(), new HashMap<>(), 0, 2);
+        new SmartPageQuery<>(JdbcPerson.class, new HashSet<>(), new HashMap<>(), 0, 2);
     query.orders().put("first_name", "asc");
 
     final var res =
@@ -80,7 +74,7 @@ class JdbcQueryExecutorTest {
   @Order(5)
   void paginationTestSortedPage1() {
     final var query =
-        new SmartPageQuery<>(JdbcPerson.class, new HashMap<>(), new HashMap<>(), 1, 2);
+        new SmartPageQuery<>(JdbcPerson.class, new HashSet<>(), new HashMap<>(), 1, 2);
     query.orders().put("first_name", "asc");
 
     final var res =
@@ -96,10 +90,8 @@ class JdbcQueryExecutorTest {
   @Order(6)
   void paginationTestEqualsStringFilter() {
     final var query =
-        new SmartPageQuery<>(JdbcPerson.class, new HashMap<>(), new HashMap<>(), 0, 2);
-    var filter = new EqualsFilter<>(String.class);
-    filter.parse(new ObjectMapper(), new String[] {"Perceval"});
-    query.filters().put("first_name", filter);
+        new SmartPageQuery<>(JdbcPerson.class, new HashSet<>(), new HashMap<>(), 0, 2);
+    query.filters().add(new PropertyFilter("first_name", "Perceval", "equals"));
 
     final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
@@ -114,10 +106,9 @@ class JdbcQueryExecutorTest {
   @Order(7)
   void paginationTestEqualsLongFilter() {
     final var query =
-        new SmartPageQuery<>(JdbcPerson.class, new HashMap<>(), new HashMap<>(), 0, 2);
-    var filter = new EqualsFilter<>(Long.class);
-    filter.parse(new ObjectMapper(), new String[] {"2"});
-    query.filters().put("id", filter);
+        new SmartPageQuery<>(JdbcPerson.class, new HashSet<>(), new HashMap<>(), 0, 2);
+
+    query.filters().add(new PropertyFilter("id", "2", "equals"));
 
     final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
@@ -132,10 +123,9 @@ class JdbcQueryExecutorTest {
   @Order(8)
   void paginationTestInLongFilter() {
     final var query =
-        new SmartPageQuery<>(JdbcPerson.class, new HashMap<>(), new HashMap<>(), 0, 2);
-    var filter = new InFilter<>(Long.class);
-    filter.parse(new ObjectMapper(), new String[] {"2", "3"});
-    query.filters().put("id", filter);
+        new SmartPageQuery<>(JdbcPerson.class, new HashSet<>(), new HashMap<>(), 0, 2);
+
+    query.filters().add(new PropertyFilter("id", Set.of(2, 3), "in"));
 
     final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
@@ -150,10 +140,9 @@ class JdbcQueryExecutorTest {
   @Order(9)
   void paginationTestInStringFilter() {
     final var query =
-        new SmartPageQuery<>(JdbcPerson.class, new HashMap<>(), new HashMap<>(), 0, 2);
-    var filter = new InFilter<>(String.class);
-    filter.parse(new ObjectMapper(), new String[] {"Perceval", "Leodagan"});
-    query.filters().put("first_name", filter);
+        new SmartPageQuery<>(JdbcPerson.class, new HashSet<>(), new HashMap<>(), 0, 2);
+
+    query.filters().add(new PropertyFilter("first_name", Set.of("Perceval", "Leodagan"), "in"));
 
     final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
@@ -168,10 +157,9 @@ class JdbcQueryExecutorTest {
   @Order(10)
   void paginationTestContainsStringFilter() {
     final var query =
-        new SmartPageQuery<>(JdbcPerson.class, new HashMap<>(), new HashMap<>(), 0, 2);
-    var filter = new ContainsFilter();
-    filter.parse(new ObjectMapper(), new String[] {"Ka"});
-    query.filters().put("first_name", filter);
+        new SmartPageQuery<>(JdbcPerson.class, new HashSet<>(), new HashMap<>(), 0, 2);
+
+    query.filters().add(new PropertyFilter("first_name", "%Ka%", "contains"));
 
     final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
@@ -186,10 +174,9 @@ class JdbcQueryExecutorTest {
   @Order(11)
   void paginationTestGreaterThanFilter() {
     final var query =
-        new SmartPageQuery<>(JdbcPerson.class, new HashMap<>(), new HashMap<>(), 0, 10);
-    var filter = new GreaterThanFilter<>(String.class);
-    filter.parse(new ObjectMapper(), new String[] {"Karadoc"});
-    query.filters().put("first_name", filter);
+        new SmartPageQuery<>(JdbcPerson.class, new HashSet<>(), new HashMap<>(), 0, 10);
+
+    query.filters().add(new PropertyFilter("first_name", Set.of("Karadoc"), "gt"));
 
     final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
@@ -204,10 +191,9 @@ class JdbcQueryExecutorTest {
   @Order(12)
   void paginationTestGreaterThanOrEqualsFilter() {
     final var query =
-        new SmartPageQuery<>(JdbcPerson.class, new HashMap<>(), new HashMap<>(), 0, 10);
-    var filter = new GreaterThanOrEqualsFilter<>(String.class);
-    filter.parse(new ObjectMapper(), new String[] {"Karadoc"});
-    query.filters().put("first_name", filter);
+        new SmartPageQuery<>(JdbcPerson.class, new HashSet<>(), new HashMap<>(), 0, 10);
+
+    query.filters().add(new PropertyFilter("first_name", Set.of("Karadoc"), "gte"));
 
     final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
@@ -222,10 +208,9 @@ class JdbcQueryExecutorTest {
   @Order(13)
   void paginationTestLessThanFilter() {
     final var query =
-        new SmartPageQuery<>(JdbcPerson.class, new HashMap<>(), new HashMap<>(), 0, 10);
-    var filter = new LessThanFilter<>(String.class);
-    filter.parse(new ObjectMapper(), new String[] {"Karadoc"});
-    query.filters().put("first_name", filter);
+        new SmartPageQuery<>(JdbcPerson.class, new HashSet<>(), new HashMap<>(), 0, 10);
+
+    query.filters().add(new PropertyFilter("first_name", Set.of("Karadoc"), "lt"));
 
     final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)
@@ -240,10 +225,9 @@ class JdbcQueryExecutorTest {
   @Order(14)
   void paginationTestLessThanOrEqualsFilter() {
     final var query =
-        new SmartPageQuery<>(JdbcPerson.class, new HashMap<>(), new HashMap<>(), 0, 10);
-    var filter = new LessThanOrEqualsFilter<>(String.class);
-    filter.parse(new ObjectMapper(), new String[] {"Karadoc"});
-    query.filters().put("first_name", filter);
+        new SmartPageQuery<>(JdbcPerson.class, new HashSet<>(), new HashMap<>(), 0, 10);
+
+    query.filters().add(new PropertyFilter("first_name", Set.of("Karadoc"), "lte"));
 
     final var res =
         new JdbcQueryExecutor(jdbcTemplate, jdbcFilterRegistrationService, rowMapper)

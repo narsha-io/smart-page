@@ -4,6 +4,7 @@ import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.RowMapper;
 import io.narsha.smartpage.core.SmartPageQuery;
 import io.narsha.smartpage.core.SmartPageResult;
+import io.narsha.smartpage.core.exceptions.InternalException;
 import io.narsha.smartpage.core.utils.ResolverUtils;
 import io.narsha.smartpage.spring.mongo.filters.MongoFilterRegistrationService;
 import java.util.HashMap;
@@ -43,25 +44,16 @@ public class MongoQueryExecutor implements QueryExecutor {
 
     Query query = new Query().with(pageRequest);
 
-    paginatedFilteredQuery.filters().entrySet().stream()
+    paginatedFilteredQuery.filters().stream()
         .forEach(
             v -> {
-              var key = v.getKey();
+              var filter =
+                  this.mongoFilterRegistrationService
+                      .get(v.operation())
+                      .orElseThrow(InternalException::new);
 
-              this.mongoFilterRegistrationService
-                  .get(v.getValue().getClass())
-                  .ifPresentOrElse(
-                      action -> {
-                        final var parser = v.getValue();
-                        final var value = parser.getValue();
-                        var parsedValue = action.getParsedValue(value);
-                        var criteria = action.getMongoCriteria(key, parsedValue);
-                        query.addCriteria(criteria);
-                      },
-                      () ->
-                          log.warn(
-                              "Cannot find any filter implementation for action {}",
-                              v.getValue().getClass().getSimpleName()));
+              var criteria = filter.getMongoCriteria(v.dataSourceProperty(), v.value());
+              query.addCriteria(criteria);
             });
 
     final var collection =

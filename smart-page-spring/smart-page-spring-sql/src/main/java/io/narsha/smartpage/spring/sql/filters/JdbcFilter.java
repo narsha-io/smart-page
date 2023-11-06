@@ -2,12 +2,8 @@ package io.narsha.smartpage.spring.sql.filters;
 
 import io.narsha.smartpage.core.filters.Filter;
 
-/**
- * JDBC Filter interface
- *
- * @param <T> target parsed type
- */
-public interface JdbcFilter<T> extends Filter<T> {
+/** JDBC Filter interface */
+public interface JdbcFilter extends Filter {
 
   /**
    * Generate a sql where clause for a defined property

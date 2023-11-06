@@ -2,18 +2,16 @@ package io.narsha.smartpage.spring.mongo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import io.narsha.smartpage.core.PropertyFilter;
 import io.narsha.smartpage.core.RowMapper;
 import io.narsha.smartpage.core.SmartPageQuery;
 import io.narsha.smartpage.core.annotations.DataTableProperty;
-import io.narsha.smartpage.core.filters.ContainsFilter;
-import io.narsha.smartpage.core.filters.EqualsFilter;
-import io.narsha.smartpage.core.filters.InFilter;
 import io.narsha.smartpage.spring.mongo.filters.MongoFilterRegistrationService;
 import io.narsha.smartpage.spring.test.SmartPageSpringTestApplication;
 import io.narsha.smartpage.spring.test.model.Person;
 import io.narsha.smartpage.spring.test.validator.PersonValidator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -108,7 +106,7 @@ class MongoQueryExecutorTest {
         new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
             .execute(
                 new SmartPageQuery<>(
-                    MongoPerson.class, new HashMap<>(), new HashMap<>(), page, size));
+                    MongoPerson.class, new HashSet<>(), new HashMap<>(), page, size));
     assertThat(res.data()).hasSize(exceptedPageSize);
     assertThat(res.total()).isEqualTo(exceptedTotalElement);
     PersonValidator.validate(res.data());
@@ -122,7 +120,7 @@ class MongoQueryExecutorTest {
   @Order(4)
   void paginationTestSortedPage0() {
     final var query =
-        new SmartPageQuery<>(MongoPerson.class, new HashMap<>(), new HashMap<>(), 0, 2);
+        new SmartPageQuery<>(MongoPerson.class, new HashSet<>(), new HashMap<>(), 0, 2);
     query.orders().put("first_name", "asc");
 
     final var res =
@@ -138,7 +136,7 @@ class MongoQueryExecutorTest {
   @Order(5)
   void paginationTestSortedPage1() {
     final var query =
-        new SmartPageQuery<>(MongoPerson.class, new HashMap<>(), new HashMap<>(), 1, 2);
+        new SmartPageQuery<>(MongoPerson.class, new HashSet<>(), new HashMap<>(), 1, 2);
     query.orders().put("first_name", "asc");
 
     final var res =
@@ -154,10 +152,9 @@ class MongoQueryExecutorTest {
   @Order(6)
   void paginationTestEqualsStringFilter() {
     final var query =
-        new SmartPageQuery<>(MongoPerson.class, new HashMap<>(), new HashMap<>(), 0, 2);
-    var filter = new EqualsFilter<>(String.class);
-    filter.parse(new ObjectMapper(), new String[] {"Perceval"});
-    query.filters().put("first_name", filter);
+        new SmartPageQuery<>(MongoPerson.class, new HashSet<>(), new HashMap<>(), 0, 2);
+
+    query.filters().add(new PropertyFilter("first_name", "Perceval", "equals"));
 
     final var res =
         new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
@@ -172,10 +169,8 @@ class MongoQueryExecutorTest {
   @Order(7)
   void paginationTestEqualsLongFilter() {
     final var query =
-        new SmartPageQuery<>(MongoPerson.class, new HashMap<>(), new HashMap<>(), 0, 2);
-    var filter = new EqualsFilter<>(Long.class);
-    filter.parse(new ObjectMapper(), new String[] {"2"});
-    query.filters().put("_id", filter);
+        new SmartPageQuery<>(MongoPerson.class, new HashSet<>(), new HashMap<>(), 0, 2);
+    query.filters().add(new PropertyFilter("_id", 2L, "equals"));
 
     final var res =
         new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
@@ -190,10 +185,8 @@ class MongoQueryExecutorTest {
   @Order(8)
   void paginationTestInLongFilter() {
     final var query =
-        new SmartPageQuery<>(MongoPerson.class, new HashMap<>(), new HashMap<>(), 0, 2);
-    var filter = new InFilter<>(Long.class);
-    filter.parse(new ObjectMapper(), new String[] {"2", "3"});
-    query.filters().put("_id", filter);
+        new SmartPageQuery<>(MongoPerson.class, new HashSet<>(), new HashMap<>(), 0, 2);
+    query.filters().add(new PropertyFilter("_id", Set.of(2L, 3L), "in"));
 
     final var res =
         new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
@@ -208,10 +201,8 @@ class MongoQueryExecutorTest {
   @Order(9)
   void paginationTestInStringFilter() {
     final var query =
-        new SmartPageQuery<>(MongoPerson.class, new HashMap<>(), new HashMap<>(), 0, 2);
-    var filter = new InFilter<>(String.class);
-    filter.parse(new ObjectMapper(), new String[] {"Perceval", "Leodagan"});
-    query.filters().put("first_name", filter);
+        new SmartPageQuery<>(MongoPerson.class, new HashSet<>(), new HashMap<>(), 0, 2);
+    query.filters().add(new PropertyFilter("first_name", Set.of("Perceval", "Leodagan"), "in"));
 
     final var res =
         new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
@@ -226,10 +217,8 @@ class MongoQueryExecutorTest {
   @Order(10)
   void paginationTestContainsStringFilter() {
     final var query =
-        new SmartPageQuery<>(MongoPerson.class, new HashMap<>(), new HashMap<>(), 0, 2);
-    var filter = new ContainsFilter();
-    filter.parse(new ObjectMapper(), new String[] {"Ka"});
-    query.filters().put("first_name", filter);
+        new SmartPageQuery<>(MongoPerson.class, new HashSet<>(), new HashMap<>(), 0, 2);
+    query.filters().add(new PropertyFilter("first_name", "Ka", "contains"));
 
     final var res =
         new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)

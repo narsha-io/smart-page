@@ -1,15 +1,10 @@
 package io.narsha.smartpage.spring.sql.filters;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.narsha.smartpage.core.filters.ContainsFilter;
-import io.narsha.smartpage.core.filters.FilterParser;
 
 /** JDBC filter for contains operation */
-public class JdbcContainsFilter implements JdbcFilter<String> {
-
-  @Override
-  public Class<? extends FilterParser<?, ?>> getParserType() {
-    return ContainsFilter.class;
-  }
+public class JdbcContainsFilter extends ContainsFilter implements JdbcFilter {
 
   @Override
   public String getSQLFragment(String property) {
@@ -17,7 +12,8 @@ public class JdbcContainsFilter implements JdbcFilter<String> {
   }
 
   @Override
-  public String getParsedValue(String value) {
-    return "%" + value + "%";
+  public <T> T getParsedValue(ObjectMapper objectMapper, Class<T> targetClass, String[] values) {
+    final var value = super.getParsedValue(objectMapper, targetClass, values);
+    return (T) ("%" + value + "%");
   }
 }

@@ -3,8 +3,10 @@ package io.narsha.smartpage.core;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
+import lombok.Getter;
 
 /** Class used to map a data from the datasource query into a java DTO */
+@Getter
 public class RowMapper {
 
   /** Jackson objectMapper used to convert property */

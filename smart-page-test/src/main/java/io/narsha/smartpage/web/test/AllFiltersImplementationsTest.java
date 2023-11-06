@@ -3,12 +3,8 @@ package io.narsha.smartpage.web.test;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import io.narsha.smartpage.core.filters.Filter;
-import io.narsha.smartpage.core.filters.FilterFactory;
-import io.narsha.smartpage.core.filters.FilterParser;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.function.Failable;
 import org.junit.jupiter.api.Test;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
@@ -20,8 +16,8 @@ public abstract class AllFiltersImplementationsTest {
   private final Class<? extends Filter> filterClass;
 
   protected AllFiltersImplementationsTest(Class<? extends Filter> filterClass) {
-    final var reflections = new Reflections(FilterFactory.class.getPackageName());
-    this.parsers = reflections.get(Scanners.SubTypes.of(FilterParser.class).asClass());
+    final var reflections = new Reflections(Filter.class.getPackageName());
+    this.parsers = reflections.get(Scanners.SubTypes.of(Filter.class).asClass());
     log.info(
         "{} parsers found {}",
         this.parsers.size(),
@@ -36,18 +32,7 @@ public abstract class AllFiltersImplementationsTest {
     log.info(
         "{} filters found {}", filters.size(), filters.stream().map(Class::getSimpleName).toList());
 
-    var parserType =
-        filters.stream()
-            .map(
-                Failable.asFunction(
-                    e -> {
-                      var constructor = e.getConstructor();
-                      return (Filter<?>) constructor.newInstance();
-                    }))
-            .map(Filter::getParserType)
-            .collect(Collectors.toSet());
-
-    this.parsers.removeIf(parserType::contains);
+    filters.forEach(clazz -> this.parsers.removeIf(parser -> parser.isAssignableFrom(clazz)));
 
     if (!this.parsers.isEmpty()) {
       fail(String.format("Cannot find filter implementation for parser : %s", this.parsers));

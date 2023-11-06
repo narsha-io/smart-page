@@ -91,7 +91,7 @@ public abstract class AbstractSmartPageWebTest {
         Arguments.of(
             "testSortAsc",
             "/api/sales?sort=itemId,asc",
-            "<http://localhost/api/sales?sort=itemId,asc&page=0>; rel=\"first\",<http://localhost/api/sales?sort=itemId,asc&page=0>; rel=\"last\",",
+            null,
             4,
             """
                                 [{
@@ -123,7 +123,7 @@ public abstract class AbstractSmartPageWebTest {
         Arguments.of(
             "testSortDesc",
             "/api/sales?sort=storeId,desc",
-            "<http://localhost/api/sales?sort=storeId,desc&page=0>; rel=\"first\",<http://localhost/api/sales?sort=storeId,desc&page=0>; rel=\"last\",",
+            null,
             4,
             """
                                 [{
@@ -156,7 +156,7 @@ public abstract class AbstractSmartPageWebTest {
         Arguments.of(
             "testSortWithRename",
             "/api/sales?sort=quantity,desc",
-            "<http://localhost/api/sales?sort=quantity,desc&page=0>; rel=\"first\",<http://localhost/api/sales?sort=quantity,desc&page=0>; rel=\"last\",",
+            null,
             4,
             """
                                  [{
@@ -189,7 +189,7 @@ public abstract class AbstractSmartPageWebTest {
         Arguments.of(
             "testFilterWithRename",
             "/api/sales?quantity=2",
-            "<http://localhost/api/sales?quantity=2&page=0>; rel=\"first\",<http://localhost/api/sales?quantity=2&page=0>; rel=\"last\",",
+            null,
             1,
             """
                                 [{
@@ -203,7 +203,7 @@ public abstract class AbstractSmartPageWebTest {
         Arguments.of(
             "testFilterWithFilterType",
             "/api/sales?quantity=2&filter=quantity,equals",
-            "<http://localhost/api/sales?quantity=2&filter=quantity,equals&page=0>; rel=\"first\",<http://localhost/api/sales?quantity=2&filter=quantity,equals&page=0>; rel=\"last\",",
+            null,
             1,
             """
                                 [{
@@ -217,14 +217,14 @@ public abstract class AbstractSmartPageWebTest {
         Arguments.of(
             "testFilterWithLessThanFilterType",
             "/api/sales?quantity=2&filter=quantity,lt",
-            "<http://localhost/api/sales?quantity=2&filter=quantity,lt&page=0>; rel=\"first\",<http://localhost/api/sales?quantity=2&filter=quantity,lt&page=0>; rel=\"last\",",
+            null,
             "3",
             """
                                 [{"itemId":1,"itemName":"T-SHIRT","storeId":2,"storeName":"SEOUL","quantity":1},{"itemId":1,"itemName":"T-SHIRT","storeId":3,"storeName":"BEIJING","quantity":1},{"itemId":3,"itemName":"CAP","storeId":2,"storeName":"SEOUL","quantity":1}]"""),
         Arguments.of(
             "testFilterWithLessThanOrEqualsFilterType",
             "/api/sales?quantity=1&filter=quantity,lte",
-            "<http://localhost/api/sales?quantity=1&filter=quantity,lte&page=0>; rel=\"first\",<http://localhost/api/sales?quantity=1&filter=quantity,lte&page=0>; rel=\"last\",",
+            null,
             3,
             """
                                 [{"itemId":1,"itemName":"T-SHIRT","storeId":2,"storeName":"SEOUL","quantity":1},{"itemId":1,"itemName":"T-SHIRT","storeId":3,"storeName":"BEIJING","quantity":1},{"itemId":3,"itemName":"CAP","storeId":2,"storeName":"SEOUL","quantity":1}]
@@ -232,17 +232,33 @@ public abstract class AbstractSmartPageWebTest {
         Arguments.of(
             "testFilterWithGreaterThanFilterType",
             "/api/sales?quantity=1&filter=quantity,gt",
-            "<http://localhost/api/sales?quantity=1&filter=quantity,gt&page=0>; rel=\"first\",<http://localhost/api/sales?quantity=1&filter=quantity,gt&page=0>; rel=\"last\",",
+            null,
             1,
             """
                                 [{"itemId":1,"itemName":"T-SHIRT","storeId":1,"storeName":"PARIS","quantity":2}]"""),
         Arguments.of(
             "testFilterWithGreaterThanOrEqualsFilterType",
             "/api/sales?quantity=2&filter=quantity,gte",
-            "<http://localhost/api/sales?quantity=2&filter=quantity,gte&page=0>; rel=\"first\",<http://localhost/api/sales?quantity=2&filter=quantity,gte&page=0>; rel=\"last\",",
+            null,
             1,
             """
                                 [{"itemId":1,"itemName":"T-SHIRT","storeId":1,"storeName":"PARIS","quantity":2}]
-                                                             """));
+                                                             """),
+        Arguments.of(
+            "testFilterWithContainsFilterType",
+            "/api/sales?itemName=IR&filter=itemName,contains",
+            null,
+            3,
+            """
+                                [{"itemId":1,"itemName":"T-SHIRT","storeId":1,"storeName":"PARIS","quantity":2},{"itemId":1,"itemName":"T-SHIRT","storeId":2,"storeName":"SEOUL","quantity":1},{"itemId":1,"itemName":"T-SHIRT","storeId":3,"storeName":"BEIJING","quantity":1}]
+                                                             """),
+        Arguments.of(
+            "testFilterWithContainsFilterType",
+            "/api/sales?itemId=1,2&filter=itemId,in",
+            null,
+            3,
+            """
+                                        [{"itemId":1,"itemName":"T-SHIRT","storeId":1,"storeName":"PARIS","quantity":2},{"itemId":1,"itemName":"T-SHIRT","storeId":2,"storeName":"SEOUL","quantity":1},{"itemId":1,"itemName":"T-SHIRT","storeId":3,"storeName":"BEIJING","quantity":1}]
+                                                                     """));
   }
 }

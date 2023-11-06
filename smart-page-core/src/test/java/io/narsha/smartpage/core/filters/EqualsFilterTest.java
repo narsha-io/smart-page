@@ -4,68 +4,66 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.narsha.smartpage.core.exceptions.InternalException;
 import org.junit.jupiter.api.Test;
 
 class EqualsFilterTest {
 
   private static final ObjectMapper objectMapper = new ObjectMapper();
-  private static final FilterFactory equalsFilterFactory = new EqualsFilterFactory();
+  private static final Filter equalsFilter = new EqualsFilter();
 
   @Test
   void emptyString() {
-    final var filter = equalsFilterFactory.get(String.class);
-    filter.parse(objectMapper, new String[] {""});
-    final String value = (String) filter.getValue();
+    final var value = equalsFilter.getParsedValue(objectMapper, String.class, new String[] {""});
     assertThat(value).isEmpty();
   }
 
   @Test
   void simpleString() {
-    final var filter = equalsFilterFactory.get(String.class);
-    filter.parse(objectMapper, new String[] {"test"});
-    assertThat(filter.getValue()).isEqualTo("test");
+    final var value =
+        equalsFilter.getParsedValue(objectMapper, String.class, new String[] {"test"});
+    assertThat(value).isEqualTo("test");
   }
 
   @Test
   void multipleString() {
-    final var filter = equalsFilterFactory.get(String.class);
-    filter.parse(objectMapper, new String[] {"test1", "test2"});
-    assertThat(filter.getValue()).isEqualTo("test1,test2");
+    assertThrows(
+        InternalException.class,
+        () ->
+            equalsFilter.getParsedValue(
+                objectMapper, String.class, new String[] {"test1", "test2"}));
   }
 
   @Test
   void emptyLong() {
-    final var filter = equalsFilterFactory.get(Long.class);
-    filter.parse(objectMapper, new String[] {""});
-    assertThat(filter.getValue()).isNull();
+    final var value = equalsFilter.getParsedValue(objectMapper, Long.class, new String[] {""});
+    assertThat(value).isNull();
   }
 
   @Test
   void simpleLong() {
-    final var filter = equalsFilterFactory.get(Long.class);
-    filter.parse(objectMapper, new String[] {"1"});
-    assertThat(filter.getValue()).isEqualTo(1L);
+    final var value = equalsFilter.getParsedValue(objectMapper, Long.class, new String[] {"1"});
+    assertThat(value).isEqualTo(1L);
   }
 
   @Test
   void simpleInvalidLong() {
-    final var filter = equalsFilterFactory.get(Long.class);
     assertThrows(
-        IllegalArgumentException.class, () -> filter.parse(objectMapper, new String[] {"tt"}));
+        InternalException.class,
+        () -> equalsFilter.getParsedValue(objectMapper, Long.class, new String[] {"tt"}));
   }
 
   @Test
   void multipleLong() {
-    final var filter = equalsFilterFactory.get(Long.class);
     assertThrows(
-        IllegalArgumentException.class, () -> filter.parse(objectMapper, new String[] {"1", "2"}));
+        InternalException.class,
+        () -> equalsFilter.getParsedValue(objectMapper, Long.class, new String[] {"1", "2"}));
   }
 
   @Test
   void multipleInvalidLong() {
-    final var filter = equalsFilterFactory.get(Long.class);
     assertThrows(
-        IllegalArgumentException.class,
-        () -> filter.parse(objectMapper, new String[] {"1", "toto"}));
+        InternalException.class,
+        () -> equalsFilter.getParsedValue(objectMapper, Long.class, new String[] {"1", "toto"}));
   }
 }

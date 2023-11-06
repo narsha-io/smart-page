@@ -2,9 +2,7 @@ package io.narsha.smartpage.spring.core.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.narsha.smartpage.core.QueryExecutor;
-import io.narsha.smartpage.core.configuration.AbstractFilterConfiguration;
-import io.narsha.smartpage.core.filters.FilterFactory;
-import io.narsha.smartpage.core.filters.FilterFactoryRegistrationService;
+import io.narsha.smartpage.core.filters.FilterRegistrationService;
 import io.narsha.smartpage.spring.core.SmartPage;
 import io.narsha.smartpage.spring.core.web.SmartPageQueryResolver;
 import org.springframework.context.annotation.Bean;
@@ -16,19 +14,7 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
  * PaginatedFilteredQueryResolver bean
  */
 @Configuration
-public class FilterFactoryConfiguration
-    extends AbstractFilterConfiguration<FilterFactory, FilterFactoryRegistrationService> {
-
-  /**
-   * Register an initiated FilterFactoryRegistrationService with internal declared Filter
-   *
-   * @return FilterFactoryRegistrationService bean
-   * @throws Exception init reflection exception
-   */
-  @Bean
-  public FilterFactoryRegistrationService filterRegistrationService() throws Exception {
-    return super.init(FilterFactory.class);
-  }
+public class FilterFactoryConfiguration {
 
   /**
    * Register a PaginatedFilteredQueryResolver which convert a http request into
@@ -41,11 +27,11 @@ public class FilterFactoryConfiguration
    *     PaginatedFilteredQuery
    */
   @Bean
-  public SmartPageQueryResolver paginatedFilteredQueryResolver(
+  public SmartPageQueryResolver<?> paginatedFilteredQueryResolver(
       ObjectMapper objectMapper,
       PageableHandlerMethodArgumentResolver pageableHandlerMethodArgumentResolver,
-      FilterFactoryRegistrationService filterFactoryRegistrationService) {
-    return new SmartPageQueryResolver(
+      FilterRegistrationService<?> filterFactoryRegistrationService) {
+    return new SmartPageQueryResolver<>(
         objectMapper, pageableHandlerMethodArgumentResolver, filterFactoryRegistrationService);
   }
 
