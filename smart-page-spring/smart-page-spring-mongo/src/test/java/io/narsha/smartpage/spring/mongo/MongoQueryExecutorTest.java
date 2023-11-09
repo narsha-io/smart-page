@@ -106,7 +106,8 @@ class MongoQueryExecutorTest {
         new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
             .execute(
                 new SmartPageQuery<>(
-                    MongoPerson.class, new HashSet<>(), new HashMap<>(), page, size));
+                    MongoPerson.class, new HashSet<>(), new HashMap<>(), page, size),
+                null);
     assertThat(res.data()).hasSize(exceptedPageSize);
     assertThat(res.total()).isEqualTo(exceptedTotalElement);
     PersonValidator.validate(res.data());
@@ -125,7 +126,7 @@ class MongoQueryExecutorTest {
 
     final var res =
         new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
-            .execute(query);
+            .execute(query, null);
     assertThat(res.data()).hasSize(2);
     assertThat(res.total()).isEqualTo(5);
     PersonValidator.containsIds(res.data(), Set.of(1L, 5L));
@@ -141,7 +142,7 @@ class MongoQueryExecutorTest {
 
     final var res =
         new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
-            .execute(query);
+            .execute(query, null);
     assertThat(res.data()).hasSize(2);
     assertThat(res.total()).isEqualTo(5);
     PersonValidator.containsIds(res.data(), Set.of(4L, 2L));
@@ -158,7 +159,7 @@ class MongoQueryExecutorTest {
 
     final var res =
         new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
-            .execute(query);
+            .execute(query, null);
     assertThat(res.data()).hasSize(1);
     assertThat(res.total()).isEqualTo(1);
     PersonValidator.containsIds(res.data(), Set.of(3L));
@@ -174,7 +175,7 @@ class MongoQueryExecutorTest {
 
     final var res =
         new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
-            .execute(query);
+            .execute(query, null);
     assertThat(res.data()).hasSize(1);
     assertThat(res.total()).isEqualTo(1);
     PersonValidator.containsIds(res.data(), Set.of(2L));
@@ -190,7 +191,7 @@ class MongoQueryExecutorTest {
 
     final var res =
         new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
-            .execute(query);
+            .execute(query, null);
     assertThat(res.data()).hasSize(2);
     assertThat(res.total()).isEqualTo(2);
     PersonValidator.containsIds(res.data(), Set.of(2L, 3L));
@@ -206,7 +207,7 @@ class MongoQueryExecutorTest {
 
     final var res =
         new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
-            .execute(query);
+            .execute(query, null);
     assertThat(res.data()).hasSize(2);
     assertThat(res.total()).isEqualTo(2);
     PersonValidator.containsIds(res.data(), Set.of(2L, 3L));
@@ -222,7 +223,7 @@ class MongoQueryExecutorTest {
 
     final var res =
         new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper)
-            .execute(query);
+            .execute(query, null);
     assertThat(res.data()).hasSize(2);
     assertThat(res.total()).isEqualTo(2);
     PersonValidator.containsIds(res.data(), Set.of(4L, 5L));

@@ -8,18 +8,20 @@ import io.narsha.smartpage.core.exceptions.InternalException;
 import io.narsha.smartpage.core.utils.ResolverUtils;
 import io.narsha.smartpage.spring.mongo.filters.MongoFilterRegistrationService;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 /** Class that will execute the mongo query following the declared filters */
 @RequiredArgsConstructor
 @Slf4j
-public class MongoQueryExecutor implements QueryExecutor {
+public class MongoQueryExecutor implements QueryExecutor<List<Criteria>> {
 
   private final MongoTemplate mongoTemplate;
 
@@ -27,7 +29,8 @@ public class MongoQueryExecutor implements QueryExecutor {
   private final RowMapper rowMapper;
 
   @Override
-  public <T> SmartPageResult<T> execute(SmartPageQuery<T> paginatedFilteredQuery) {
+  public <T> SmartPageResult<T> execute(
+      SmartPageQuery<T> paginatedFilteredQuery, List<Criteria> extraParameters) {
 
     var pageable = PageRequest.of(paginatedFilteredQuery.page(), paginatedFilteredQuery.size());
 
@@ -55,6 +58,10 @@ public class MongoQueryExecutor implements QueryExecutor {
               var criteria = filter.getMongoCriteria(v.dataSourceProperty(), v.value());
               query.addCriteria(criteria);
             });
+
+    if (extraParameters != null) {
+      extraParameters.forEach(query::addCriteria);
+    }
 
     final var collection =
         ResolverUtils.getDataTableValue(

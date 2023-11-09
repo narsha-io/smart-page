@@ -16,10 +16,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /** Smart Page entrypoint */
 @RequiredArgsConstructor
-public class SmartPage {
+public abstract class SmartPage<P> {
 
-  // TODO manage multi executor depend on the annotation choice
-  private final QueryExecutor executor;
+  private final QueryExecutor<P> executor;
 
   /**
    * generate a spring response entity which contains the response body and some http header RFC988
@@ -30,7 +29,20 @@ public class SmartPage {
    * @return the http response entity
    */
   public <T> ResponseEntity<List<T>> asResponseEntity(SmartPageQuery<T> query) {
-    var result = executor.execute(query);
+    return asResponseEntity(query, null);
+  }
+
+  /**
+   * generate a spring response entity which contains the response body and some http header RFC988
+   * more information https://datatracker.ietf.org/doc/html/rfc5988#page-6
+   *
+   * @param query the query to execute
+   * @param extraParameters use this if you want to apply some extra parameters to your query
+   * @param <T> targeted DTO type
+   * @return the http response entity
+   */
+  public <T> ResponseEntity<List<T>> asResponseEntity(SmartPageQuery<T> query, P extraParameters) {
+    var result = executor.execute(query, extraParameters);
     if (CollectionUtils.isEmpty(result.data())) {
       return ResponseEntity.noContent().build();
     }

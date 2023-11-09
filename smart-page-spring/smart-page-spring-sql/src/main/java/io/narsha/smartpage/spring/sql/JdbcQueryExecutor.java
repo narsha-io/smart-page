@@ -1,5 +1,6 @@
 package io.narsha.smartpage.spring.sql;
 
+import io.narsha.smartpage.core.PropertyFilter;
 import io.narsha.smartpage.core.QueryExecutor;
 import io.narsha.smartpage.core.RowMapper;
 import io.narsha.smartpage.core.SmartPageQuery;
@@ -18,15 +19,15 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 /** In charge of the sql query execution */
 @RequiredArgsConstructor
-public class JdbcQueryExecutor implements QueryExecutor {
+public class JdbcQueryExecutor implements QueryExecutor<Map<String, Object>> {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
   private final JdbcFilterRegistrationService jdbcFilterRegistrationService;
   private final RowMapper rowMapper;
 
   @Override
-  public <T> SmartPageResult<T> execute(SmartPageQuery<T> paginatedFilteredQuery) {
-
+  public <T> SmartPageResult<T> execute(
+      SmartPageQuery<T> paginatedFilteredQuery, Map<String, Object> extraParameters) {
     final var jdbcQueryParser =
         new JdbcQueryParser<>(paginatedFilteredQuery, jdbcFilterRegistrationService);
 
@@ -34,7 +35,11 @@ public class JdbcQueryExecutor implements QueryExecutor {
 
     final var params =
         paginatedFilteredQuery.filters().stream()
-            .collect(Collectors.toMap(e -> e.dataSourceProperty(), e -> e.value()));
+            .collect(Collectors.toMap(PropertyFilter::dataSourceProperty, PropertyFilter::value));
+
+    if (extraParameters != null) {
+      params.putAll(extraParameters);
+    }
 
     final var data =
         this.jdbcTemplate.query(

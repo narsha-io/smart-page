@@ -1,7 +1,7 @@
 package io.narsha.smartpage.spring.sql.example;
 
 import io.narsha.smartpage.core.SmartPageQuery;
-import io.narsha.smartpage.spring.core.SmartPage;
+import io.narsha.smartpage.spring.sql.SmartPageJdbc;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SalesController {
 
-  private final SmartPage smartPage;
+  private final SmartPageJdbc smartPage;
 
   /**
    * TODO response entity utils Endpoint to get filtered sales

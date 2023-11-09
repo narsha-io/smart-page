@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.narsha.smartpage.core.RowMapper;
 import io.narsha.smartpage.core.configuration.AbstractFilterConfiguration;
 import io.narsha.smartpage.spring.sql.JdbcQueryExecutor;
+import io.narsha.smartpage.spring.sql.SmartPageJdbc;
 import io.narsha.smartpage.spring.sql.filters.JdbcFilter;
 import io.narsha.smartpage.spring.sql.filters.JdbcFilterRegistrationService;
 import org.springframework.context.annotation.Bean;
@@ -52,5 +53,17 @@ public class JdbcFilterConfiguration
   @Bean
   public RowMapper rowMapper() {
     return new RowMapper(new ObjectMapper());
+  }
+
+  /**
+   * Create the jdbc instance for smart page
+   *
+   * @param jdbcQueryExecutor JdbcQueryExecutor that will be in charge of execute the final SQL
+   *     query
+   * @return smart page jdbc instance
+   */
+  @Bean
+  public SmartPageJdbc smartPageJdbc(JdbcQueryExecutor jdbcQueryExecutor) {
+    return new SmartPageJdbc(jdbcQueryExecutor);
   }
 }
