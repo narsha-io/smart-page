@@ -1,4 +1,4 @@
-package io.narsha.smartpage.web.test;
+package io.narsha.smartpage.web;
 
 import static org.junit.jupiter.api.Assertions.fail;
 

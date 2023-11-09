@@ -1,4 +1,4 @@
-package io.narsha.smartpage.web.test;
+package io.narsha.smartpage.web;
 
 import java.util.stream.Stream;
 import lombok.AccessLevel;
