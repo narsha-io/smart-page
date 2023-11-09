@@ -225,6 +225,7 @@
                         <version>3.0.1</version>
                         <configuration>
                             <tagNameFormat>v@{project.version}</tagNameFormat>
+                            <preparationGoals>clean install</preparationGoals>
                         </configuration>
                     </plugin>
                     <plugin>
