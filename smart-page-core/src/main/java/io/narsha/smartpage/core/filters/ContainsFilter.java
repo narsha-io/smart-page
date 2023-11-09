@@ -7,6 +7,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * class which provide some method to parse String array into a targetClass in order to apply an
+ * Contains than operation
+ */
 public class ContainsFilter implements Filter {
   @Override
   public String getFilterAlias() {

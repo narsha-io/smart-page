@@ -2,7 +2,7 @@ package io.narsha.smartpage.spring.sql.filters;
 
 import io.narsha.smartpage.core.filters.LessThanFilter;
 
-/** JDBC filter for < operation */
+/** JDBC filter for lt operation */
 public class JdbcLessThanFilter extends LessThanFilter implements JdbcFilter {
   @Override
   public String getSQLFragment(String property) {

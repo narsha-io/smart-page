@@ -9,12 +9,18 @@ import org.junit.jupiter.api.Test;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 
+/** Check if all basics tests are implemented into the current stack */
 @Slf4j
 public abstract class AllFiltersImplementationsTest {
 
   private final Set<Class<?>> parsers;
   private final Class<? extends Filter> filterClass;
 
+  /**
+   * Construct for the specific implementation
+   *
+   * @param filterClass kind of specific Filter need that need to be tested
+   */
   protected AllFiltersImplementationsTest(Class<? extends Filter> filterClass) {
     final var reflections = new Reflections(Filter.class.getPackageName());
     this.parsers = reflections.get(Scanners.SubTypes.of(Filter.class).asClass());

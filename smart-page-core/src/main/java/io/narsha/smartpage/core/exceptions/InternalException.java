@@ -4,8 +4,15 @@ package io.narsha.smartpage.core.exceptions;
 @Deprecated
 public class InternalException extends RuntimeException {
 
+  /** Default constructor */
   public InternalException() {}
 
+  /**
+   * Constructor used when an existing exception was previously thrown
+   *
+   * @param message custom message
+   * @param cause original exception
+   */
   public InternalException(String message, Throwable cause) {
     super(message, cause);
   }

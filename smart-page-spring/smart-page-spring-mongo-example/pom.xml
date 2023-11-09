@@ -43,7 +43,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.github.narsha-io</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>smart-page-spring-test</artifactId>
             <version>${project.version}</version>
             <type>test-jar</type>
