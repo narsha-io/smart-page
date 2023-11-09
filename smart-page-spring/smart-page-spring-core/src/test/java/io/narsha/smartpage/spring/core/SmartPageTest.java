@@ -27,14 +27,14 @@ class SmartPageTest {
   void init() {
     queryExecutor = mock();
     paginatedFilteredQuery = mock();
-    smartPage = new SmartPage(queryExecutor);
+    smartPage = new SmartPage(queryExecutor) {};
     MockHttpServletRequest request = new MockHttpServletRequest();
     RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
   }
 
   @Test
   void smartPageNoContent() {
-    when(queryExecutor.execute(paginatedFilteredQuery))
+    when(queryExecutor.execute(paginatedFilteredQuery, null))
         .thenReturn(new SmartPageResult<>(List.of(), 0));
     var res = smartPage.asResponseEntity(paginatedFilteredQuery);
     assertThat(res).isNotNull();
@@ -48,7 +48,8 @@ class SmartPageTest {
     when(paginatedFilteredQuery.page()).thenReturn(0);
     when(paginatedFilteredQuery.size()).thenReturn(10);
     final var data = List.of(1L);
-    when(queryExecutor.execute(paginatedFilteredQuery)).thenReturn(new SmartPageResult<>(data, 10));
+    when(queryExecutor.execute(paginatedFilteredQuery, null))
+        .thenReturn(new SmartPageResult<>(data, 10));
     var res = smartPage.asResponseEntity(paginatedFilteredQuery);
     assertThat(res).isNotNull();
     assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -64,7 +65,8 @@ class SmartPageTest {
     when(paginatedFilteredQuery.page()).thenReturn(0);
     when(paginatedFilteredQuery.size()).thenReturn(5);
     final var data = List.of(1L);
-    when(queryExecutor.execute(paginatedFilteredQuery)).thenReturn(new SmartPageResult<>(data, 10));
+    when(queryExecutor.execute(paginatedFilteredQuery, null))
+        .thenReturn(new SmartPageResult<>(data, 10));
     var res = smartPage.asResponseEntity(paginatedFilteredQuery);
     assertThat(res).isNotNull();
     assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -81,7 +83,8 @@ class SmartPageTest {
     when(paginatedFilteredQuery.page()).thenReturn(1);
     when(paginatedFilteredQuery.size()).thenReturn(5);
     final var data = List.of(1L);
-    when(queryExecutor.execute(paginatedFilteredQuery)).thenReturn(new SmartPageResult<>(data, 10));
+    when(queryExecutor.execute(paginatedFilteredQuery, null))
+        .thenReturn(new SmartPageResult<>(data, 10));
     var res = smartPage.asResponseEntity(paginatedFilteredQuery);
     assertThat(res).isNotNull();
     assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);

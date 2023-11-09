@@ -31,7 +31,8 @@ public class WebConfig
   public QueryExecutor queryExecutor() {
     return new QueryExecutor() {
       @Override
-      public <T> SmartPageResult<T> execute(SmartPageQuery<T> paginatedFilteredQuery) {
+      public SmartPageResult execute(
+          SmartPageQuery paginatedFilteredQuery, Object extraParameters) {
         return null;
       }
     };

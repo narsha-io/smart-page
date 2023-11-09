@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.narsha.smartpage.core.RowMapper;
 import io.narsha.smartpage.core.configuration.AbstractFilterConfiguration;
 import io.narsha.smartpage.spring.mongo.MongoQueryExecutor;
+import io.narsha.smartpage.spring.mongo.SmartPageMongo;
 import io.narsha.smartpage.spring.mongo.filters.MongoFilter;
 import io.narsha.smartpage.spring.mongo.filters.MongoFilterRegistrationService;
 import org.springframework.context.annotation.Bean;
@@ -51,5 +52,17 @@ public class MongoFilterConfiguration
       MongoFilterRegistrationService mongoFilterRegistrationService,
       RowMapper rowMapper) {
     return new MongoQueryExecutor(mongoTemplate, mongoFilterRegistrationService, rowMapper);
+  }
+
+  /**
+   * Create the mongo instance for smart page
+   *
+   * @param mongoQueryExecutor MongoQueryExecutor that will be in charge of execute the final mongo
+   *     query
+   * @return smart page mongo instance
+   */
+  @Bean
+  public SmartPageMongo smartPageMongo(MongoQueryExecutor mongoQueryExecutor) {
+    return new SmartPageMongo(mongoQueryExecutor);
   }
 }
