@@ -16,6 +16,7 @@
         <module>smart-page-spring</module>
         <module>smart-page-coverage</module>
         <module>smart-page-quarkus</module>
+        <module>smart-page-core-jdbc</module>
     </modules>
 
     <developers>
