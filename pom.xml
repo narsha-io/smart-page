@@ -132,6 +132,9 @@
                     <dataFileIncludes>
                         <include>${jacoco.overall.exec}</include>
                     </dataFileIncludes>
+                    <excludes>
+                        <excludes>**/*.jar</excludes>
+                    </excludes>
                 </configuration>
                 <executions>
                     <execution>

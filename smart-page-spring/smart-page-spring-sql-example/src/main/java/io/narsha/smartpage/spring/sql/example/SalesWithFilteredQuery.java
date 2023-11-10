@@ -1,7 +1,7 @@
 package io.narsha.smartpage.spring.sql.example;
 
 import io.narsha.smartpage.core.annotations.DataTableProperty;
-import io.narsha.smartpage.spring.sql.SqlDataTable;
+import io.narsha.smartpage.core.sql.SqlDataTable;
 import lombok.Getter;
 import lombok.Setter;
 

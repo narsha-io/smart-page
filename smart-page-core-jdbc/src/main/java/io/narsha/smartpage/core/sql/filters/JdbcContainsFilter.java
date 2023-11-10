@@ -1,4 +1,4 @@
-package io.narsha.smartpage.spring.sql.filters;
+package io.narsha.smartpage.core.sql.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.narsha.smartpage.core.filters.ContainsFilter;

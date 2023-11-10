@@ -1,4 +1,4 @@
-package io.narsha.smartpage.spring.sql.filters;
+package io.narsha.smartpage.core.sql.filters;
 
 import io.narsha.smartpage.core.filters.GreaterThanFilter;
 

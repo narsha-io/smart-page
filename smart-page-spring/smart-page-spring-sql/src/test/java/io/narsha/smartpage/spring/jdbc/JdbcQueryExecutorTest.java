@@ -5,9 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.narsha.smartpage.core.PropertyFilter;
 import io.narsha.smartpage.core.RowMapper;
 import io.narsha.smartpage.core.SmartPageQuery;
+import io.narsha.smartpage.core.sql.SqlDataTable;
+import io.narsha.smartpage.core.sql.filters.JdbcFilterRegistrationService;
 import io.narsha.smartpage.spring.sql.JdbcQueryExecutor;
-import io.narsha.smartpage.spring.sql.SqlDataTable;
-import io.narsha.smartpage.spring.sql.filters.JdbcFilterRegistrationService;
+import io.narsha.smartpage.spring.sql.configuration.JdbcFilterConfiguration;
 import io.narsha.smartpage.spring.test.SmartPageSpringTestApplication;
 import io.narsha.smartpage.spring.test.model.Person;
 import io.narsha.smartpage.spring.test.validator.PersonValidator;
@@ -26,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-@SpringBootTest(classes = {SmartPageSpringTestApplication.class, JdbcConfiguration.class})
+@SpringBootTest(classes = {SmartPageSpringTestApplication.class, JdbcFilterConfiguration.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JdbcQueryExecutorTest {
 
