@@ -15,6 +15,8 @@
         <module>smart-page-test</module>
         <module>smart-page-spring</module>
         <module>smart-page-coverage</module>
+        <module>smart-page-quarkus</module>
+        <module>smart-page-core-jdbc</module>
     </modules>
 
     <developers>
@@ -66,6 +68,7 @@
         <jacoco.version>0.8.10</jacoco.version>
         <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
         <sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/smart-page-coverage/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <compiler-plugin.version>3.11.0</compiler-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -129,6 +132,9 @@
                     <dataFileIncludes>
                         <include>${jacoco.overall.exec}</include>
                     </dataFileIncludes>
+                    <excludes>
+                        <excludes>**/*.jar</excludes>
+                    </excludes>
                 </configuration>
                 <executions>
                     <execution>
@@ -150,7 +156,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>${compiler-plugin.version}</version>
             </plugin>
 
             <plugin>
