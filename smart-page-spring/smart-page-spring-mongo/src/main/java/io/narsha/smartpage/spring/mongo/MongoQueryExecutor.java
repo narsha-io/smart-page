@@ -10,7 +10,6 @@ import io.narsha.smartpage.spring.mongo.filters.MongoFilterRegistrationService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,7 +18,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 /** Class that will execute the mongo query following the declared filters */
-@RequiredArgsConstructor
 @Slf4j
 public class MongoQueryExecutor implements QueryExecutor<List<Criteria>> {
 
@@ -27,6 +25,22 @@ public class MongoQueryExecutor implements QueryExecutor<List<Criteria>> {
 
   private final MongoFilterRegistrationService mongoFilterRegistrationService;
   private final RowMapper rowMapper;
+
+  /**
+   * constructor
+   *
+   * @param mongoTemplate mongo template in charge of the communication with mongo instance
+   * @param mongoFilterRegistrationService auto registered mongo filters service
+   * @param rowMapper conversion mapper
+   */
+  public MongoQueryExecutor(
+      MongoTemplate mongoTemplate,
+      MongoFilterRegistrationService mongoFilterRegistrationService,
+      RowMapper rowMapper) {
+    this.mongoTemplate = mongoTemplate;
+    this.mongoFilterRegistrationService = mongoFilterRegistrationService;
+    this.rowMapper = rowMapper;
+  }
 
   @Override
   public <T> SmartPageResult<T> execute(

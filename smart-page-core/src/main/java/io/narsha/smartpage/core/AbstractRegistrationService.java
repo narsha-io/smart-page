@@ -13,6 +13,9 @@ public abstract class AbstractRegistrationService<T> {
   /** Set to contain as unique all instance of T objects */
   protected final Set<T> registeredService = new HashSet<>();
 
+  /** default constructor */
+  public AbstractRegistrationService() {}
+
   /**
    * Save the object service
    *

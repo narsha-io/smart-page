@@ -6,6 +6,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 /** JDBC filter for in operation */
 public class MongoGreaterThanFilter extends GreaterThanFilter implements MongoFilter {
 
+  /** default constructor */
+  public MongoGreaterThanFilter() {}
+
   @Override
   public Criteria getMongoCriteria(String property, Object value) {
     return Criteria.where(property).gt(value);

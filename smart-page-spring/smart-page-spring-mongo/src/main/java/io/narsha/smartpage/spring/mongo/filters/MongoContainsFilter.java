@@ -7,6 +7,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 /** Mongo implementation of contains operation */
 public class MongoContainsFilter extends ContainsFilter implements MongoFilter {
 
+  /** default constructor */
+  public MongoContainsFilter() {}
+
   @Override
   public Criteria getMongoCriteria(String property, Object value) {
     return Criteria.where(property).regex(Pattern.compile(".*(" + value + ").*"));

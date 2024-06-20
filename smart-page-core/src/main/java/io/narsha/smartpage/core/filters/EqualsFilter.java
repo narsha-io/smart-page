@@ -7,6 +7,10 @@ import java.util.Set;
  * Equals than operation
  */
 public class EqualsFilter implements Filter {
+
+  /** default constructor */
+  public EqualsFilter() {}
+
   @Override
   public String getFilterAlias() {
     return "equals";

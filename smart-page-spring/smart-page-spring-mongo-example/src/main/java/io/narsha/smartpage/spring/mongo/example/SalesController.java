@@ -3,7 +3,6 @@ package io.narsha.smartpage.spring.mongo.example;
 import io.narsha.smartpage.core.SmartPageQuery;
 import io.narsha.smartpage.spring.mongo.SmartPageMongo;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,12 +12,22 @@ import org.springframework.web.bind.annotation.RestController;
 /** Simple RestController that expose an endpoint to get filtered data */
 @RestController
 @RequestMapping("/api/sales")
-@RequiredArgsConstructor
 public class SalesController {
 
   private final SmartPageMongo smartPage;
 
   /**
+   * constructor
+   *
+   * @param smartPage smartPage service
+   */
+  public SalesController(SmartPageMongo smartPage) {
+    this.smartPage = smartPage;
+  }
+
+  /**
+   * list sales
+   *
    * @param query filter to apply
    * @return filtered data
    */
@@ -28,6 +37,8 @@ public class SalesController {
   }
 
   /**
+   * list sales using custom filter
+   *
    * @param query filter to apply
    * @return filtered data
    */

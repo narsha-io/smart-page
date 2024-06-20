@@ -25,6 +25,22 @@ public class JdbcQueryExecutor implements QueryExecutor<Map<String, Object>> {
   private final JdbcFilterRegistrationService jdbcFilterRegistrationService;
   private final RowMapper rowMapper;
 
+  /**
+   * constructor
+   *
+   * @param jdbcTemplate jdbcTemplate
+   * @param jdbcFilterRegistrationService jdbcFilterRegistrationService
+   * @param rowMapper rowMapper
+   */
+  public JdbcQueryExecutor(
+      NamedParameterJdbcTemplate jdbcTemplate,
+      JdbcFilterRegistrationService jdbcFilterRegistrationService,
+      RowMapper rowMapper) {
+    this.jdbcTemplate = jdbcTemplate;
+    this.jdbcFilterRegistrationService = jdbcFilterRegistrationService;
+    this.rowMapper = rowMapper;
+  }
+
   @Override
   public <T> SmartPageResult<T> execute(
       SmartPageQuery<T> paginatedFilteredQuery, Map<String, Object> extraParameters) {

@@ -6,6 +6,9 @@ import io.narsha.smartpage.core.filters.ContainsFilter;
 /** JDBC filter for contains operation */
 public class JdbcContainsFilter extends ContainsFilter implements JdbcFilter {
 
+  /** default constructor */
+  public JdbcContainsFilter() {}
+
   @Override
   public String getSQLFragment(String property) {
     return String.format("%s like :%s", property, property);

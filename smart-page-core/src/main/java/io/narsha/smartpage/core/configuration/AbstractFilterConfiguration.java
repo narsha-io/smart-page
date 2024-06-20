@@ -15,6 +15,9 @@ import org.reflections.scanners.Scanners;
  */
 public abstract class AbstractFilterConfiguration<E, T extends AbstractRegistrationService<E>> {
 
+  /** default constructor */
+  public AbstractFilterConfiguration() {}
+
   /**
    * Trigger the auto-registration
    *

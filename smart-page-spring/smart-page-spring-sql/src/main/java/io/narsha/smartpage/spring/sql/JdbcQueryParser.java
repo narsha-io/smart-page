@@ -9,7 +9,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -17,13 +16,24 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @param <T> type of the target DTO
  */
-@RequiredArgsConstructor
 public class JdbcQueryParser<T> {
 
   private StringBuilder query = new StringBuilder();
   private StringBuilder countQuery = new StringBuilder();
   private final SmartPageQuery<T> queryFilter;
   private final JdbcFilterRegistrationService jdbcFilterRegistrationService;
+
+  /**
+   * constructor
+   *
+   * @param queryFilter queryFilter
+   * @param jdbcFilterRegistrationService jdbcFilterRegistrationService
+   */
+  public JdbcQueryParser(
+      SmartPageQuery<T> queryFilter, JdbcFilterRegistrationService jdbcFilterRegistrationService) {
+    this.queryFilter = queryFilter;
+    this.jdbcFilterRegistrationService = jdbcFilterRegistrationService;
+  }
 
   /** Build sql + count query */
   public void init() {

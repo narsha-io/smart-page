@@ -3,14 +3,14 @@ package io.narsha.smartpage.core.utils;
 import java.lang.reflect.Field;
 import java.util.Optional;
 import java.util.Set;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /** Utils class needed to parse a class using reflection */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public class ReflectionUtils {
+
+  /** default constructor */
+  private ReflectionUtils() {}
 
   /**
    * Get the class of a property in a targetClass

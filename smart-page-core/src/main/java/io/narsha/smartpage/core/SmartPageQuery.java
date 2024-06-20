@@ -6,6 +6,7 @@ import java.util.Set;
 /**
  * An object that contains everything needed for executing datasource query
  *
+ * @param <T> kind of DTO
  * @param targetClass The DTO class
  * @param filters all property filters
  * @param orders order need to be set during the datasource query

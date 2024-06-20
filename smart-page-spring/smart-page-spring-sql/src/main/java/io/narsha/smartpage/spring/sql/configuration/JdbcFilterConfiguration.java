@@ -16,6 +16,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 public class JdbcFilterConfiguration
     extends AbstractFilterConfiguration<JdbcFilter, JdbcFilterRegistrationService> {
 
+  /** default constructor */
+  public JdbcFilterConfiguration() {}
+
   /**
    * Auto-register all JdbcFilter implementations
    *

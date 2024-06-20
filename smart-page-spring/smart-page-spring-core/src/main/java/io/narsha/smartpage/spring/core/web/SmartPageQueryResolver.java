@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Pageable;
@@ -26,15 +25,34 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.mvc.method.annotation.PathVariableMapMethodArgumentResolver;
 
-/** PaginatedFilteredQueryResolver which convert a http request into PaginatedFilteredQuery */
-@RequiredArgsConstructor
+/**
+ * PaginatedFilteredQueryResolver which convert a http request into PaginatedFilteredQuery
+ *
+ * @param <T> kind of filter
+ */
 public class SmartPageQueryResolver<T extends Filter> implements HandlerMethodArgumentResolver {
 
   private final ObjectMapper objectMapper;
   private final PageableHandlerMethodArgumentResolver pageableHandlerMethodArgumentResolver;
   private final FilterRegistrationService<T> filterRegistrationService;
-  private PathVariableMapMethodArgumentResolver pathVariableMapMethodArgumentResolver =
-      new PathVariableMapMethodArgumentResolver();
+  private final PathVariableMapMethodArgumentResolver pathVariableMapMethodArgumentResolver;
+
+  /**
+   * construct the query resolver
+   *
+   * @param objectMapper mapper use to convert type
+   * @param pageableHandlerMethodArgumentResolver resolve size and page by spring resolver
+   * @param filterRegistrationService filterRegistrationService
+   */
+  public SmartPageQueryResolver(
+      ObjectMapper objectMapper,
+      PageableHandlerMethodArgumentResolver pageableHandlerMethodArgumentResolver,
+      FilterRegistrationService<T> filterRegistrationService) {
+    this.objectMapper = objectMapper;
+    this.pageableHandlerMethodArgumentResolver = pageableHandlerMethodArgumentResolver;
+    this.filterRegistrationService = filterRegistrationService;
+    this.pathVariableMapMethodArgumentResolver = new PathVariableMapMethodArgumentResolver();
+  }
 
   @Override
   public boolean supportsParameter(MethodParameter parameter) {

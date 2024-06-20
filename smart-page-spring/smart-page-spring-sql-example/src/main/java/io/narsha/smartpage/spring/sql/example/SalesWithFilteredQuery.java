@@ -27,4 +27,7 @@ public class SalesWithFilteredQuery {
 
   @DataTableProperty(columnName = "qty") // rename
   private Long quantity;
+
+  /** default constructor */
+  public SalesWithFilteredQuery() {}
 }

@@ -4,12 +4,12 @@ import io.narsha.smartpage.core.annotations.DataTableIgnore;
 import java.lang.annotation.Annotation;
 import java.util.Optional;
 import java.util.function.Function;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /** Utils class used to get some information used for query data mapping */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ResolverUtils {
+
+  /** default constructor */
+  private ResolverUtils() {}
 
   /**
    * Get the property name in the datasource based on the java property in the targetClass

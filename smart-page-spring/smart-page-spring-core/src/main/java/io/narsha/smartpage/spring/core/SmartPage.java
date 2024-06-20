@@ -14,11 +14,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-/** Smart Page entrypoint */
+/**
+ * Smart Page entrypoint
+ *
+ * @param <P> kind of dto
+ */
 @RequiredArgsConstructor
 public abstract class SmartPage<P> {
 
   private final QueryExecutor<P> executor;
+
+  /** default constructor */
+  public SmartPage() {}
 
   /**
    * generate a spring response entity which contains the response body and some http header RFC988

@@ -12,6 +12,9 @@ import java.util.stream.Stream;
  */
 public class InFilter implements Filter {
 
+  /** default constructor */
+  public InFilter() {}
+
   @Override
   public String getFilterAlias() {
     return "in";

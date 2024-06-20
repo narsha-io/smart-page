@@ -12,6 +12,10 @@ import org.apache.commons.lang3.StringUtils;
  * Contains than operation
  */
 public class ContainsFilter implements Filter {
+
+  /** default constructor */
+  public ContainsFilter() {}
+
   @Override
   public String getFilterAlias() {
     return "contains";

@@ -10,6 +10,9 @@ import java.util.Set;
  */
 public class GreaterThanOrEqualsFilter implements Filter {
 
+  /** default constructor */
+  public GreaterThanOrEqualsFilter() {}
+
   @Override
   public String getFilterAlias() {
     return "gte";

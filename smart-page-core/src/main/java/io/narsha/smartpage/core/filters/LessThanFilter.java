@@ -10,6 +10,9 @@ import java.util.Set;
  */
 public class LessThanFilter implements Filter {
 
+  /** default constructor */
+  public LessThanFilter() {}
+
   @Override
   public String getFilterAlias() {
     return "lt";

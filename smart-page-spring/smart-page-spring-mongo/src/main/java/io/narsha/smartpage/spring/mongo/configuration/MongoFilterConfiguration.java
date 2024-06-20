@@ -16,6 +16,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 public class MongoFilterConfiguration
     extends AbstractFilterConfiguration<MongoFilter, MongoFilterRegistrationService> {
 
+  /** default constructor */
+  public MongoFilterConfiguration() {}
+
   /**
    * Auto-register all MongoFilter implementations
    *

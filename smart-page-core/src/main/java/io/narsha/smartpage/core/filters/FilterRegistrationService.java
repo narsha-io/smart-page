@@ -4,8 +4,15 @@ import io.narsha.smartpage.core.AbstractRegistrationService;
 import java.util.Objects;
 import java.util.Optional;
 
-/** Filter registration Service */
+/**
+ * Filter registration Service
+ *
+ * @param <T> Kind of object that we want to register
+ */
 public class FilterRegistrationService<T extends Filter> extends AbstractRegistrationService<T> {
+
+  /** Default constructor */
+  public FilterRegistrationService() {}
 
   /**
    * Get a new instance of a filter

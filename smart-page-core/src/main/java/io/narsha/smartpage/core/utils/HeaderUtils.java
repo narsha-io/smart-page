@@ -4,15 +4,15 @@ import io.narsha.smartpage.core.SmartPageResult;
 import java.util.Optional;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * Header generator following http header RFC988 more information
  * https://datatracker.ietf.org/doc/html/rfc5988#page-6
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HeaderUtils {
+
+  /** default constructor */
+  private HeaderUtils() {}
 
   /** Http header Link */
   public static final String LINK_HEADER = "Link";

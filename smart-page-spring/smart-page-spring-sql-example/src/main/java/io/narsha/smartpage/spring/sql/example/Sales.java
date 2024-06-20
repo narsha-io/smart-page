@@ -26,4 +26,7 @@ public class Sales {
 
   @DataTableProperty(columnName = "qty") // rename
   private Long quantity;
+
+  /** default constructor */
+  public Sales() {}
 }

@@ -7,6 +7,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 /** Mongo implementation of in operation */
 public class MongoInFilter extends InFilter implements MongoFilter {
 
+  /** default constructor */
+  public MongoInFilter() {}
+
   @Override
   public Criteria getMongoCriteria(String property, Object value) {
     return Criteria.where(property).in(((Set<Object>) value).toArray());

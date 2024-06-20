@@ -10,6 +10,9 @@ import java.util.Set;
  */
 public class GreaterThanFilter implements Filter {
 
+  /** default constructor */
+  public GreaterThanFilter() {}
+
   @Override
   public String getFilterAlias() {
     return "gt";

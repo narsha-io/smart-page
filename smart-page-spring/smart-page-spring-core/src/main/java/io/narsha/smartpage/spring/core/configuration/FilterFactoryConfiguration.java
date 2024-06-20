@@ -14,6 +14,9 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 @Configuration
 public class FilterFactoryConfiguration {
 
+  /** default constructor */
+  public FilterFactoryConfiguration() {}
+
   /**
    * Register a PaginatedFilteredQueryResolver which convert a http request into
    * PaginatedFilteredQuery
