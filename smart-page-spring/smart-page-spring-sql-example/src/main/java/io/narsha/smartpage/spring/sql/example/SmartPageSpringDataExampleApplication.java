@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Import;
 public class SmartPageSpringDataExampleApplication {
 
   /** default constructor */
-  private SmartPageSpringDataExampleApplication() {}
+  public SmartPageSpringDataExampleApplication() {}
 
   /**
    * Application entry point

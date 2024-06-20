@@ -14,11 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 /** In charge of the sql query execution */
-@RequiredArgsConstructor
 public class JdbcQueryExecutor implements QueryExecutor<Map<String, Object>> {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;

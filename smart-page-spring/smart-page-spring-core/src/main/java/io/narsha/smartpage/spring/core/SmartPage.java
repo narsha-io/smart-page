@@ -7,7 +7,6 @@ import io.narsha.smartpage.core.SmartPageQuery;
 import io.narsha.smartpage.core.SmartPageResult;
 import io.narsha.smartpage.core.utils.HeaderUtils;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +18,18 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
  *
  * @param <P> kind of dto
  */
-@RequiredArgsConstructor
 public abstract class SmartPage<P> {
 
   private final QueryExecutor<P> executor;
 
-  /** default constructor */
-  public SmartPage() {}
+  /**
+   * constructor
+   *
+   * @param executor executor
+   */
+  public SmartPage(QueryExecutor<P> executor) {
+    this.executor = executor;
+  }
 
   /**
    * generate a spring response entity which contains the response body and some http header RFC988
