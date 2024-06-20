@@ -62,7 +62,7 @@
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <jacoco.overall.exec>${maven.multiModuleProjectDirectory}/target/jacoco_analysis/jacoco.exec</jacoco.overall.exec>
-        <git-code-format-maven-plugin.version>4.2</git-code-format-maven-plugin.version>
+        <git-code-format-maven-plugin.version>4.3</git-code-format-maven-plugin.version>
         <jacoco.version>0.8.10</jacoco.version>
         <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
         <sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/smart-page-coverage/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
